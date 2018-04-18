@@ -30,26 +30,27 @@ void Game::Loop() {
         border.setFillColor(sf::Color(0,0,0,0));
         border.setOutlineThickness(10);
         border.setOutlineColor(sf::Color(0,0,0));
+        main_window_.draw(border);
 
-        // Draw the circles
-        sf::CircleShape circle[5][5];
+        // Draw the spaces
+        sf::CircleShape spaces[5][5];
         int x,y;
         for(int i = 0; i<5; i++) {
             for(int j = 0; j<5; j++) {
-                circle[i][j].setRadius(50);
-                circle[i][j].setFillColor(sf::Color::Transparent);
-                circle[i][j].setOutlineThickness(3);
-                circle[i][j].setOutlineColor(sf::Color(25, 25, 25));
+                spaces[i][j].setRadius(50);
+                spaces[i][j].setFillColor(sf::Color::Transparent);
+                spaces[i][j].setOutlineThickness(3);
+                spaces[i][j].setOutlineColor(sf::Color(25, 25, 25));
                 // Define spaces position
-                int circle_position_x = border_position_x + i * 150 + 25;
-                int circle_position_y = border_position_y + j * 150 + 25;
+                int space_position_x = border_position_x + i * 150 + 25;
+                int space_position_y = border_position_y + j * 150 + 25;
                 // Set spaces position
-                circle[i][j].setPosition(circle_position_x, circle_position_y);
-                main_window_.draw(circle[i][j]);
+                spaces[i][j].setPosition(space_position_x, space_position_y);
+                main_window_.draw(spaces[i][j]);
                 if (i < 4) {
                     // Render the link between this space and the next one
                     sf::RectangleShape link(sf::Vector2f(50, 5));
-                    link.setPosition(circle_position_x + 100, circle_position_y + 50);
+                    link.setPosition(space_position_x + 100, space_position_y + 50);
                     link.setFillColor(sf::Color::Black);
                     main_window_.draw(link);
                 }
@@ -57,14 +58,14 @@ void Game::Loop() {
                     // Render the link between this space and the one below it
                     sf::RectangleShape link(sf::Vector2f(50, 5));
                     link.setFillColor(sf::Color::Black);
-                    link.setPosition(circle_position_x + 50, circle_position_y + 100);
+                    link.setPosition(space_position_x + 50, space_position_y + 100);
                     link.rotate(90);
                     main_window_.draw(link);
                 }
                 // Render the link between this space and the two diagonally
                 if(i < 4 && j < 4) {
-                    int link_position_x = circle_position_x + 50 + 35;
-                    int link_position_y = circle_position_y + 50 + 35;
+                    int link_position_x = space_position_x + 50 + 35;
+                    int link_position_y = space_position_y + 50 + 35;
                     sf::RectangleShape link(sf::Vector2f(110, 5));
                     link.setFillColor(sf::Color::Black);
                     link.setPosition(link_position_x, link_position_y);
@@ -72,8 +73,8 @@ void Game::Loop() {
                     main_window_.draw(link);
                 }
                 if(i > 0 && j < 4) {
-                    int link_position_x = circle_position_x + 50 - 35;
-                    int link_position_y = circle_position_y + 50 + 35;
+                    int link_position_x = space_position_x + 50 - 35;
+                    int link_position_y = space_position_y + 50 + 35;
                     sf::RectangleShape link(sf::Vector2f(110, 5));
                     link.setFillColor(sf::Color::Black);
                     link.setPosition(link_position_x, link_position_y);
@@ -83,8 +84,6 @@ void Game::Loop() {
             }
         }
 
-
-        main_window_.draw(border);
         main_window_.display();
     }
 }
