@@ -84,6 +84,16 @@ void Game::Loop() {
             }
         }
 
+        // Render two markers
+        // TODO(Piryus) Remove when not needed anymore
+        sf::CircleShape red_marker(50);
+        sf::CircleShape black_marker(50);
+        red_marker.setFillColor(sf::Color::Red);
+        black_marker.setFillColor(sf::Color::Black);
+        red_marker.setPosition(border_position_x + 4 * 150 + 25, border_position_y + 3 * 150 + 25);
+        black_marker.setPosition(border_position_x + 2 * 150 + 25, border_position_y + 0 * 150 + 25);
+        main_window_.draw(red_marker);
+        main_window_.draw(black_marker);
         main_window_.display();
     }
 }
