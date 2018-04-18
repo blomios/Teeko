@@ -88,9 +88,3 @@ void Game::Loop() {
         main_window_.display();
     }
 }
-
-void Game::RenderSpacesLinks() {
-    for(int i=0 ; i<5 ; i++) {
-
-    }
-}
