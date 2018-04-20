@@ -2,10 +2,13 @@
 #define TEEKO_BOARD_H
 
 #include <vector>
+#include "Space.h"
+#include "Marker.h"
 
 class Board {
 private:
-    std::vector<int> spaces_;
+    std::vector<Space> spaces_;
+    std::vector<Marker> markers_;
 public:
     Board();
 };
