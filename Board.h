@@ -9,8 +9,6 @@ class Board {
 private:
     std::vector<Space> spaces_;
     std::vector<Marker> markers_;
-public:
-    Board();
 };
 
 
