@@ -3,7 +3,9 @@
 
 GameRenderer::GameRenderer(Game *game) {
     this->game_=game;
-    main_window_.create(sf::VideoMode(1200, 800), "Teeko");
+    sf::ContextSettings settings;
+    settings.antialiasingLevel = 8;
+    main_window_.create(sf::VideoMode(1200, 800), "Teeko", sf::Style::Default, settings);
 }
 
 void GameRenderer::Render() {
