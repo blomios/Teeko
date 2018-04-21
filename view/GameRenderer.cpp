@@ -97,13 +97,25 @@ void GameRenderer::Render() {
         black_marker.setPosition(getCoordX(25), getCoordY(25));
         main_window_.draw(red_marker);
         main_window_.draw(black_marker);
-        main_window_.display();
 
+        // TODO(Piryus) Draw markers from the board
         for(Space space : game_->getBoard().getSpaces()) {
             if(space.getMarker()) {
                 space.getSpace_id();
             }
         }
+
+        // Display turn
+        sf::Font junegull;
+        junegull.loadFromFile("..\\resources\\fonts\\junegull.ttf");
+
+        sf::Text turn_text("Turn : XX", junegull);
+        turn_text.setCharacterSize(40);
+        turn_text.setPosition(20,10);
+        main_window_.draw(turn_text);
+
+        // Display window
+        main_window_.display();
     }
 }
 
