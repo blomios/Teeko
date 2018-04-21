@@ -1,11 +1,12 @@
-#include "Game.h"
+#include "GameRenderer.h"
 
-void Game::Start() {
+
+GameRenderer::GameRenderer(Game *game) {
+    this->game_=game;
     main_window_.create(sf::VideoMode(1200, 800), "Teeko");
-    Loop();
 }
 
-void Game::Loop() {
+void GameRenderer::Render() {
     sf::Event event;
     while (main_window_.isOpen())
     {
@@ -14,7 +15,7 @@ void Game::Loop() {
             // Close button
             if (event.type == sf::Event::Closed)
                 main_window_.close();
-            // Resizing, prevent bad scaling
+                // Resizing, prevent bad scaling
             else if(event.type == sf::Event::Resized)
                 main_window_.setView(sf::View(sf::FloatRect(0, 0, event.size.width, event.size.height)));
         }
@@ -90,10 +91,34 @@ void Game::Loop() {
         sf::CircleShape black_marker(50);
         red_marker.setFillColor(sf::Color::Red);
         black_marker.setFillColor(sf::Color::Black);
-        red_marker.setPosition(border_position_x + 4 * 150 + 25, border_position_y + 3 * 150 + 25);
-        black_marker.setPosition(border_position_x + 2 * 150 + 25, border_position_y + 0 * 150 + 25);
+        red_marker.setPosition(getCoordX(1), getCoordY(1));
+        black_marker.setPosition(getCoordX(25), getCoordY(25));
         main_window_.draw(red_marker);
         main_window_.draw(black_marker);
         main_window_.display();
+
+        for(Space space : game_->getBoard().getSpaces()) {
+            if(space.getMarker()) {
+                space.getSpace_id();
+            }
+        }
     }
+}
+
+int GameRenderer::getCoordX(int space_id) {
+    int x = space_id%5;
+    if(x==0) {
+        x=4;
+    }
+    else
+        x--;
+    return (main_window_.getSize().x-750)/2+x*150+25;
+}
+
+int GameRenderer::getCoordY(int space_id) {
+    int y = space_id/5;
+    if(space_id%5==0) {
+        y = space_id/5-1;
+    }
+    return (main_window_.getSize().y-750)/2+y*150+25;
 }

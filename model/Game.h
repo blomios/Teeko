@@ -4,18 +4,15 @@
 
 #include <SFML/Graphics.hpp>
 #include "Board.h"
+#include <vector>
 
 class Game {
 public:
     void Start();
-    void Loop();
-    static void RenderSpacesLinks();
-
+    const Board &getBoard() const;
 private:
-    sf::RenderWindow main_window_;
     Board board_;
     int turn_; // Player 1 or 2
 };
-
 
 #endif //TEEKO_GAME_H
