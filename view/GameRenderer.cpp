@@ -21,7 +21,6 @@ void GameRenderer::DrawBoardBorders() {
 
 void GameRenderer::DrawSpaces() {
     sf::CircleShape spaces[5][5];
-    int x,y;
     for(int i = 0; i<5; i++) {
         for(int j = 0; j<5; j++) {
             spaces[i][j].setRadius(50);
@@ -29,8 +28,8 @@ void GameRenderer::DrawSpaces() {
             spaces[i][j].setOutlineThickness(3);
             spaces[i][j].setOutlineColor(sf::Color(25, 25, 25));
             // Define spaces position
-            int space_position_x = kBorderX + i * 150 + 25;
-            int space_position_y = kBorderY + j * 150 + 25;
+            int space_position_x = (main_window_.getSize().x-kBorderX)/2 + i * 150 + 25;
+            int space_position_y = (main_window_.getSize().y-kBorderY)/2 + j * 150 + 25;
             // Set spaces position
             spaces[i][j].setPosition(space_position_x, space_position_y);
             main_window_.draw(spaces[i][j]);
