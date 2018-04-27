@@ -169,7 +169,7 @@ int* allCorrectMoves(Space marker_here){
  * @param player who want if is the winner of the game
  * @return 1 if the player won the game, 0 else
  */
-int isWinner(Player player){
+int Game::isWinner(Player player){
     int winner = 1; /* True */
 
     //Check first if there 4 markers on board
