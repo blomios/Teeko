@@ -9,6 +9,7 @@
 
 class Game {
 public:
+    void initGame();
     void Start();
     const Board &getBoard() const;
     int* numberMarkerOnBoard(Board board);
@@ -18,8 +19,12 @@ public:
     void placeMarker();
     void moveMarker();
 
+
 private:
     Board board_;
+    vector<Space> spaces_;
+    vector<Marker> markers_;
+    vector<Player> players_;
     int turn_; // Player 1 or 2
 
 

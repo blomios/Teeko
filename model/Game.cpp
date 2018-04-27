@@ -1,37 +1,33 @@
 #include "Game.h"
 using namespace std;
 
-vector<Space> spaces;
-vector<Marker> markers;
-vector<Player> players;
+void Game::Start() {
+    this->initGame();
+
+    do{
+
+    }while(isWinner(players_[0]) || isWinner(players_[1]));
+}
 
 /**
  * Initiation Spaces and Markers
  */
-void initGame(){
+void Game::initGame() {
     for(int i = 0; i < 25; i++){
-        spaces.push_back(*(new Space(i+1,NULL)));
+        spaces_.push_back(*(new Space(i+1,NULL)));
     }
 
     for(int i = 0; i < 8; i++){
         if( i < 4){
-            markers.push_back(*(new Marker("Black")));
+            markers_.push_back(*(new Marker("Black")));
         } else {
-            markers.push_back(*(new Marker("Red")));
+            markers_.push_back(*(new Marker("Red")));
         }
 
     }
 
-    players.push_back(*(new Player("Black")));
-    players.push_back(*(new Player("Red")));
-}
-
-void Game::Start() {
-    initGame();
-
-    do{
-
-    }while(isWinner(players[0]) || isWinner(players[1]));
+    players_.push_back(*(new Player("Black")));
+    players_.push_back(*(new Player("Red")));
 }
 
 const Board &Game::getBoard() const {
@@ -43,7 +39,7 @@ const Board &Game::getBoard() const {
 * @return number_marker_on_board Number of marker on board for each player
 * 0 for the player who plays black markers, 1 for the other player (red)
 */
-int* numberMarkerOnBoard(Board board){
+int* Game::numberMarkerOnBoard(Board board){
     // Check all spaces and return number of marker on the board
     // Count number of marker for each players
     vector<Space> spaces = board.getSpaces();
@@ -68,7 +64,7 @@ int* numberMarkerOnBoard(Board board){
  * @param space analyze this space
  * @return is_empty true if there no markers in this space, else false
  */
-int checkEmptySpace(Space space){
+int Game::checkEmptySpace(Space space){
     return space.getMarker() == NULL ? 1/*true*/ : 0;
 }
 
@@ -78,7 +74,7 @@ int checkEmptySpace(Space space){
  * @return all moves possible for the player, within -1 for impossible choices
  *		   and id_space for
  */
-int* allCorrectMoves(Space marker_here){
+int* Game::allCorrectMoves(Space marker_here){
 
     /* First, if the space is next to the marker before the move
      * Next, we check if the space is empty
@@ -155,7 +151,7 @@ int* allCorrectMoves(Space marker_here){
     /* Check if spaces is empty */
     for(int i = 0; i < 8; i++){
         if(id_space_enable[i] != -1){
-            if(spaces[id_space_enable[i]-1].getMarker() != NULL ){
+            if(spaces_[id_space_enable[i]-1].getMarker() != NULL ){
                 id_space_enable[i] = -1; /* There is a marker on this space */
             }
         }
@@ -225,6 +221,6 @@ int Game::isWinner(Player player){
  *
  *
  */
-void placeMarker();
+void Game::placeMarker() {}
 
-void moveMarker();
+void Game::moveMarker() {}
