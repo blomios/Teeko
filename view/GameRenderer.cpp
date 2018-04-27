@@ -8,15 +8,43 @@ GameRenderer::GameRenderer(Game *game) {
     main_window_.create(sf::VideoMode(1200, 800), "Teeko", sf::Style::Default, settings);
 }
 
-void GameRenderer::DrawBoardBorders() {
+void GameRenderer::Render() {
+    sf::Event event;
+    while (main_window_.isOpen())
+    {
+        // TODO(Piryus) Events function
+        while (main_window_.pollEvent(event))
+        {
+            // Close button
+            if (event.type == sf::Event::Closed)
+                main_window_.close();
+                // Resizing, prevent bad scaling
+            else if(event.type == sf::Event::Resized)
+                main_window_.setView(sf::View(sf::FloatRect(0, 0, event.size.width, event.size.height)));
+        }
+
+        //main_window_.clear(sf::Color(238,192,106)); // Set the background color
+        this->DrawBackground();
+        this->DrawBoard();
+        this->DrawSpaces();
+        this->DrawMarkers();
+        this->DrawTurnLabel();
+
+        // Display window
+        main_window_.display();
+    }
+}
+
+void GameRenderer::DrawBoard() {
     sf::RectangleShape border(sf::Vector2f(kBorderX,kBorderY));
     int border_position_x = (main_window_.getSize().x-kBorderX)/2;
     int border_position_y = (main_window_.getSize().y-kBorderY)/2;
     border.setPosition(border_position_x,border_position_y);
-    border.setFillColor(sf::Color(0,0,0,0));
+    border.setFillColor(sf::Color(255,178,71));
     border.setOutlineThickness(10);
     border.setOutlineColor(sf::Color(0,0,0));
     main_window_.draw(border);
+
 }
 
 void GameRenderer::DrawSpaces() {
@@ -86,7 +114,9 @@ void GameRenderer::DrawMarkers() {
     // TODO(Piryus) Draw markers from the board
     for(Space space : game_->getBoard().getSpaces()) {
         if(space.getMarker()) {
-
+            /* TODO(Piryus) Loop through spaces and check if member is_selected_ is true
+             * If it is, draw in different color
+             */
         }
     }
 }
@@ -102,29 +132,17 @@ void GameRenderer::DrawTurnLabel() {
     main_window_.draw(turn_text);
 }
 
-void GameRenderer::Render() {
-    sf::Event event;
-    while (main_window_.isOpen())
-    {
-        // TODO(Piryus) Events function
-        while (main_window_.pollEvent(event))
-        {
-            // Close button
-            if (event.type == sf::Event::Closed)
-                main_window_.close();
-                // Resizing, prevent bad scaling
-            else if(event.type == sf::Event::Resized)
-                main_window_.setView(sf::View(sf::FloatRect(0, 0, event.size.width, event.size.height)));
-        }
-
-        main_window_.clear(sf::Color(238,192,106)); // Set the background color
-        this->DrawBoardBorders();
-        this->DrawSpaces();
-        this->DrawMarkers();
-        this->DrawTurnLabel();
-
-        // Display window
-        main_window_.display();
+void GameRenderer::DrawBackground() {
+    sf::Texture wood_texture;
+    if(!wood_texture.loadFromFile("..\\resources\\images\\wood.jpg")) {
+        printf("Error while loading wood texture.\n");
+    }
+    else {
+        wood_texture.setRepeated(true);
+        sf::Sprite background_sprite;
+        background_sprite.setTexture(wood_texture);
+        background_sprite.setTextureRect(sf::IntRect(0,0,main_window_.getSize().x,main_window_.getSize().y));
+        main_window_.draw(background_sprite);
     }
 }
 

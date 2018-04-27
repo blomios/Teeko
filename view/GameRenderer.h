@@ -16,10 +16,11 @@ private:
 public:
     explicit GameRenderer(Game *game);
     void Render();
-    void DrawBoardBorders();
+    void DrawBoard();
     void DrawSpaces();
     void DrawMarkers();
     void DrawTurnLabel();
+    void DrawBackground();
     int GetCoordX(int space_id);
     int GetCoordY(int space_id);
 };
