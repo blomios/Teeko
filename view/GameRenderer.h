@@ -11,11 +11,17 @@ class GameRenderer{
 private:
     Game* game_;
     sf::RenderWindow main_window_;
+    const int kBorderX = 750;
+    const int kBorderY = 750;
 public:
-    GameRenderer(Game *game);
+    explicit GameRenderer(Game *game);
     void Render();
-    int getCoordX(int space_id);
-    int getCoordY(int space_id);
+    void DrawBoardBorders();
+    void DrawSpaces();
+    void DrawMarkers();
+    void DrawTurnLabel();
+    int GetCoordX(int space_id);
+    int GetCoordY(int space_id);
 };
 
 
