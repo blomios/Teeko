@@ -6,8 +6,12 @@
 class Space {
 private:
     int space_id_;
-    Marker *marker_;
+    Marker* marker_;
 public:
+    Space(int id,Marker* m){
+        space_id_ = id;
+        marker_ = m;
+    }
     int getSpace_id() const;
     Marker* getMarker() const;
 };

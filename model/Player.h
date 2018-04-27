@@ -1,13 +1,29 @@
 #ifndef TEEKO_PLAYER_H
 #define TEEKO_PLAYER_H
 
-enum Color {
-    kRed, kBlack,
-};
+#include <string>
+#include "Space.h"
+#include <vector>
+using namespace std;
 
 class Player {
 private:
-    Color color_;
+    string color_;
+    vector<Space> spaces;
+public:
+
+    Player(string color){
+        color_ = color;
+    }
+
+    vector<Space> getSpaces(){
+        return spaces;
+    }
+
+    int getMarkersOnBoard(){
+        return getSpaces().size();
+    }
+
 };
 
 
