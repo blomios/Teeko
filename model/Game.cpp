@@ -157,7 +157,7 @@ int* Game::allCorrectMoves(Space marker_here){
     /* Check if spaces is empty */
     for(int i = 0; i < 8; i++){
         if(id_space_enable[i] != -1){
-            if(spaces_[id_space_enable[i]-1].getMarker() != NULL ){
+            if(checkEmptySpace(spaces_[id_space_enable[i]-1])){
                 id_space_enable[i] = -1; /* There is a marker on this space */
             }
         }
