@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "Game.h"
 using namespace std;
 
@@ -16,6 +17,7 @@ void Game::Start() {
 /**
  * Initiation Spaces and Markers
  */
+
 void Game::initGame() {
     for(int i = 0; i < 25; i++){
         spaces_.push_back(*(new Space(i+1,NULL)));
@@ -225,6 +227,25 @@ int Game::isWinner(Player player){
  *
  *
  */
-void Game::placeMarker() {}
+void Game::placeMarker(Space space, Marker marker) {
 
-void Game::moveMarker() {}
+    space.setMarker(&marker);
+
+}
+
+void Game::moveMarker(Space currentSpace, Space nextSpace) {
+
+    int* movesAvailables=allCorrectMoves(currentSpace);
+
+    for(int i=0; i<8; i++){
+        if(movesAvailables[i]==nextSpace.getSpace_id()){
+
+            Marker* currentMarker = currentSpace.getMarker();
+
+            nextSpace.setMarker(currentMarker);
+            currentSpace.setMarker(nullptr);
+
+            return;
+        }
+    }
+}
