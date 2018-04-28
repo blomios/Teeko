@@ -33,6 +33,9 @@ void Game::initGame() {
     }
     players_.push_back(*(new Player("Black")));
     players_.push_back(*(new Player("Red")));
+    // TODO(anyone) Remove the next two lines, test purpose
+    players_.at(1).getSpaces()->push_back(&spaces_.at(2));
+    spaces_.at(2).setMarker(&markers_.at(5));
 }
 
 const Board &Game::getBoard() const {
