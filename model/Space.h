@@ -12,8 +12,11 @@ public:
         space_id_ = id;
         marker_ = m;
     }
+
     int getSpace_id() const;
     Marker* getMarker() const;
+
+    void setMarker(Marker* marker);
 };
 
 

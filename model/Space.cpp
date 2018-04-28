@@ -7,3 +7,7 @@ int Space::getSpace_id() const {
 Marker* Space::getMarker() const {
     return marker_;
 }
+
+void Space::setMarker(Marker* marker) {
+    marker_ = marker;
+}

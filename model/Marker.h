@@ -11,6 +11,7 @@ public:
     Marker(string color){
         color_ = color;
     }
+
     string getColor(){
         return color_;
     }
