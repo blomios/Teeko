@@ -228,8 +228,14 @@ int Game::isWinner(Player player){
  *
  */
 void Game::placeMarker(Space space, Marker marker) {
+    int* movesAvailables=allCorrectMoves(space);
 
-    space.setMarker(&marker);
+    for(int i=0; i<8; i++) {
+        if (movesAvailables[i] == space.getSpace_id()) {
+            space.setMarker(&marker);
+            return;
+        }
+    }
 
 }
 
