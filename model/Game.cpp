@@ -6,18 +6,9 @@ void Game::Start() {
     this->initGame();
 
     do{
-        this->numberTurn_ += 1;
         if(this->turn_ == 0){
             // Player Black
-
-
-
-            this->turn_ = 1;
         } else {
-            // Player Red
-
-
-            this->turn_ = 0;
         }
 
     }while(isWinner(players_[0]) || isWinner(players_[1]));
@@ -42,9 +33,6 @@ void Game::initGame() {
     }
     players_.push_back(*(new Player("Black")));
     players_.push_back(*(new Player("Red")));
-
-    this->turn_ = 0; // Player Black Start the game
-    this->numberTurn_ = 0; // Start turn
 }
 
 const Board &Game::getBoard() const {
@@ -168,7 +156,7 @@ int* Game::allCorrectMoves(Space marker_here){
     /* Check if spaces is empty */
     for(int i = 0; i < 8; i++){
         if(id_space_enable[i] != -1){
-            if(spaces_[id_space_enable[i]-1].getMarker() != NULL ){
+            if(checkEmptySpace(spaces_[id_space_enable[i]-1])){
                 id_space_enable[i] = -1; /* There is a marker on this space */
             }
         }
@@ -239,8 +227,14 @@ int Game::isWinner(Player player){
  *
  */
 void Game::placeMarker(Space space, Marker marker) {
+    int* movesAvailables=allCorrectMoves(space);
 
-    space.setMarker(&marker);
+    for(int i=0; i<8; i++) {
+        if (movesAvailables[i] == space.getSpace_id()) {
+            space.setMarker(&marker);
+            return;
+        }
+    }
 
 }
 
