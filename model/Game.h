@@ -26,6 +26,7 @@ private:
     vector<Marker> markers_;
     vector<Player> players_;
     int turn_; // Player 1 or 2
+    int numberTurn_;
 
 
 };
