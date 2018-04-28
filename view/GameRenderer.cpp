@@ -15,15 +15,24 @@ void GameRenderer::Render() {
         // TODO(Piryus) Events function
         while (main_window_.pollEvent(event))
         {
-            // Close button
-            if (event.type == sf::Event::Closed)
-                main_window_.close();
-                // Resizing, prevent bad scaling
-            else if(event.type == sf::Event::Resized)
-                main_window_.setView(sf::View(sf::FloatRect(0, 0, event.size.width, event.size.height)));
+            switch (event.type) {
+                case sf::Event::Closed: {  // Close button
+                    main_window_.close();
+                    break;
+                }
+                case sf::Event::Resized: {  // Occur when window is resized
+                    main_window_.setView(sf::View(sf::FloatRect(0, 0, event.size.width, event.size.height)));
+                    break;
+                }
+                case sf::Event::MouseButtonReleased: {
+                    if(event.mouseButton.button==sf::Mouse::Left) {
+                        ClickController(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y);
+                    }
+                    break;
+                }
+            }
         }
 
-        //main_window_.clear(sf::Color(238,192,106)); // Set the background color
         this->DrawBackground();
         this->DrawBoard();
         this->DrawSpaces();
@@ -40,7 +49,7 @@ void GameRenderer::DrawBoard() {
     int border_position_x = (main_window_.getSize().x-kBorderX)/2;
     int border_position_y = (main_window_.getSize().y-kBorderY)/2;
     border.setPosition(border_position_x,border_position_y);
-    border.setFillColor(sf::Color(255,178,71));
+    border.setFillColor(sf::Color(210,105,30));
     border.setOutlineThickness(10);
     border.setOutlineColor(sf::Color(0,0,0));
     main_window_.draw(border);
@@ -52,32 +61,29 @@ void GameRenderer::DrawSpaces() {
     for(int i = 0; i<5; i++) {
         for(int j = 0; j<5; j++) {
             spaces[i][j].setRadius(50);
-            spaces[i][j].setFillColor(sf::Color::Transparent);
-            spaces[i][j].setOutlineThickness(3);
-            spaces[i][j].setOutlineColor(sf::Color(25, 25, 25));
+            spaces[i][j].setFillColor(sf::Color(255,178,71));
+            spaces[i][j].setOutlineThickness(4);
+            spaces[i][j].setOutlineColor(sf::Color::Black);
             // Define spaces position
             int space_position_x = (main_window_.getSize().x-kBorderX)/2 + i * 150 + 25;
             int space_position_y = (main_window_.getSize().y-kBorderY)/2 + j * 150 + 25;
             // Set spaces position
             spaces[i][j].setPosition(space_position_x, space_position_y);
             main_window_.draw(spaces[i][j]);
-            if (i < 4) {
-                // Render the link between this space and the next one
+            if (i < 4) { // Render the link between this space and the next one
                 sf::RectangleShape link(sf::Vector2f(50, 5));
                 link.setPosition(space_position_x + 100, space_position_y + 50);
                 link.setFillColor(sf::Color::Black);
                 main_window_.draw(link);
             }
-            if (j < 4) {
-                // Render the link between this space and the one below it
+            if (j < 4) { // Render the link between this space and the one below it
                 sf::RectangleShape link(sf::Vector2f(50, 5));
                 link.setFillColor(sf::Color::Black);
                 link.setPosition(space_position_x + 50, space_position_y + 100);
                 link.rotate(90);
                 main_window_.draw(link);
             }
-            // Render the link between this space and the two diagonally
-            if(i < 4 && j < 4) {
+            if(i < 4 && j < 4) { // Render the link between this space and the one on the right diagonal
                 int link_position_x = space_position_x + 50 + 35;
                 int link_position_y = space_position_y + 50 + 35;
                 sf::RectangleShape link(sf::Vector2f(110, 5));
@@ -86,7 +92,7 @@ void GameRenderer::DrawSpaces() {
                 link.rotate(45);
                 main_window_.draw(link);
             }
-            if(i > 0 && j < 4) {
+            if(i > 0 && j < 4) { // Render the link between this space and the one on the left diagonal
                 int link_position_x = space_position_x + 50 - 35;
                 int link_position_y = space_position_y + 50 + 35;
                 sf::RectangleShape link(sf::Vector2f(110, 5));
@@ -101,14 +107,14 @@ void GameRenderer::DrawSpaces() {
 
 void GameRenderer::DrawMarkers() {
     // TODO(Piryus) Draw markers from the board
-    for(int i = 0; i < game_->getPlayers()->size(); i++) {
-        for(int j = 0; j < game_->getPlayers()->at(i).getSpaces()->size(); j++) {
-            sf::CircleShape marker(50);
-            if( game_->getPlayers()->at(i).getColor()=="Red")
-                marker.setFillColor(sf::Color::Red);
+    for (auto &player : *game_->getPlayers()) {
+        for(int j = 0; j < player.getSpaces()->size(); j++) {
+            sf::CircleShape marker(43);
+            if(player.getColor()=="Red")
+                marker.setFillColor(sf::Color(216,0,0));
             else
                 marker.setFillColor(sf::Color::Black);
-            marker.setPosition(GetCoordX(game_->getPlayers()->at(i).getSpaces()->at(j)->getSpace_id()),GetCoordY(game_->getPlayers()->at(i).getSpaces()->at(j)->getSpace_id()));
+            marker.setPosition(GetCoordX(player.getSpaces()->at(j)->getSpace_id())+(50-marker.getRadius()),GetCoordY(player.getSpaces()->at(j)->getSpace_id())+(50-marker.getRadius()));
             main_window_.draw(marker);
         }
             /* TODO(Piryus) Loop through spaces and check if member is_selected_ is true
@@ -158,4 +164,16 @@ int GameRenderer::GetCoordY(int space_id) {
         y = space_id/5-1;
     }
     return (main_window_.getSize().y-750)/2+y*150+25;
+}
+
+void GameRenderer::ClickController(int mouse_x, int mouse_y) { //TODO(Piryus) Finish implementing this function
+    for(int i = 0 ; i < 25 ; i++) {
+        if((mouse_x>=GetCoordX(i)||mouse_x<=GetCoordX(i)+50)&&(mouse_y>=GetCoordY(i)||mouse_y<=GetCoordY(i)+50)) {
+            for(Space space : game_->getBoard().getSpaces()) {
+                space.Unselect();
+            }
+            Space space = game_->getBoard().getSpaces().at(i);
+            space.Select();
+        }
+    }
 }
