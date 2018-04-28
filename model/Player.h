@@ -9,19 +9,20 @@ using namespace std;
 class Player {
 private:
     string color_;
-    vector<Space> spaces;
+    vector<Space*> spaces;
 public:
+    string getColor();
 
     Player(string color){
         color_ = color;
     }
 
-    vector<Space> getSpaces(){
-        return spaces;
+    vector<Space *> *getSpaces(){
+        return &spaces;
     }
 
     int getMarkersOnBoard(){
-        return getSpaces().size();
+        return getSpaces()->size();
     }
 
 };

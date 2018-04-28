@@ -100,24 +100,20 @@ void GameRenderer::DrawSpaces() {
 }
 
 void GameRenderer::DrawMarkers() {
-    // Render two markers
-    // TODO(Piryus) Remove when not needed anymore
-    sf::CircleShape red_marker(50);
-    sf::CircleShape black_marker(50);
-    red_marker.setFillColor(sf::Color::Red);
-    black_marker.setFillColor(sf::Color::Black);
-    red_marker.setPosition(GetCoordX(1), GetCoordY(1));
-    black_marker.setPosition(GetCoordX(25), GetCoordY(25));
-    main_window_.draw(red_marker);
-    main_window_.draw(black_marker);
-
     // TODO(Piryus) Draw markers from the board
-    for(Space space : game_->getBoard().getSpaces()) {
-        if(space.getMarker()) {
+    for(int i = 0; i < game_->getPlayers()->size(); i++) {
+        for(int j = 0; j < game_->getPlayers()->at(i).getSpaces()->size(); j++) {
+            sf::CircleShape marker(50);
+            if( game_->getPlayers()->at(i).getColor()=="Red")
+                marker.setFillColor(sf::Color::Red);
+            else
+                marker.setFillColor(sf::Color::Black);
+            marker.setPosition(GetCoordX(game_->getPlayers()->at(i).getSpaces()->at(j)->getSpace_id()),GetCoordY(game_->getPlayers()->at(i).getSpaces()->at(j)->getSpace_id()));
+            main_window_.draw(marker);
+        }
             /* TODO(Piryus) Loop through spaces and check if member is_selected_ is true
              * If it is, draw in different color
              */
-        }
     }
 }
 
