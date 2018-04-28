@@ -17,7 +17,7 @@ public:
     int* allCorrectMoves(Space marker_here);
     int isWinner(Player player);
     void placeMarker(Space space, Marker marker);
-    void moveMarker(Space space, Marker marker);
+    void moveMarker(Space currentSpace,Space nextSpace);
 
 
 private:

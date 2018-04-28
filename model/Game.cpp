@@ -245,8 +245,19 @@ void Game::placeMarker(Space space, Marker marker) {
 
 }
 
-void Game::moveMarker(Space space, Marker marker) {
+void Game::moveMarker(Space currentSpace, Space nextSpace) {
 
+    int* movesAvailables=allCorrectMoves(currentSpace);
 
+    for(int i=0; i<8; i++){
+        if(movesAvailables[i]==nextSpace.getSpace_id()){
 
+            Marker* currentMarker = currentSpace.getMarker();
+
+            nextSpace.setMarker(currentMarker);
+            currentSpace.setMarker(nullptr);
+
+            return;
+        }
+    }
 }
