@@ -6,17 +6,15 @@
 class Space {
 private:
     int space_id_;
+    bool isSelected;
     Marker* marker_;
 public:
-    Space(int id,Marker* m){
-        space_id_ = id;
-        marker_ = m;
-    }
-
+    Space(int id,Marker* m);
     int getSpace_id() const;
     Marker* getMarker() const;
-
     void setMarker(Marker* marker);
+    void Select();
+    void Unselect();
 };
 
 

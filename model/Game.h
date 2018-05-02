@@ -18,7 +18,7 @@ public:
     int isWinner(Player player);
     void placeMarker(Space space, Marker marker);
     void moveMarker(Space currentSpace,Space nextSpace);
-
+    vector<Player>* getPlayers();
 
 private:
     Board board_;

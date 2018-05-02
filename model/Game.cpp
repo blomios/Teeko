@@ -44,6 +44,10 @@ void Game::initGame() {
     players_.push_back(*(new Player("Black")));
     players_.push_back(*(new Player("Red")));
 
+    // TODO(anyone) Remove the next two lines, test purpose
+    players_.at(1).getSpaces()->push_back(&spaces_.at(2));
+    spaces_.at(2).setMarker(&markers_.at(5));
+
     this->turn_ = 0; // Player Black Start the game
     this->numberTurn_ = 0; // Start turn
 }
@@ -188,11 +192,11 @@ int Game::isWinner(Player player){
 
     //Check first if there 4 markers on board
     if(player.getMarkersOnBoard() == 4){
-        vector<Space> spaces_contains_markers = player.getSpaces();
+        vector<Space*> *spaces_contains_markers = player.getSpaces();
         int* markers_ids = new int[4];
         //Get ids
         for(int i = 0; i < 4; i++){
-            markers_ids[i] = spaces_contains_markers[i].getSpace_id();
+            markers_ids[i] = spaces_contains_markers->at(i)->getSpace_id();
         }
 
         //Sort tab
@@ -267,3 +271,8 @@ void Game::moveMarker(Space currentSpace, Space nextSpace) {
         }
     }
 }
+
+vector<Player>* Game::getPlayers() {
+    return &players_;
+}
+

@@ -23,6 +23,7 @@ public:
     void DrawBackground();
     int GetCoordX(int space_id);
     int GetCoordY(int space_id);
+    void ClickController(int mouse_x, int mouse_y);
 };
 
 
