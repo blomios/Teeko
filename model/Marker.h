@@ -7,14 +7,11 @@ using namespace std;
 class Marker {
 private:
     string color_;
+    int marker_id_;
 public:
-    Marker(string color){
-        color_ = color;
-    }
-
-    string getColor(){
-        return color_;
-    }
+    Marker(string color,int id);
+    string getColor();
+    int getMarker_id() const;
 };
 
 

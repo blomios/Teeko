@@ -16,8 +16,8 @@ public:
     int checkEmptySpace(Space space);
     int* allCorrectMoves(Space marker_here);
     int isWinner(Player player);
-    void placeMarker(Space space, Marker marker);
-    void moveMarker(Space currentSpace,Space nextSpace);
+    void placeMarker(Space space, int player);
+    void moveMarker(Space currentSpace,Space nextSpace, int player);
     vector<Player>* getPlayers();
 
 private:
