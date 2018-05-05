@@ -1,7 +1,6 @@
 #include "Space.h"
 
 Space::Space(int id,Marker* m){
-    isSelected = false;
     space_id_ = id;
     marker_ = m;
 }
@@ -16,12 +15,4 @@ Marker* Space::getMarker() const {
 
 void Space::setMarker(Marker* marker) {
     marker_ = marker;
-}
-
-void Space::Select() {
-    this->isSelected = true;
-}
-
-void Space::Unselect() {
-    this->isSelected = false;
 }

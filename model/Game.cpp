@@ -275,3 +275,11 @@ vector<Player>* Game::getPlayers() {
     return &players_;
 }
 
+vector<Space> *Game::GetSpaces() {
+    return &spaces_;
+}
+
+vector<Marker> *Game::GetMarkers() {
+    return &markers_;
+}
+

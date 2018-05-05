@@ -17,6 +17,8 @@ public:
     void placeMarker(Space space, int player);
     void moveMarker(Space currentSpace,Space nextSpace, int player);
     vector<Player>* getPlayers();
+    vector<Space>* GetSpaces();
+    vector<Marker>* GetMarkers();
 
 private:
     vector<Space> spaces_;

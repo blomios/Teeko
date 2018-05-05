@@ -1,3 +1,4 @@
+#include <iostream>
 #include "GameRenderer.h"
 
 
@@ -108,19 +109,21 @@ void GameRenderer::DrawSpaces() {
 void GameRenderer::DrawMarkers() {
     // TODO(Piryus) Draw markers from the board
     for (auto &player : *game_->getPlayers()) {
-        for(int j = 0; j < player.getSpaces()->size(); j++) {
+        vector<Space*> *player_spaces = player.getSpaces();
+        for(int j = 0; j < player_spaces->size(); j++) {
             sf::CircleShape marker(43);
-            if(player.getColor()=="Red")
+            if(player.getSpaces()->at(j)->getMarker()->IsSelected())
+                marker.setFillColor(sf::Color::Yellow);
+            else if(player.getColor()=="Red")
                 marker.setFillColor(sf::Color(216,0,0));
-            else
+            else if(player.getColor()=="Black")
                 marker.setFillColor(sf::Color::Black);
-            marker.setPosition(GetCoordX(player.getSpaces()->at(j)->getSpace_id())+(50-marker.getRadius()),GetCoordY(player.getSpaces()->at(j)->getSpace_id())+(50-marker.getRadius()));
+            marker.setPosition(GetCoordX(player_spaces->at(j)->getSpace_id())+(50-marker.getRadius()),GetCoordY(player_spaces->at(j)->getSpace_id())+(50-marker.getRadius()));
             main_window_.draw(marker);
         }
-            /* TODO(Piryus) Loop through spaces and check if member is_selected_ is true
-             * If it is, draw in different color
-             */
     }
+
+    // TODO Draw selected marker (if there is one)
 }
 
 void GameRenderer::DrawTurnLabel() {
@@ -167,13 +170,15 @@ int GameRenderer::GetCoordY(int space_id) {
 }
 
 void GameRenderer::ClickController(int mouse_x, int mouse_y) { //TODO(Piryus) Finish implementing this function
+    vector<Space>* spaces = game_->GetSpaces();
+    for(int j = 0; j < spaces->size(); j++) {
+        if(spaces->at(j).getMarker() != nullptr)
+            spaces->at(j).getMarker()->Unselect();
+    }
     for(int i = 0 ; i < 25 ; i++) {
         if((mouse_x>=GetCoordX(i)||mouse_x<=GetCoordX(i)+50)&&(mouse_y>=GetCoordY(i)||mouse_y<=GetCoordY(i)+50)) {
-            for(Space space : game_->getBoard().getSpaces()) {
-                space.Unselect();
-            }
-            Space space = game_->getBoard().getSpaces().at(i);
-            space.Select();
+            if(spaces->at(i).getMarker() != nullptr)
+                spaces->at(i).getMarker()->Select();
         }
     }
 }
