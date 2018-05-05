@@ -3,7 +3,6 @@
 
 
 #include <SFML/Graphics.hpp>
-#include "Board.h"
 #include "Player.h"
 #include <vector>
 
@@ -11,8 +10,7 @@ class Game {
 public:
     void initGame();
     void Start();
-    const Board &getBoard() const;
-    int* numberMarkerOnBoard(Board board);
+    vector<int> numberMarkerOnBoard();
     int checkEmptySpace(Space space);
     int* allCorrectMoves(Space marker_here);
     int isWinner(Player player);
@@ -21,7 +19,6 @@ public:
     vector<Player>* getPlayers();
 
 private:
-    Board board_;
     vector<Space> spaces_;
     vector<Marker> markers_;
     vector<Player> players_;

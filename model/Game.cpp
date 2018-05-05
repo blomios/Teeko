@@ -58,33 +58,27 @@ void Game::initGame() {
     this->numberTurn_ = 0; // Start turn
 }
 
-const Board &Game::getBoard() const {
-    return board_;
-}
 /**
 * Count markers on the board
 *
 * @return number_marker_on_board Number of marker on board for each player
 * 0 for the player who plays black markers, 1 for the other player (red)
 */
-int* Game::numberMarkerOnBoard(Board board){
+vector<int> Game::numberMarkerOnBoard(){
     // Check all spaces and return number of marker on the board
     // Count number of marker for each players
-    vector<Space> spaces = board.getSpaces();
     Marker* x;
-    int* number_marker_on_board;
-    for(int i = 0; i < spaces.size() ; i++){
-        if ((x = spaces[i].getMarker()) != NULL ){
-            if(x->getColor().compare("Black")){
+    vector<int> number_marker_on_board;
+    for (Space &space : this->spaces_) {
+        if ((x = space.getMarker()) != nullptr){
+            if(x->getColor()=="Black"){
                 number_marker_on_board[0]++;
             } else {
                 number_marker_on_board[1]++;
             }
         }
     }
-
     return number_marker_on_board;
-
 }
 
 /**
