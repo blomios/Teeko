@@ -246,8 +246,8 @@ int Game::isWinner(Player player){
 void Game::placeMarker(Space space, int player) {
 
     if(checkEmptySpace(space)){
-        players_.at(player).getSpaces()->push_back(&spaces_.at(space.getSpace_id()));
-        spaces_.at(space.getSpace_id()).setMarker(&markers_.at(/*TODO find a solution to put the forth markers_id*/1));
+        players_.at(player).getSpaces()->push_back(&spaces_.at(space.getSpace_id()-1));
+        spaces_.at(space.getSpace_id()-1).setMarker(&markers_.at(/*TODO find a solution to put the forth markers_id*/1));
     }
 
 }
