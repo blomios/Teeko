@@ -51,8 +51,8 @@ void Game::initGame() {
     players_.push_back(*(new Player("Red")));
 
     // TODO(anyone) Remove the next two lines, test purpose
-    players_.at(1).getSpaces()->push_back(&spaces_.at(2));
-    spaces_.at(2).setMarker(&markers_.at(5));
+    players_.at(1).getSpaces()->push_back(&spaces_.at(19));
+    spaces_.at(19).setMarker(&markers_.at(1));
 
     this->turn_ = 0; // Player Black Start the game
     this->numberTurn_ = 0; // Start turn

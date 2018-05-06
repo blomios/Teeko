@@ -1,4 +1,3 @@
-#include <iostream>
 #include "GameRenderer.h"
 
 
@@ -27,7 +26,7 @@ void GameRenderer::Render() {
                 }
                 case sf::Event::MouseButtonReleased: {
                     if(event.mouseButton.button==sf::Mouse::Left) {
-                        ClickController(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y);
+                        ClickController(sf::Mouse::getPosition(main_window_).x, sf::Mouse::getPosition(main_window_).y);
                     }
                     break;
                 }
@@ -112,9 +111,11 @@ void GameRenderer::DrawMarkers() {
         vector<Space*> *player_spaces = player.getSpaces();
         for(int j = 0; j < player_spaces->size(); j++) {
             sf::CircleShape marker(43);
-            if(player.getSpaces()->at(j)->getMarker()->IsSelected())
-                marker.setFillColor(sf::Color::Yellow);
-            else if(player.getColor()=="Red")
+            if(player.getSpaces()->at(j)->getMarker()->IsSelected()) {
+                marker.setOutlineThickness(-10);
+                marker.setOutlineColor(sf::Color(0, 100, 255));
+            }
+            if(player.getColor()=="Red")
                 marker.setFillColor(sf::Color(216,0,0));
             else if(player.getColor()=="Black")
                 marker.setFillColor(sf::Color::Black);
@@ -169,14 +170,14 @@ int GameRenderer::GetCoordY(int space_id) {
     return (main_window_.getSize().y-750)/2+y*150+25;
 }
 
-void GameRenderer::ClickController(int mouse_x, int mouse_y) { //TODO(Piryus) Finish implementing this function
+void GameRenderer::ClickController(int mouse_x, int mouse_y) {
     vector<Space>* spaces = game_->GetSpaces();
     for(int j = 0; j < spaces->size(); j++) {
         if(spaces->at(j).getMarker() != nullptr)
             spaces->at(j).getMarker()->Unselect();
     }
     for(int i = 0 ; i < 25 ; i++) {
-        if((mouse_x>=GetCoordX(i)||mouse_x<=GetCoordX(i)+50)&&(mouse_y>=GetCoordY(i)||mouse_y<=GetCoordY(i)+50)) {
+        if((mouse_x>=GetCoordX(i+1)&&mouse_x<=GetCoordX(i+1)+100)&&(mouse_y>=GetCoordY(i+1)&&mouse_y<=GetCoordY(i+1)+100)) {
             if(spaces->at(i).getMarker() != nullptr)
                 spaces->at(i).getMarker()->Select();
         }
