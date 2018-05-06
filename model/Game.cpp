@@ -6,10 +6,10 @@ void Game::Start() {
     this->initGame();
 
     do{
-        this->numberTurn_ += 1;
+        this->turn_number_ += 1;
         if(this->turn_ == 0){
             // Player Black
-            if(numberTurn_ > 4){
+            if(turn_number_ > 4){
                 //placeMarker();
             } else {
                 //moveMarker();
@@ -17,7 +17,7 @@ void Game::Start() {
             this->turn_ = 1;
         } else {
             //Player Red
-            if(numberTurn_ > 4){
+            if(turn_number_ > 4){
                 //placeMarker();
             } else {
                 //moveMarker();
@@ -55,7 +55,7 @@ void Game::initGame() {
     spaces_.at(19).setMarker(&markers_.at(1));
 
     this->turn_ = 0; // Player Black Start the game
-    this->numberTurn_ = 0; // Start turn
+    this->turn_number_ = 0; // Start turn
 }
 
 /**
@@ -283,3 +283,10 @@ vector<Marker> *Game::GetMarkers() {
     return &markers_;
 }
 
+int Game::GetTurnNumber() {
+    return turn_number_;
+}
+
+int Game::GetPlayerTurn() {
+    return turn_;
+}

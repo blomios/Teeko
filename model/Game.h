@@ -19,13 +19,15 @@ public:
     vector<Player>* getPlayers();
     vector<Space>* GetSpaces();
     vector<Marker>* GetMarkers();
+    int GetTurnNumber();
+    int GetPlayerTurn();
 
 private:
     vector<Space> spaces_;
     vector<Marker> markers_;
     vector<Player> players_;
     int turn_; // Player 1 or 2
-    int numberTurn_;
+    int turn_number_;
 
 
 };
