@@ -243,7 +243,7 @@ void Game::placeMarker(Space space, int player) {
 
     if(checkEmptySpace(space) && players_.at(player).getSpaces()->size()<4){
         players_.at(player).getSpaces()->push_back(&spaces_.at(space.getSpace_id()-1));
-        spaces_.at(space.getSpace_id()-1).setMarker(&markers_.at(/*TODO find a solution to put the forth markers_id*/1));
+        spaces_.at(space.getSpace_id()-1).setMarker(&markers_.at(players_.at(0).getSpaces()->size()+players_.at(1).getSpaces()->size()-1));
         turn_number_++;
         turn_ = turn_ == 0 ? 1 : 0;
     }
