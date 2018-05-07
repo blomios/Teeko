@@ -50,10 +50,6 @@ void Game::initGame() {
     players_.push_back(*(new Player("Black")));
     players_.push_back(*(new Player("Red")));
 
-    // TODO(anyone) Remove the next two lines, test purpose
-    players_.at(1).getSpaces()->push_back(&spaces_.at(19));
-    spaces_.at(19).setMarker(&markers_.at(1));
-
     this->turn_ = 0; // Player Black Start the game
     this->turn_number_ = 0; // Start turn
 }
@@ -245,28 +241,31 @@ int Game::isWinner(Player player){
  */
 void Game::placeMarker(Space space, int player) {
 
-    if(checkEmptySpace(space)){
+    if(checkEmptySpace(space) && players_.at(player).getSpaces()->size()<4){
         players_.at(player).getSpaces()->push_back(&spaces_.at(space.getSpace_id()-1));
         spaces_.at(space.getSpace_id()-1).setMarker(&markers_.at(/*TODO find a solution to put the forth markers_id*/1));
+        turn_number_++;
+        turn_ = turn_ == 0 ? 1 : 0;
     }
 
 }
 
 void Game::moveMarker(Space currentSpace, Space nextSpace, int player) {
+    if(players_.at(player).getSpaces()->size()==4) {
+        int *movesAvailables = allCorrectMoves(currentSpace);
 
-    int* movesAvailables=allCorrectMoves(currentSpace);
+        for (int i = 0; i < 8; i++) {
+            if (movesAvailables[i] == nextSpace.getSpace_id()) {
 
-    for(int i=0; i<8; i++){
-        if(movesAvailables[i]== nextSpace.getSpace_id()){
+                players_.at(player).getSpaces()->push_back(&spaces_.at(nextSpace.getSpace_id()));
+                spaces_.at(nextSpace.getSpace_id()).setMarker(&markers_.at(currentSpace.getMarker()->getMarker_id()));
 
-            players_.at(player).getSpaces()->push_back(&spaces_.at(nextSpace.getSpace_id()));
-            spaces_.at(nextSpace.getSpace_id()).setMarker(&markers_.at(currentSpace.getMarker()->getMarker_id()));
+                //TODO find a method erase this element
+                players_.at(player).getSpaces()->pop_back(/*&spaces_.at(currentSpace.getSpace_id())*/);
+                spaces_.at(currentSpace.getSpace_id()).setMarker(nullptr);
 
-            //TODO find a method erase this element
-            players_.at(player).getSpaces()->pop_back(/*&spaces_.at(currentSpace.getSpace_id())*/);
-            spaces_.at(currentSpace.getSpace_id()).setMarker(nullptr);
-
-            return;
+                return;
+            }
         }
     }
 }
