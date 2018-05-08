@@ -5,6 +5,7 @@
 #include <SFML/Graphics.hpp>
 #include "Player.h"
 #include <vector>
+#include <algorithm>
 
 class Game {
 public:
@@ -12,7 +13,7 @@ public:
     void Start();
     vector<int> numberMarkerOnBoard();
     int checkEmptySpace(Space space);
-    int* allCorrectMoves(Space marker_here);
+    vector<int> allCorrectMoves(Space marker_here);
     int isWinner(Player player);
     void placeMarker(Space space, int player);
     void moveMarker(Space currentSpace,Space nextSpace, int player);

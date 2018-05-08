@@ -1,4 +1,3 @@
-#include <algorithm>
 #include "Game.h"
 using namespace std;
 
@@ -92,7 +91,7 @@ int Game::checkEmptySpace(Space space){
  * @return all moves possible for the player, within -1 for impossible choices
  *		   and id_space for
  */
-int* Game::allCorrectMoves(Space marker_here){
+vector<int> Game::allCorrectMoves(Space marker_here){
 
     /* First, if the space is next to the marker before the move
      * Next, we check if the space is empty
@@ -106,7 +105,7 @@ int* Game::allCorrectMoves(Space marker_here){
      */
 
     int id_space = marker_here.getSpace_id();
-    int* id_space_enable = new int[8];
+    vector<int> id_space_enable;
 
     /* 5 cases :
      *
@@ -251,22 +250,23 @@ void Game::placeMarker(Space space, int player) {
 }
 
 void Game::moveMarker(Space currentSpace, Space nextSpace, int player) {
-    if(players_.at(player).getSpaces()->size()==4) {
-        int *movesAvailables = allCorrectMoves(currentSpace);
+    if (players_.at(player).getSpaces()->size() == 4) {
+        //vector<int> movesAvailables = allCorrectMoves(currentSpace);
 
-        for (int i = 0; i < 8; i++) {
-            if (movesAvailables[i] == nextSpace.getSpace_id()) {
+        //for (int i = 0; i < 8; i++) {
+            //if (movesAvailables[i] == nextSpace.getSpace_id()) {
 
-                players_.at(player).getSpaces()->push_back(&spaces_.at(nextSpace.getSpace_id()));
-                spaces_.at(nextSpace.getSpace_id()).setMarker(&markers_.at(currentSpace.getMarker()->getMarker_id()));
 
-                //TODO find a method erase this element
-                players_.at(player).getSpaces()->pop_back(/*&spaces_.at(currentSpace.getSpace_id())*/);
-                spaces_.at(currentSpace.getSpace_id()).setMarker(nullptr);
+                players_.at(player).getSpaces()->push_back(&spaces_.at(nextSpace.getSpace_id()-1));
+                spaces_.at(nextSpace.getSpace_id()-1).setMarker(&markers_.at(currentSpace.getMarker()->getMarker_id()-1));
 
-                return;
-            }
-        }
+                //TODO find a method erase this element (use erase-remove idiom)
+                //vector<Space*>* spaces = players_.at(player).getSpaces();
+                //spaces->erase(std::remove(spaces->begin(), spaces->end(), currentSpace), spaces->end());
+                //spaces_.at(currentSpace.getSpace_id()-1).setMarker(nullptr);
+
+           // }
+        //}
     }
 }
 

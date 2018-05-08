@@ -192,6 +192,7 @@ void GameRenderer::ClickController(int mouse_x, int mouse_y) {
             selected_space = &spaces->at(j);
     }
 
+    // TODO(Piryus) Check marker color for selection
     if (selected_space == nullptr && clicked_space_id != -1) { // If the player clicks on a space and if no space is selected
         // If the player clicks on a marker
         if (spaces->at(clicked_space_id-1).getMarker() != nullptr)
@@ -203,13 +204,14 @@ void GameRenderer::ClickController(int mouse_x, int mouse_y) {
         selected_space->getMarker()->Unselect();
         selected_space = nullptr;
     } else if (selected_space != nullptr && clicked_space_id != -1) { // If the player clicks on a valid space and if there is a selected marker
-        // Unselect the selected space
-        selected_space->getMarker()->Unselect();
-        selected_space = nullptr;
         // If the player clicked on a marker
-        if (spaces->at(clicked_space_id-1).getMarker() != nullptr)
-            spaces->at(clicked_space_id-1).getMarker()->Select();
-        else {
+        if (spaces->at(clicked_space_id - 1).getMarker() != nullptr) {
+            // Unselect the selected space
+            selected_space->getMarker()->Unselect();
+            selected_space = nullptr;
+            // Select the other marker
+            spaces->at(clicked_space_id - 1).getMarker()->Select();
+        } else {
             game_->moveMarker(spaces->at(selected_space->getSpace_id()-1), spaces->at(clicked_space_id-1), player_turn);
         }
     }
