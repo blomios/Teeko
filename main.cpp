@@ -4,7 +4,7 @@
 
 int main()
 {
-    Game game(true);
+    Game game(false);
     game.Start();
     GameRenderer game_renderer(&game);
     game_renderer.Render();
