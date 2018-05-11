@@ -1,6 +1,4 @@
 #include "MainMenu.h"
-#include "../model/Game.h"
-#include "GameRenderer.h"
 
 MainMenu::MainMenu() {
     sf::ContextSettings settings;
@@ -32,10 +30,34 @@ void MainMenu::Render() {
             }
         }
 
+        this->DrawBackground();
+        this->DrawTitle();
         this->DrawButtons();
         // Display window
         main_window_.display();
     }
+}
+
+void MainMenu::DrawBackground() {
+    sf::Texture wood_texture;
+    if (!wood_texture.loadFromFile("..\\resources\\images\\wood.jpg")) {
+        printf("Error while loading wood texture.\n");
+    } else {
+        wood_texture.setRepeated(true);
+        sf::Sprite background_sprite;
+        background_sprite.setTexture(wood_texture);
+        background_sprite.setTextureRect(sf::IntRect(0, 0, main_window_.getSize().x, main_window_.getSize().y));
+        main_window_.draw(background_sprite);
+    }
+}
+
+void MainMenu::DrawTitle() {
+    sf::Texture teeko_img;
+    teeko_img.loadFromFile("..\\resources\\images\\teeko.png");
+    sf::Sprite teeko;
+    teeko.setTexture(teeko_img);
+    teeko.setPosition((main_window_.getSize().x-teeko.getLocalBounds().width)/2,(main_window_.getSize().y-teeko.getLocalBounds().height)/12);
+    main_window_.draw(teeko);
 }
 
 void MainMenu::DrawButtons() { //TODO(Piryus) Refactor this (soon)

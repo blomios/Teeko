@@ -2,6 +2,8 @@
 #define TEEKO_MAINMENU_H
 
 #include <SFML/Graphics.hpp>
+#include "../model/Game.h"
+#include "GameRenderer.h"
 
 class MainMenu {
 private:
@@ -18,6 +20,8 @@ public:
     void DrawButtons();
     void HighlightButtonsController(int mouse_x, int mouse_y);
     void ClickController(int mouse_x, int mouse_y);
+    void DrawTitle();
+    void DrawBackground();
 };
 
 
