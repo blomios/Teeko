@@ -9,8 +9,11 @@
 
 class Game {
 public:
+    Game(bool isIA):iaGame_(isIA){};
+
     void initGame();
     void Start();
+
     vector<int> numberMarkerOnBoard();
     int checkEmptySpace(Space space);
     vector<int> allCorrectMoves(Space marker_here);
@@ -29,7 +32,7 @@ private:
     vector<Player> players_;
     int turn_; // Player 1 or 2
     int turn_number_;
-
+    bool iaGame_; // Si jamais on veut lancer contre une IA, ça passe à vrai
 
 };
 
