@@ -6,7 +6,7 @@ using namespace std;
  * Initiation Spaces and Markers
  */
 void Game::initGame() {
-    this->turn_number_ += 1;
+
     for(int i = 0; i < 25; i++){
         this->spaces_.push_back(*(new Space(i+1,NULL)));
     }
@@ -23,9 +23,8 @@ void Game::initGame() {
 
     this->players_.push_back(*(new Player("Black")));
     this->players_.push_back(*(new Player("Red")));
-
-    this->turn_ = 0; // Player Black Start the game
-    this->turn_number_ = 0; // Start turn
+    this->turn_number_ = 1;
+    this->turn_ = 1; // Player Black Start the game
 }
 
 /**
