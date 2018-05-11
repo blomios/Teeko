@@ -32,15 +32,29 @@ void Game::Start() {
  * Initiation Spaces and Markers
  */
 
+
+
 void Game::initGame() {
-    for(int i = 0; i < 25; i++){
+    for(int i = 0; i < 25; i++)
+    {
         spaces_.push_back(*(new Space(i+1,NULL)));
     }
 
-    for(int i = 0; i < 8; i++){
-        if( i < 4){
+    for(int i = 0; i < 8; i++)
+    {
+        /*if( i < 4)
+        {
             markers_.push_back(*(new Marker("Black",i+1)));
-        } else {
+        } else
+            {
+            markers_.push_back(*(new Marker("Red",i+1)));
+        }*/
+
+        if(i%2)
+        {
+            markers_.push_back(*(new Marker("Black",i+1)));
+        } else
+        {
             markers_.push_back(*(new Marker("Red",i+1)));
         }
 
@@ -182,7 +196,8 @@ vector<int> Game::allCorrectMoves(Space marker_here){
  * @param player who want if is the winner of the game
  * @return 1 if the player won the game, 0 else
  */
-int Game::isWinner(Player player){
+int Game::isWinner(Player player)
+{
     int winner = 1; /* True */
 
     //Check first if there 4 markers on board
@@ -233,19 +248,32 @@ int Game::isWinner(Player player){
     }
     return winner - 1; /* False */
 }
+
+
 /**
  * The player want to put a marker on the board
  *
  *
  */
-void Game::placeMarker(Space space, int player) {
+void Game::placeMarker(Space space, int player)
+{
 
-    if(checkEmptySpace(space) && players_.at(player).getSpaces()->size()<4){
-        players_.at(player).getSpaces()->push_back(&spaces_.at(space.getSpace_id()-1));
-        spaces_.at(space.getSpace_id()-1).setMarker(&markers_.at(players_.at(0).getSpaces()->size()+players_.at(1).getSpaces()->size()-1));
-        turn_number_++;
-        turn_ = turn_ == 0 ? 1 : 0;
+    if(iaGame_ && players_.at(player).getColor()=="Red")
+    {
+
     }
+    else
+    {
+        if(checkEmptySpace(space) && players_.at(player).getSpaces()->size()<4)
+        {
+            players_.at(player).getSpaces()->push_back(&spaces_.at(space.getSpace_id()-1));
+            spaces_.at(space.getSpace_id()-1).setMarker(&markers_.at(players_.at(0).getSpaces()->size()+players_.at(1).getSpaces()->size()-1));
+            turn_number_++;
+            turn_ = turn_ == 0 ? 1 : 0;
+        }
+    }
+
+
 
 }
 
