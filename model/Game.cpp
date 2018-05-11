@@ -38,7 +38,8 @@ void Game::initGame() {
     }
 
     for(int i = 0; i < 8; i++){
-        if( i < 4){
+
+        if(i % 2){
             markers_.push_back(*(new Marker("Black",i+1)));
         } else {
             markers_.push_back(*(new Marker("Red",i+1)));
@@ -242,7 +243,7 @@ void Game::placeMarker(Space space, int player) {
 
     if(checkEmptySpace(space) && players_.at(player).getSpaces()->size()<4){
         players_.at(player).getSpaces()->push_back(&spaces_.at(space.getSpace_id()-1));
-        spaces_.at(space.getSpace_id()-1).setMarker(&markers_.at(players_.at(0).getSpaces()->size()+players_.at(1).getSpaces()->size()-1));
+        spaces_.at(space.getSpace_id()-1).setMarker(&markers_.at(turn_number_-1));
         turn_number_++;
         turn_ = turn_ == 0 ? 1 : 0;
     }
@@ -251,22 +252,22 @@ void Game::placeMarker(Space space, int player) {
 
 void Game::moveMarker(Space currentSpace, Space nextSpace, int player) {
     if (players_.at(player).getSpaces()->size() == 4) {
-        //vector<int> movesAvailables = allCorrectMoves(currentSpace);
-
-        //for (int i = 0; i < 8; i++) {
-            //if (movesAvailables[i] == nextSpace.getSpace_id()) {
 
 
-                players_.at(player).getSpaces()->push_back(&spaces_.at(nextSpace.getSpace_id()-1));
-                spaces_.at(nextSpace.getSpace_id()-1).setMarker(&markers_.at(currentSpace.getMarker()->getMarker_id()-1));
+        players_.at(player).getSpaces()->push_back(&spaces_.at(nextSpace.getSpace_id() - 1));
+        spaces_.at(nextSpace.getSpace_id() - 1).setMarker(&markers_.at(currentSpace.getMarker()->getMarker_id() - 1));
 
-                //TODO find a method erase this element (use erase-remove idiom)
-                //vector<Space*>* spaces = players_.at(player).getSpaces();
-                //spaces->erase(std::remove(spaces->begin(), spaces->end(), currentSpace), spaces->end());
-                //spaces_.at(currentSpace.getSpace_id()-1).setMarker(nullptr);
+        // method erase
+        spaces_.at(currentSpace.getSpace_id() - 1).setMarker(nullptr);
+        vector<Space *>* spaces = players_.at(player).getSpaces();
+        for(int i = 0; i < 4; i++){
+            if(currentSpace.getSpace_id() == spaces->at(i)->getSpace_id()){
+                players_.at(player).getSpaces()->erase(spaces->begin()+i);
+            }
+        }
 
-           // }
-        //}
+        turn_number_++;
+        turn_ = turn_ == 0 ? 1 : 0;
     }
 }
 
