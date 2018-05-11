@@ -106,7 +106,6 @@ void GameRenderer::DrawSpaces() {
 }
 
 void GameRenderer::DrawMarkers() {
-    // TODO(Piryus) Draw markers from the board
     for (auto &player : *game_->getPlayers()) {
         vector<Space *> *player_spaces = player.getSpaces();
         for (int j = 0; j < player_spaces->size(); j++) {
@@ -124,8 +123,6 @@ void GameRenderer::DrawMarkers() {
             main_window_.draw(marker);
         }
     }
-
-    // TODO Draw selected marker (if there is one)
 }
 
 void GameRenderer::DrawTurnLabel() {
@@ -182,6 +179,7 @@ int GameRenderer::GetCoordY(int space_id) {
     return (main_window_.getSize().y - 750) / 2 + y * 150 + 25;
 }
 
+// TODO(Piryus) Refactor this method
 void GameRenderer::ClickController(int mouse_x, int mouse_y) {
     vector<Space> *spaces = game_->GetSpaces();
     int turn_number = game_->GetTurnNumber();
@@ -194,27 +192,35 @@ void GameRenderer::ClickController(int mouse_x, int mouse_y) {
             selected_space = &spaces->at(j);
     }
 
-    // TODO(Piryus) Check marker color for selection
-    if (selected_space == nullptr && clicked_space_id != -1) { // If the player clicks on a space and if no space is selected
+    if (selected_space == nullptr &&
+        clicked_space_id != -1) { // If the player clicks on a space and if no space is selected
         // If the player clicks on a marker
-        if (spaces->at(clicked_space_id-1).getMarker() != nullptr)
-            spaces->at(clicked_space_id-1).getMarker()->Select();
-        // If he clicks on an empty space
-        else game_->placeMarker(spaces->at(clicked_space_id-1), player_turn);
-    } else if (selected_space != nullptr && clicked_space_id == -1) { // If the player clicks out of a space and if a space is selected
+        if (spaces->at(clicked_space_id - 1).getMarker() != nullptr &&
+            (spaces->at(clicked_space_id - 1).getMarker()->getColor() ==
+             game_->getPlayers()->at(game_->GetPlayerTurn()).getColor()))
+            spaces->at(clicked_space_id - 1).getMarker()->Select();
+            // If he clicks on an empty space
+        else game_->placeMarker(spaces->at(clicked_space_id - 1), player_turn);
+    } else if (selected_space != nullptr &&
+               clicked_space_id == -1) { // If the player clicks out of a space and if a space is selected
         // Unselect the space
         selected_space->getMarker()->Unselect();
         selected_space = nullptr;
-    } else if (selected_space != nullptr && clicked_space_id != -1) { // If the player clicks on a valid space and if there is a selected marker
+    } else if (selected_space != nullptr &&
+               clicked_space_id != -1) { // If the player clicks on a valid space and if there is a selected marker
         // If the player clicked on a marker
-        if (spaces->at(clicked_space_id - 1).getMarker() != nullptr) {
+        if (spaces->at(clicked_space_id - 1).getMarker() != nullptr &&
+            (spaces->at(clicked_space_id - 1).getMarker()->getColor() ==
+             game_->getPlayers()->at(game_->GetPlayerTurn()).getColor())) {
             // Unselect the selected space
             selected_space->getMarker()->Unselect();
             selected_space = nullptr;
             // Select the other marker
             spaces->at(clicked_space_id - 1).getMarker()->Select();
         } else {
-            game_->moveMarker(spaces->at(selected_space->getSpace_id()-1), spaces->at(clicked_space_id-1), player_turn);
+            selected_space->getMarker()->Unselect();
+            game_->moveMarker(spaces->at(selected_space->getSpace_id() - 1), spaces->at(clicked_space_id - 1),
+                              player_turn);
         }
     }
 }
@@ -224,7 +230,7 @@ int GameRenderer::GetClickedSpaceID(int x, int y) {
     for (int i = 0; i < 25; i++) {
         if ((x >= GetCoordX(i + 1) && x <= GetCoordX(i + 1) + 100) &&
             (y >= GetCoordY(i + 1) && y <= GetCoordY(i + 1) + 100)) {
-            space_id = i+1;
+            space_id = i + 1;
         }
     }
     return space_id;
