@@ -152,7 +152,7 @@ void MainMenu::ClickController(int mouse_x, int mouse_y) {
                 case 0 : { // Two players button
                     main_window_.close();
                     Game game(false);
-                    game.Start();
+                    game.initGame();
                     GameRenderer game_renderer(&game);
                     game_renderer.Render();
                     break;

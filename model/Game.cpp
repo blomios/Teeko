@@ -1,54 +1,28 @@
 #include "Game.h"
 using namespace std;
 
-void Game::Start() {
-    this->initGame();
-
-    do{
-        this->turn_number_ += 1;
-        if(this->turn_ == 0){
-            // Player Black
-            if(turn_number_ > 4){
-                //placeMarker();
-            } else {
-                //moveMarker();
-            }
-            this->turn_ = 1;
-        } else {
-            //Player Red
-            if(turn_number_ > 4){
-                //placeMarker();
-            } else {
-                //moveMarker();
-            }
-
-            this->turn_ = 0;
-        }
-
-    }while(isWinner(players_[0]) || isWinner(players_[1]));
-}
 
 /**
  * Initiation Spaces and Markers
  */
-
 void Game::initGame() {
+    this->turn_number_ += 1;
     for(int i = 0; i < 25; i++){
-        spaces_.push_back(*(new Space(i+1,NULL)));
+        this->spaces_.push_back(*(new Space(i+1,NULL)));
     }
 
     for(int i = 0; i < 8; i++){
 
         if(i % 2){
-            markers_.push_back(*(new Marker("Black",i+1)));
+            this->markers_.push_back(*(new Marker("Black",i+1)));
         } else {
-            markers_.push_back(*(new Marker("Red",i+1)));
+            this->markers_.push_back(*(new Marker("Red",i+1)));
         }
 
     }
 
-    players_.push_back(*(new Player("Black")));
-    players_.push_back(*(new Player("Red")));
+    this->players_.push_back(*(new Player("Black")));
+    this->players_.push_back(*(new Player("Red")));
 
     this->turn_ = 0; // Player Black Start the game
     this->turn_number_ = 0; // Start turn
@@ -183,9 +157,8 @@ vector<int> Game::allCorrectMoves(Space marker_here){
  * @param player who want if is the winner of the game
  * @return 1 if the player won the game, 0 else
  */
-int Game::isWinner(Player player){
-    int winner = 1; /* True */
-
+void Game::isWinner(Player player){
+    winner_ = &player;
     //Check first if there 4 markers on board
     if(player.getMarkersOnBoard() == 4){
         vector<Space*> *spaces_contains_markers = player.getSpaces();
@@ -211,7 +184,7 @@ int Game::isWinner(Player player){
                     space_id+=4;
                 }
 
-            }else if((space_id + 1) == markers_ids[i]){
+            } else if((space_id + 1) == markers_ids[i]){
                 /* Line */
                 space_id++;
 
@@ -224,15 +197,10 @@ int Game::isWinner(Player player){
                 space_id+=6;
 
             } else {
-                /* The player doesn't  win this turn */
-                winner = 0; /* False */
-                break;
+                winner_ = nullptr;
             }
         }
-
-        return winner;
     }
-    return winner - 1; /* False */
 }
 /**
  * The player want to put a marker on the board
@@ -241,7 +209,7 @@ int Game::isWinner(Player player){
  * @return 1 if the player won the game, 0 else
  *
  */
-int Game::placeMarker(Space space, int player) {
+void Game::placeMarker(Space space, int player) {
 
     if(iaGame_ && players_.at(player).getColor()=="Red")
     {
@@ -254,10 +222,10 @@ int Game::placeMarker(Space space, int player) {
             spaces_.at(space.getSpace_id()-1).setMarker(&markers_.at(turn_number_-1));
             turn_number_++;
             turn_ = turn_ == 0 ? 1 : 0;
+
+            isWinner(players_.at(player));
         }
     }
-
-    return isWinner(players_.at(player));
 }
 
 /**
@@ -268,7 +236,7 @@ int Game::placeMarker(Space space, int player) {
  * @return 1 if the player won the game, 0 else
  *
  */
-int Game::moveMarker(Space currentSpace, Space nextSpace, int player) {
+void Game::moveMarker(Space currentSpace, Space nextSpace, int player) {
     int valid = 0;
     if (players_.at(player).getSpaces()->size() == 4) {
 
@@ -297,7 +265,7 @@ int Game::moveMarker(Space currentSpace, Space nextSpace, int player) {
             turn_number_++;
             turn_ = turn_ == 0 ? 1 : 0;
 
-            return isWinner(players_.at(player));
+            isWinner(players_.at(player));
         }
     }
 }
@@ -320,4 +288,8 @@ int Game::GetTurnNumber() {
 
 int Game::GetPlayerTurn() {
     return turn_;
+}
+
+Player Game::GetWinner() {
+    return *winner_;
 }
