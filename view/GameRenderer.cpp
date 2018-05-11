@@ -6,6 +6,9 @@ GameRenderer::GameRenderer(Game *game) {
     sf::ContextSettings settings;
     settings.antialiasingLevel = 8;
     main_window_.create(sf::VideoMode(1200, 800), "Teeko", sf::Style::Default, settings);
+    sf::Image icon;
+    icon.loadFromFile("..\\resources\\images\\icon.png");
+    main_window_.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 }
 
 void GameRenderer::Render() {
