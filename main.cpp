@@ -1,12 +1,9 @@
 #include <SFML/Graphics.hpp>
-#include "model/Game.h"
-#include "view/GameRenderer.h"
+#include "view/MainMenu.h"
 
 int main()
 {
-    Game game;
-    game.Start();
-    GameRenderer game_renderer(&game);
-    game_renderer.Render();
+    MainMenu mainMenu;
+    mainMenu.Render();
     return 0;
 }

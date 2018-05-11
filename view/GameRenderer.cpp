@@ -4,14 +4,16 @@
 GameRenderer::GameRenderer(Game *game) {
     this->game_ = game;
     sf::ContextSettings settings;
-    settings.antialiasingLevel = 8; // TODO(Piryus) : Check whether this is auto-detectable, avoid weird graphics
+    settings.antialiasingLevel = 8;
     main_window_.create(sf::VideoMode(1200, 800), "Teeko", sf::Style::Default, settings);
+    sf::Image icon;
+    icon.loadFromFile("..\\resources\\images\\icon.png");
+    main_window_.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 }
 
 void GameRenderer::Render() {
     sf::Event event;
     while (main_window_.isOpen()) {
-        // TODO(Piryus) Events function
         while (main_window_.pollEvent(event)) {
             switch (event.type) {
                 case sf::Event::Closed: {  // Close button
