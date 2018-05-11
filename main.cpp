@@ -5,8 +5,6 @@
 
 int main()
 {
-    Game game;
-    game.Start();
     MainMenu mainMenu;
     mainMenu.Render();
     //GameRenderer game_renderer(&game);
