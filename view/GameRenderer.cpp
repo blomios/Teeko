@@ -1,6 +1,7 @@
 #include "GameRenderer.h"
 
 
+
 GameRenderer::GameRenderer(Game *game) {
     this->game_ = game;
     sf::ContextSettings settings;
@@ -29,6 +30,13 @@ void GameRenderer::Render() {
                         ClickController(sf::Mouse::getPosition(main_window_).x, sf::Mouse::getPosition(main_window_).y);
                     }
                     break;
+                }
+                case sf::Event::KeyPressed: {
+                    if(event.key.code == sf::Keyboard::Escape) {
+                        main_window_.close();
+                        MainMenu main_menu;
+                        main_menu.Render();
+                    }
                 }
             }
         }

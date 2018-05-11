@@ -4,6 +4,7 @@
 
 #include <SFML/Graphics.hpp>
 #include "../model/Game.h"
+#include "MainMenu.h"
 
 class Game; // Forward declaration to implement circular dependency
 
