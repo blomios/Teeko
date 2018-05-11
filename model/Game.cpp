@@ -83,7 +83,7 @@ vector<int> Game::numberMarkerOnBoard(){
  * @return is_empty true if there no markers in this space, else false
  */
 int Game::checkEmptySpace(Space space){
-    return space.getMarker() == NULL ? 1/*true*/ : 0;
+    return space.getMarker() == nullptr ? 1/*true*/ : 0;
 }
 
 /**
@@ -106,7 +106,7 @@ vector<int> Game::allCorrectMoves(Space marker_here){
      */
 
     int id_space = marker_here.getSpace_id();
-    vector<int> id_space_enable;
+    vector<int> id_space_enable (8);
 
     /* 5 cases :
      *
@@ -169,7 +169,7 @@ vector<int> Game::allCorrectMoves(Space marker_here){
     /* Check if spaces is empty */
     for(int i = 0; i < 8; i++){
         if(id_space_enable[i] != -1){
-            if(checkEmptySpace(spaces_[id_space_enable[i]-1])){
+            if(!checkEmptySpace(spaces_[id_space_enable[i]-1])){
                 id_space_enable[i] = -1; /* There is a marker on this space */
             }
         }
@@ -236,10 +236,12 @@ int Game::isWinner(Player player){
 }
 /**
  * The player want to put a marker on the board
- *
+ * @param space the place where the player want the marker
+ * @param player who play now
+ * @return 1 if the player won the game, 0 else
  *
  */
-void Game::placeMarker(Space space, int player) {
+int Game::placeMarker(Space space, int player) {
 
     if(iaGame_ && players_.at(player).getColor()=="Red")
     {
@@ -255,26 +257,48 @@ void Game::placeMarker(Space space, int player) {
         }
     }
 
+    return isWinner(players_.at(player));
 }
 
-void Game::moveMarker(Space currentSpace, Space nextSpace, int player) {
+/**
+ * The player want to move a marker from the currentSpace to the nextSpace
+ * @param currentSpace the place where was the marker
+ * @param nextSpace the place where the player want the marker
+ * @param player who play now
+ * @return 1 if the player won the game, 0 else
+ *
+ */
+int Game::moveMarker(Space currentSpace, Space nextSpace, int player) {
+    int valid = 0;
     if (players_.at(player).getSpaces()->size() == 4) {
 
-
-        players_.at(player).getSpaces()->push_back(&spaces_.at(nextSpace.getSpace_id() - 1));
-        spaces_.at(nextSpace.getSpace_id() - 1).setMarker(&markers_.at(currentSpace.getMarker()->getMarker_id() - 1));
-
-        // method erase
-        spaces_.at(currentSpace.getSpace_id() - 1).setMarker(nullptr);
-        vector<Space *>* spaces = players_.at(player).getSpaces();
-        for(int i = 0; i < 4; i++){
-            if(currentSpace.getSpace_id() == spaces->at(i)->getSpace_id()){
-                players_.at(player).getSpaces()->erase(spaces->begin()+i);
+        vector<int> moves = allCorrectMoves(currentSpace);
+        for(int i = 0; i < 8;i++){
+            if(moves.at(i) == (nextSpace.getSpace_id())){
+                valid = 1;
+                break;
             }
         }
 
-        turn_number_++;
-        turn_ = turn_ == 0 ? 1 : 0;
+        if(valid == 1) {
+            players_.at(player).getSpaces()->push_back(&spaces_.at(nextSpace.getSpace_id() - 1));
+            spaces_.at(nextSpace.getSpace_id() - 1).setMarker(
+                    &markers_.at(currentSpace.getMarker()->getMarker_id() - 1));
+
+            // method erase
+            spaces_.at(currentSpace.getSpace_id() - 1).setMarker(nullptr);
+            vector<Space *> *spaces = players_.at(player).getSpaces();
+            for (int i = 0; i < 4; i++) {
+                if (currentSpace.getSpace_id() == spaces->at(i)->getSpace_id()) {
+                    players_.at(player).getSpaces()->erase(spaces->begin() + i);
+                }
+            }
+
+            turn_number_++;
+            turn_ = turn_ == 0 ? 1 : 0;
+
+            return isWinner(players_.at(player));
+        }
     }
 }
 
