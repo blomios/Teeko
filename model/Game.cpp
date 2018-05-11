@@ -241,11 +241,6 @@ int Game::isWinner(Player player){
  */
 void Game::placeMarker(Space space, int player) {
 
-    if(checkEmptySpace(space) && players_.at(player).getSpaces()->size()<4){
-        players_.at(player).getSpaces()->push_back(&spaces_.at(space.getSpace_id()-1));
-        spaces_.at(space.getSpace_id()-1).setMarker(&markers_.at(turn_number_-1));
-        turn_number_++;
-        turn_ = turn_ == 0 ? 1 : 0;
     if(iaGame_ && players_.at(player).getColor()=="Red")
     {
 
