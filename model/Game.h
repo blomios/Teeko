@@ -13,7 +13,6 @@ public:
 
     void initGame();
 
-    vector<int> numberMarkerOnBoard();
     int checkEmptySpace(Space space);
     vector<int> allCorrectMoves(Space marker_here);
     void isWinner(Player player);

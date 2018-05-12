@@ -28,29 +28,6 @@ void Game::initGame() {
 }
 
 /**
-* Count markers on the board
-*
-* @return number_marker_on_board Number of marker on board for each player
-* 0 for the player who plays black markers, 1 for the other player (red)
-*/
-vector<int> Game::numberMarkerOnBoard(){
-    // Check all spaces and return number of marker on the board
-    // Count number of marker for each players
-    Marker* x;
-    vector<int> number_marker_on_board;
-    for (Space &space : this->spaces_) {
-        if ((x = space.getMarker()) != nullptr){
-            if(x->getColor()=="Black"){
-                number_marker_on_board[0]++;
-            } else {
-                number_marker_on_board[1]++;
-            }
-        }
-    }
-    return number_marker_on_board;
-}
-
-/**
  * Check if the space is empty and this function return a boolean
  * @param space analyze this space
  * @return is_empty true if there no markers in this space, else false
