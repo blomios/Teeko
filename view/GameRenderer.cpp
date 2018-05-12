@@ -26,7 +26,7 @@ void GameRenderer::Render() {
                     break;
                 }
                 case sf::Event::MouseButtonReleased: {
-                    if (event.mouseButton.button == sf::Mouse::Left) {
+                    if (event.mouseButton.button == sf::Mouse::Left && game_->GetWinner() == nullptr) {
                         ClickController(sf::Mouse::getPosition(main_window_).x, sf::Mouse::getPosition(main_window_).y);
                     }
                     break;
@@ -46,6 +46,8 @@ void GameRenderer::Render() {
         this->DrawSpaces();
         this->DrawMarkers();
         this->DrawTurnLabel();
+        if(game_->GetWinner() != nullptr)
+            this->DrawWinnerMessage();
 
         // Display window
         main_window_.display();
@@ -242,4 +244,23 @@ int GameRenderer::GetClickedSpaceID(int x, int y) {
         }
     }
     return space_id;
+}
+
+void GameRenderer::DrawWinnerMessage() {
+    // Hide the game with black mask
+    sf::RectangleShape black_mask(sf::Vector2f(main_window_.getSize().x,main_window_.getSize().y));
+    black_mask.setFillColor(sf::Color(0,0,0,150));
+    main_window_.draw(black_mask);
+
+    // Load font
+    sf::Font junegull;
+    junegull.loadFromFile("..\\resources\\fonts\\junegull.ttf");
+
+    // Display winner
+    sf::Text winner(game_->GetWinner()->getColor() + " wins!", junegull);
+    winner.setCharacterSize(70);
+    winner.setOrigin(winner.getGlobalBounds().width / 2, winner.getGlobalBounds().height / 2);
+    winner.setPosition(main_window_.getSize().x / 2,
+                       main_window_.getSize().y / 2);
+    main_window_.draw(winner);
 }

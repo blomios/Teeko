@@ -16,7 +16,7 @@ public:
     vector<int> numberMarkerOnBoard();
     int checkEmptySpace(Space space);
     vector<int> allCorrectMoves(Space marker_here);
-    void isWinner(Player player);
+    void isWinner(Player* player);
     void placeMarker(Space space, int player);
     void moveMarker(Space currentSpace,Space nextSpace, int player);
     vector<Player>* getPlayers();
@@ -24,7 +24,7 @@ public:
     vector<Marker>* GetMarkers();
     int GetTurnNumber();
     int GetPlayerTurn();
-    Player GetWinner();
+    Player* GetWinner();
 
 private:
     vector<Space> spaces_;
