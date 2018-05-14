@@ -134,7 +134,7 @@ vector<int> Game::allCorrectMoves(Space marker_here){
  * @return 1 if the player won the game, 0 else
  */
 void Game::isWinner(Player* player){
-    int count_mark_square = 1, count_mark_diago = 1, count_mark_colu = 1 , count_mark_line = 1;
+    int count_mark_square = 1, count_mark_diago_d = 1, count_mark_diago_u = 1, count_mark_colu = 1 , count_mark_line = 1;
     winner_ = nullptr;
     //Check first if there 4 markers on board
     if(player->getMarkersOnBoard() == 4){
@@ -172,12 +172,16 @@ void Game::isWinner(Player* player){
             } else if((space_id + 6) == markers_ids[i]){
                 /* Diagonal */
                 space_id+=6;
-                count_mark_diago++;
+                count_mark_diago_d++;
+            } else if ((space_id + 4) == markers_ids[i]){
+                /* Diagonal */
+                space_id+=4;
+                count_mark_diago_u++;
             }
         }
 
-        if(count_mark_square == 4 || count_mark_diago == 4 || count_mark_line == 4
-            || count_mark_colu == 4){
+        if(count_mark_square == 4 || count_mark_diago_d == 4 || count_mark_line == 4
+            || count_mark_colu == 4 ||  count_mark_diago_u == 4 ){
             winner_ = player;
         }
     }
