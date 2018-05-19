@@ -10,9 +10,9 @@ private:
     sf::RenderWindow main_window_;
     const int kBorderX = 750;
     const int kBorderY = 750;
-    sf::RectangleShape play_two_button;
-    sf::RectangleShape play_ai_button;
-    sf::RectangleShape exit_button;
+    sf::RectangleShape play_two_button_;
+    sf::RectangleShape play_ai_button_;
+    sf::RectangleShape exit_button_;
 
 public:
     MainMenu();

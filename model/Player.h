@@ -4,27 +4,19 @@
 #include <string>
 #include "Space.h"
 #include <vector>
+#include <algorithm>
+
 using namespace std;
 
 class Player {
 private:
     string color_;
-    vector<Space*> spaces;
+    vector<Space*> spaces_;
 public:
-    string getColor();
-
-    Player(string color){
-        color_ = color;
-    }
-
-    vector<Space *> *getSpaces(){
-        return &spaces;
-    }
-
-    int getMarkersOnBoard(){
-        return getSpaces()->size();
-    }
-
+    string GetColor();
+    Player(string color);
+    vector<Space *> *GetSpaces();
+    bool IsWinner();
 };
 
 

@@ -11,8 +11,8 @@ private:
     bool is_selected_;
 public:
     Marker(string color,int id);
-    string getColor();
-    int getMarker_id() const;
+    string GetColor();
+    int GetMarkerId() const;
     void Select();
     void Unselect();
     bool IsSelected();

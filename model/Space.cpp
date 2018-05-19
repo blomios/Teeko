@@ -5,14 +5,23 @@ Space::Space(int id,Marker* m){
     marker_ = m;
 }
 
-int Space::getSpace_id() const {
+int Space::GetSpaceId() const {
     return space_id_;
 }
 
-Marker* Space::getMarker() const {
+Marker* Space::GetMarker() const {
     return marker_;
 }
 
-void Space::setMarker(Marker* marker) {
+void Space::SetMarker(Marker *marker) {
     marker_ = marker;
+}
+
+/**
+ * Check if the space is empty and this function return a boolean
+ * @param space analyze this space
+ * @return is_empty true if there no markers in this space, else false
+ */
+bool Space::IsEmpty(){
+    return marker_ == nullptr;
 }

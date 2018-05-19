@@ -9,9 +9,10 @@ private:
     Marker* marker_;
 public:
     Space(int id,Marker* m);
-    int getSpace_id() const;
-    Marker* getMarker() const;
-    void setMarker(Marker* marker);
+    int GetSpaceId() const;
+    Marker* GetMarker() const;
+    void SetMarker(Marker *marker);
+    bool IsEmpty();
 };
 
 

@@ -1,7 +1,9 @@
 #include "Game.h"
 using namespace std;
 
-
+Game::Game(bool is_ai){
+    ai_game_ = is_ai;
+}
 /**
  * Initiation Spaces and Markers
  */
@@ -28,15 +30,6 @@ void Game::initGame() {
 }
 
 /**
- * Check if the space is empty and this function return a boolean
- * @param space analyze this space
- * @return is_empty true if there no markers in this space, else false
- */
-int Game::checkEmptySpace(Space space){
-    return space.getMarker() == nullptr ? 1/*true*/ : 0;
-}
-
-/**
  * Search all correct moves
  * @param marker_here marker is in this space
  * @return all moves possible for the player, within -1 for impossible choices
@@ -55,7 +48,7 @@ vector<int> Game::allCorrectMoves(Space marker_here){
      *
      */
 
-    int id_space = marker_here.getSpace_id();
+    int id_space = marker_here.GetSpaceId();
     vector<int> id_space_enable (8);
 
     /* 5 cases :
@@ -119,7 +112,7 @@ vector<int> Game::allCorrectMoves(Space marker_here){
     /* Check if spaces is empty */
     for(int i = 0; i < 8; i++){
         if(id_space_enable[i] != -1){
-            if(!checkEmptySpace(spaces_[id_space_enable[i]-1])){
+            if(!spaces_[id_space_enable[i] - 1].IsEmpty()){
                 id_space_enable[i] = -1; /* There is a marker on this space */
             }
         }
@@ -128,64 +121,7 @@ vector<int> Game::allCorrectMoves(Space marker_here){
     return id_space_enable;
 
 }
-/**
- * Check if the player win the game in this turn
- * @param player who want if is the winner of the game
- * @return 1 if the player won the game, 0 else
- */
-void Game::isWinner(Player* player){
-    int count_mark_square = 1, count_mark_diago_d = 1, count_mark_diago_u = 1, count_mark_colu = 1 , count_mark_line = 1;
-    winner_ = nullptr;
-    //Check first if there 4 markers on board
-    if(player->getMarkersOnBoard() == 4){
-        vector<Space*> *spaces_contains_markers = player->getSpaces();
-        int* markers_ids = new int[4];
-        //Get ids
-        for(int i = 0; i < 4; i++){
-            markers_ids[i] = spaces_contains_markers->at(i)->getSpace_id();
-        }
 
-        //Sort tab
-        sort(markers_ids,markers_ids + 4);
-
-        int space_id = markers_ids[0];
-
-
-        for(int i = 1; i < 4; i++){
-
-            if((space_id + 1) == markers_ids[i] && (markers_ids[0] + 5) == markers_ids[2]){
-                /* Square */
-                if(i == 2){
-                    space_id++;
-                } else {
-                    space_id+=4;
-                }
-                count_mark_square++;
-            } else if((space_id + 1) == markers_ids[i]){
-                /* Line */
-                space_id++;
-                count_mark_line++;
-            } else if((space_id + 5) == markers_ids[i]){
-                /* Column */
-                space_id+=5;
-                count_mark_colu++;
-            } else if((space_id + 6) == markers_ids[i]){
-                /* Diagonal */
-                space_id+=6;
-                count_mark_diago_d++;
-            } else if ((space_id + 4) == markers_ids[i]){
-                /* Diagonal */
-                space_id+=4;
-                count_mark_diago_u++;
-            }
-        }
-
-        if(count_mark_square == 4 || count_mark_diago_d == 4 || count_mark_line == 4
-            || count_mark_colu == 4 ||  count_mark_diago_u == 4 ){
-            winner_ = player;
-        }
-    }
-}
 /**
  * The player want to put a marker on the board
  * @param space the place where the player want the marker
@@ -193,68 +129,70 @@ void Game::isWinner(Player* player){
  * @return 1 if the player won the game, 0 else
  *
  */
-void Game::placeMarker(Space space, int player) {
+void Game::PlaceMarker(Space space, int player) {
 
-    if(iaGame_ && players_.at(player).getColor()=="Red")
+    if(ai_game_ && players_.at(player).GetColor()=="Red")
     {
 
     }
     else
     {
-        if(checkEmptySpace(space) && players_.at(player).getSpaces()->size()<4){
-            players_.at(player).getSpaces()->push_back(&spaces_.at(space.getSpace_id()-1));
-            spaces_.at(space.getSpace_id()-1).setMarker(&markers_.at(turn_number_-1));
+        if(space.IsEmpty() && players_.at(player).GetSpaces()->size()<4){
+            players_.at(player).GetSpaces()->push_back(&spaces_.at(space.GetSpaceId()-1));
+            spaces_.at(space.GetSpaceId() - 1).SetMarker(&markers_.at(turn_number_ - 1));
             turn_number_++;
             turn_ = turn_ == 0 ? 1 : 0;
 
-            isWinner(&players_.at(player));
+            if(players_.at(player).IsWinner())
+                winner_ = &players_.at(player);
         }
     }
 }
 
 /**
  * The player want to move a marker from the currentSpace to the nextSpace
- * @param currentSpace the place where was the marker
- * @param nextSpace the place where the player want the marker
+ * @param current_space the place where was the marker
+ * @param next_space the place where the player want the marker
  * @param player who play now
  * @return 1 if the player won the game, 0 else
  *
  */
-void Game::moveMarker(Space currentSpace, Space nextSpace, int player) {
+void Game::MoveMarker(Space current_space, Space next_space, int player) {
     int valid = 0;
-    if (players_.at(player).getSpaces()->size() == 4) {
+    if (players_.at(player).GetSpaces()->size() == 4) {
 
-        vector<int> moves = allCorrectMoves(currentSpace);
+        vector<int> moves = allCorrectMoves(current_space);
         for(int i = 0; i < 8;i++){
-            if(moves.at(i) == (nextSpace.getSpace_id())){
+            if(moves.at(i) == (next_space.GetSpaceId())){
                 valid = 1;
                 break;
             }
         }
 
         if(valid == 1) {
-            players_.at(player).getSpaces()->push_back(&spaces_.at(nextSpace.getSpace_id() - 1));
-            spaces_.at(nextSpace.getSpace_id() - 1).setMarker(
-                    &markers_.at(currentSpace.getMarker()->getMarker_id() - 1));
+            players_.at(player).GetSpaces()->push_back(&spaces_.at(next_space.GetSpaceId() - 1));
+            spaces_.at(next_space.GetSpaceId() - 1).SetMarker(
+                    &markers_.at(current_space.GetMarker()->GetMarkerId() - 1));
 
             // method erase
-            spaces_.at(currentSpace.getSpace_id() - 1).setMarker(nullptr);
-            vector<Space *> *spaces = players_.at(player).getSpaces();
+            spaces_.at(current_space.GetSpaceId() - 1).SetMarker(nullptr);
+            vector<Space *> *spaces = players_.at(player).GetSpaces();
             for (int i = 0; i < 4; i++) {
-                if (currentSpace.getSpace_id() == spaces->at(i)->getSpace_id()) {
-                    players_.at(player).getSpaces()->erase(spaces->begin() + i);
+                if (current_space.GetSpaceId() == spaces->at(i)->GetSpaceId()) {
+                    players_.at(player).GetSpaces()->erase(spaces->begin() + i);
                 }
             }
 
             turn_number_++;
             turn_ = turn_ == 0 ? 1 : 0;
 
-            isWinner(&players_.at(player));
+            if(players_.at(player).IsWinner())
+                winner_ = &players_.at(player);
         }
     }
 }
 
-vector<Player>* Game::getPlayers() {
+vector<Player>* Game::GetPlayers() {
     return &players_;
 }
 

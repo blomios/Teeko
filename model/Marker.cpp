@@ -6,11 +6,11 @@ Marker::Marker(string color,int id){
     marker_id_ = id;
 }
 
-int Marker::getMarker_id() const {
+int Marker::GetMarkerId() const {
     return marker_id_;
 }
 
-string Marker::getColor(){
+string Marker::GetColor(){
     return color_;
 }
 

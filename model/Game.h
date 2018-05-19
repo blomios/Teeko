@@ -9,16 +9,12 @@
 
 class Game {
 public:
-    Game(bool isIA):iaGame_(isIA){};
-
+    Game(bool is_ai);
     void initGame();
-
-    int checkEmptySpace(Space space);
     vector<int> allCorrectMoves(Space marker_here);
-    void isWinner(Player* player);
-    void placeMarker(Space space, int player);
-    void moveMarker(Space currentSpace,Space nextSpace, int player);
-    vector<Player>* getPlayers();
+    void PlaceMarker(Space space, int player);
+    void MoveMarker(Space current_space, Space next_space, int player);
+    vector<Player>* GetPlayers();
     vector<Space>* GetSpaces();
     vector<Marker>* GetMarkers();
     int GetTurnNumber();
@@ -32,8 +28,7 @@ private:
     int turn_; // Player 1 or 2
     int turn_number_;
     Player* winner_ = nullptr;
-    bool iaGame_; // Si jamais on veut lancer contre une IA, ça passe à vrai
-
+    bool ai_game_;
 };
 
 #endif //TEEKO_GAME_H
