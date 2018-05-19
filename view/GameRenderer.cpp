@@ -116,20 +116,20 @@ void GameRenderer::DrawSpaces() {
 }
 
 void GameRenderer::DrawMarkers() {
-    for (auto &player : *game_->getPlayers()) {
-        vector<Space *> *player_spaces = player.getSpaces();
+    for (auto &player : *game_->GetPlayers()) {
+        vector<Space *> *player_spaces = player.GetSpaces();
         for (int j = 0; j < player_spaces->size(); j++) {
             sf::CircleShape marker(43);
-            if (player.getSpaces()->at(j)->getMarker()->IsSelected()) {
+            if (player.GetSpaces()->at(j)->GetMarker()->IsSelected()) {
                 marker.setOutlineThickness(-10);
                 marker.setOutlineColor(sf::Color(0, 100, 255));
             }
-            if (player.getColor() == "Red")
+            if (player.GetColor() == "Red")
                 marker.setFillColor(sf::Color(216, 0, 0));
-            else if (player.getColor() == "Black")
+            else if (player.GetColor() == "Black")
                 marker.setFillColor(sf::Color::Black);
-            marker.setPosition(GetCoordX(player_spaces->at(j)->getSpace_id()) + (50 - marker.getRadius()),
-                               GetCoordY(player_spaces->at(j)->getSpace_id()) + (50 - marker.getRadius()));
+            marker.setPosition(GetCoordX(player_spaces->at(j)->GetSpaceId()) + (50 - marker.getRadius()),
+                               GetCoordY(player_spaces->at(j)->GetSpaceId()) + (50 - marker.getRadius()));
             main_window_.draw(marker);
         }
     }
@@ -198,38 +198,38 @@ void GameRenderer::ClickController(int mouse_x, int mouse_y) {
     int clicked_space_id = GetClickedSpaceID(mouse_x, mouse_y);
 
     for (int j = 0; j < spaces->size(); j++) {
-        if (spaces->at(j).getMarker() != nullptr && spaces->at(j).getMarker()->IsSelected())
+        if (spaces->at(j).GetMarker() != nullptr && spaces->at(j).GetMarker()->IsSelected())
             selected_space = &spaces->at(j);
     }
 
     if (selected_space == nullptr &&
         clicked_space_id != -1) { // If the player clicks on a space and if no space is selected
         // If the player clicks on a marker
-        if (spaces->at(clicked_space_id - 1).getMarker() != nullptr &&
-            (spaces->at(clicked_space_id - 1).getMarker()->getColor() ==
-             game_->getPlayers()->at(game_->GetPlayerTurn()).getColor()))
-            spaces->at(clicked_space_id - 1).getMarker()->Select();
+        if (spaces->at(clicked_space_id - 1).GetMarker() != nullptr &&
+            (spaces->at(clicked_space_id - 1).GetMarker()->GetColor() ==
+                    game_->GetPlayers()->at(game_->GetPlayerTurn()).GetColor()))
+            spaces->at(clicked_space_id - 1).GetMarker()->Select();
             // If he clicks on an empty space
-        else game_->placeMarker(spaces->at(clicked_space_id - 1), player_turn);
+        else game_->PlaceMarker(spaces->at(clicked_space_id - 1), player_turn);
     } else if (selected_space != nullptr &&
                clicked_space_id == -1) { // If the player clicks out of a space and if a space is selected
         // Unselect the space
-        selected_space->getMarker()->Unselect();
+        selected_space->GetMarker()->Unselect();
         selected_space = nullptr;
     } else if (selected_space != nullptr &&
                clicked_space_id != -1) { // If the player clicks on a valid space and if there is a selected marker
         // If the player clicked on a marker
-        if (spaces->at(clicked_space_id - 1).getMarker() != nullptr &&
-            (spaces->at(clicked_space_id - 1).getMarker()->getColor() ==
-             game_->getPlayers()->at(game_->GetPlayerTurn()).getColor())) {
+        if (spaces->at(clicked_space_id - 1).GetMarker() != nullptr &&
+            (spaces->at(clicked_space_id - 1).GetMarker()->GetColor() ==
+                    game_->GetPlayers()->at(game_->GetPlayerTurn()).GetColor())) {
             // Unselect the selected space
-            selected_space->getMarker()->Unselect();
+            selected_space->GetMarker()->Unselect();
             selected_space = nullptr;
             // Select the other marker
-            spaces->at(clicked_space_id - 1).getMarker()->Select();
+            spaces->at(clicked_space_id - 1).GetMarker()->Select();
         } else {
-            selected_space->getMarker()->Unselect();
-            game_->moveMarker(spaces->at(selected_space->getSpace_id() - 1), spaces->at(clicked_space_id - 1),
+            selected_space->GetMarker()->Unselect();
+            game_->MoveMarker(spaces->at(selected_space->GetSpaceId() - 1), spaces->at(clicked_space_id - 1),
                               player_turn);
         }
     }
@@ -257,7 +257,7 @@ void GameRenderer::DrawWinnerMessage() {
     junegull.loadFromFile("..\\resources\\fonts\\junegull.ttf");
 
     // Display winner
-    sf::Text winner(game_->GetWinner()->getColor() + " wins!", junegull);
+    sf::Text winner(game_->GetWinner()->GetColor() + " wins!", junegull);
     winner.setCharacterSize(70);
     winner.setOrigin(winner.getGlobalBounds().width / 2, winner.getGlobalBounds().height / 2);
     winner.setPosition(main_window_.getSize().x / 2,

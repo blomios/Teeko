@@ -4,16 +4,12 @@ Player::Player(string color) {
     color_ = color;
 }
 
-string Player::getColor() {
+string Player::GetColor() {
     return color_;
 }
 
-vector<Space *> *Player::getSpaces() {
+vector<Space *> *Player::GetSpaces() {
     return &spaces_;
-}
-
-int Player::getMarkersOnBoard() {
-    return getSpaces()->size();
 }
 
 /**
@@ -21,14 +17,14 @@ int Player::getMarkersOnBoard() {
  * @param player who want if is the winner of the game
  * @return 1 if the player won the game, 0 else
  */
-bool Player::isWinner(){
+bool Player::IsWinner(){
     int count_mark_square = 1, count_mark_diago_d = 1, count_mark_diago_u = 1, count_mark_colu = 1 , count_mark_line = 1;
     //Check first if there 4 markers on board
     if(spaces_.size() == 4){
         int* markers_ids = new int[4];
         //Get ids
         for(int i = 0; i < 4; i++){
-            markers_ids[i] = spaces_.at(i)->getSpace_id();
+            markers_ids[i] = spaces_.at(i)->GetSpaceId();
         }
 
         //Sort tab

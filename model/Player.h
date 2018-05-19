@@ -13,11 +13,10 @@ private:
     string color_;
     vector<Space*> spaces_;
 public:
-    string getColor();
+    string GetColor();
     Player(string color);
-    vector<Space *> *getSpaces();
-    bool isWinner();
-    int getMarkersOnBoard();
+    vector<Space *> *GetSpaces();
+    bool IsWinner();
 };
 
 
