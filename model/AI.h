@@ -9,6 +9,7 @@ private:
     int difficulty_; // 0 = easy ; 1 = normal ; 2 = hard
 public:
     AI();
+    int minimax(vector<int> evaluated_board, int depth, bool is_maximizing, int node_index);
 };
 
 
