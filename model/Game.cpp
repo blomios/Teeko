@@ -16,15 +16,15 @@ void Game::initGame() {
     for(int i = 0; i < 8; i++){
 
         if(i % 2){
-            this->markers_.push_back(*(new Marker("Black",i+1)));
-        } else {
             this->markers_.push_back(*(new Marker("Red",i+1)));
+        } else {
+            this->markers_.push_back(*(new Marker("Black",i+1)));
         }
 
     }
 
-    this->players_.push_back(*(new Player("Black")));
     this->players_.push_back(*(new Player("Red")));
+    this->players_.push_back(*(new Player("Black")));
     this->turn_number_ = 1;
     this->turn_ = 1; // Player Black Start the game
 }

@@ -148,12 +148,12 @@ void GameRenderer::DrawTurnLabel() {
     // Display player color
     string player_turn;
     if (game_->GetPlayerTurn() == 0)
-        player_turn = "BLACK";
-    else player_turn = "RED";
+        player_turn = "RED";
+    else player_turn = "BLACK";
     sf::Text player_turn_text(player_turn, junegull);
     if (game_->GetPlayerTurn() == 0)
-        player_turn_text.setFillColor(sf::Color::Black);
-    else player_turn_text.setFillColor(sf::Color::Red);
+        player_turn_text.setFillColor(sf::Color::Red);
+    else player_turn_text.setFillColor(sf::Color::Black);
     player_turn_text.setCharacterSize(40);
     player_turn_text.setPosition(20, 50);
     main_window_.draw(player_turn_text);
