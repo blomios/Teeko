@@ -11,7 +11,6 @@ class Game {
 public:
     Game(bool is_ai);
     void initGame();
-    vector<int> allCorrectMoves(Space marker_here);
     void PlaceMarker(Space space, int player);
     void MoveMarker(Space current_space, Space next_space, int player);
     vector<Player>* GetPlayers();

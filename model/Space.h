@@ -1,6 +1,7 @@
 #ifndef TEEKO_SPACE_H
 #define TEEKO_SPACE_H
 
+#include <vector>
 #include "Marker.h"
 
 class Space {
@@ -13,6 +14,7 @@ public:
     Marker* GetMarker() const;
     void SetMarker(Marker *marker);
     bool IsEmpty();
+    vector<int> GetValidMoves(vector<Space> spaces);
 };
 
 
