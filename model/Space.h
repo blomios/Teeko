@@ -12,6 +12,7 @@ public:
     int getSpace_id() const;
     Marker* getMarker() const;
     void setMarker(Marker* marker);
+    bool isEmpty();
 };
 
 

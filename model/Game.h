@@ -12,10 +12,7 @@ public:
     Game(bool isIA):iaGame_(isIA){};
 
     void initGame();
-
-    int checkEmptySpace(Space space);
     vector<int> allCorrectMoves(Space marker_here);
-    void isWinner(Player* player);
     void placeMarker(Space space, int player);
     void moveMarker(Space currentSpace,Space nextSpace, int player);
     vector<Player>* getPlayers();
