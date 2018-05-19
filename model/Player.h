@@ -9,7 +9,7 @@
 using namespace std;
 
 class Player {
-private:
+protected:
     string color_;
     vector<Space*> spaces_;
 public:
