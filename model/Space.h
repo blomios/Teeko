@@ -14,7 +14,7 @@ public:
     Marker* GetMarker() const;
     void SetMarker(Marker *marker);
     bool IsEmpty();
-    vector<int> GetValidMoves(vector<Space> spaces);
+    vector<int> GetValidMoves(vector<Space> *spaces);
 };
 
 

@@ -32,7 +32,7 @@ bool Space::IsEmpty(){
  * @return all moves possible for the player, within -1 for impossible choices
  *		   and id_space for
  */
-vector<int> Space::GetValidMoves(vector<Space> spaces){
+vector<int> Space::GetValidMoves(vector<Space> *spaces){
 
     /* First, if the space is next to the marker before the move
      * Next, we check if the space is empty
