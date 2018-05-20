@@ -68,7 +68,7 @@ void Game::MoveMarker(Space current_space, Space next_space, int player) {
     int valid = 0;
     if (players_.at(player).GetSpaces()->size() == 4) {
 
-        vector<int> moves = current_space.GetValidMoves(spaces_);
+        vector<int> moves = current_space.GetValidMoves(&spaces_);
         for(int i = 0; i < 8;i++){
             if(moves.at(i) == (next_space.GetSpaceId())){
                 valid = 1;

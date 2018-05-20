@@ -108,7 +108,7 @@ vector<int> Space::GetValidMoves(vector<Space> *spaces){
     /* Check if spaces is empty */
     for(int i = 0; i < 8; i++){
         if(id_space_enable[i] != -1){
-            if(!spaces[id_space_enable[i] - 1].IsEmpty()){
+            if(!spaces->at(id_space_enable[i] - 1).IsEmpty()){
                 id_space_enable[i] = -1; /* There is a marker on this space */
             }
         }
