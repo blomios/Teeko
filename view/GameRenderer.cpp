@@ -41,6 +41,12 @@ void GameRenderer::Render() {
             }
         }
 
+        // TODO Move this to another game loop ; TEST PURPOSES ONLY
+        if(game_->IsAIGame()) {
+            // Move or place marker
+        }
+
+
         this->DrawBackground();
         this->DrawBoard();
         this->DrawSpaces();

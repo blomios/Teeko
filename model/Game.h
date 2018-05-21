@@ -19,6 +19,7 @@ public:
     int GetTurnNumber();
     int GetPlayerTurn();
     Player* GetWinner();
+    bool IsAIGame();
 
 private:
     vector<Space> spaces_;

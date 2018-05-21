@@ -122,3 +122,7 @@ int Game::GetPlayerTurn() {
 Player* Game::GetWinner() {
     return winner_;
 }
+
+bool Game::IsAIGame() {
+    return ai_game_;
+}
