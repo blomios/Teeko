@@ -1,3 +1,4 @@
+#include <iostream>
 #include "AI.h"
 
 AI::AI(vector<Space>* board_spaces, int difficulty) : Player("Red") {
@@ -17,28 +18,36 @@ int AI::minimax(vector<Space> board, int depth, bool is_maximizing) {
         // For each space on the board
         for(Space current_space : board) {
             // Check whether there is a valid move and for each valid moves, make the move
+            if(current_space.GetMarker()!= nullptr && current_space.GetMarker()->GetColor() == "Red")
             for(int move_space_id : current_space.GetValidMoves(&board)) {
-                if(move_space_id!=-1 && current_space.GetMarker() != nullptr && current_space.GetMarker()->GetColor() == "Red") {
-                    board.at(move_space_id - 1).SetMarker(current_space.GetMarker()); // Add the marker to the new space
-                    board.at(current_space.GetSpaceId() - 1).SetMarker(nullptr); // Remove the marker
-                    best_eval = max(best_eval, minimax(board, depth--, false)); // Let's go deeper
+                if(move_space_id!=-1) {
+                    std::cout << "Checking move on space #" << current_space.GetSpaceId() << " to #" << move_space_id << " at depth " << depth << endl;
+                    vector<Space> new_board(board);
+                    new_board.at(move_space_id - 1).SetMarker(current_space.GetMarker()); // Add the marker to the new space
+                    new_board.at(current_space.GetSpaceId() - 1).SetMarker(nullptr); // Remove the marker
+                    best_eval = max(best_eval, minimax(new_board, depth-1, false)); // Let's go deeper
                 }
             }
         }
+        return best_eval;
     } else {
         // Best eval is +inf for now
         int best_eval = INT32_MAX;
         // For each space on the board
         for(Space current_space : board) {
             // Check whether there is a valid move and for each valid moves, make the move
+            if(current_space.GetMarker()!= nullptr && current_space.GetMarker()->GetColor() == "Black")
             for(int move_space_id : current_space.GetValidMoves(&board)) {
-                if(move_space_id!=-1 && current_space.GetMarker() != nullptr && current_space.GetMarker()->GetColor() == "Black") {
-                    board.at(move_space_id - 1).SetMarker(current_space.GetMarker()); // Add the marker to the new space
-                    board.at(current_space.GetSpaceId() - 1).SetMarker(nullptr); // Remove the marker
-                    best_eval = min(best_eval, minimax(board, depth--, true)); // Let's go deeper
+                if(move_space_id!=-1) {
+                    std::cout << "Checking move on space #" << current_space.GetSpaceId() << " to #" << move_space_id << "at depth " << depth << endl;
+                    vector<Space> new_board(board);
+                    new_board.at(move_space_id - 1).SetMarker(current_space.GetMarker()); // Add the marker to the new space
+                    new_board.at(current_space.GetSpaceId() - 1).SetMarker(nullptr); // Remove the marker
+                    best_eval = min(best_eval, minimax(new_board, depth-1, true)); // Let's go deeper
                 }
             }
         }
+        return best_eval;
     }
 }
 
@@ -58,7 +67,7 @@ int AI::evaluate(vector<Space> *board) {
     vector <int> red(4),black(4);
 
     for(int i = 0; i < 25; i ++){
-        if( board->at(i).GetMarker()->GetColor() == "Red"){
+        if(board->at(i).GetMarker() != nullptr && board->at(i).GetMarker()->GetColor() == "Red"){
             red.push_back(board->at(i).GetSpaceId());
         } else {
             black.push_back(board->at(i).GetSpaceId());
@@ -133,12 +142,13 @@ vector<int> AI::FindBestMoveSpacesId(vector<Space> board) {
         for (int move_space_id : current_space.GetValidMoves(&board)) {
             if (move_space_id != -1 && current_space.GetMarker() != nullptr &&
                 current_space.GetMarker()->GetColor() == "Red") {
-                board.at(move_space_id - 1).SetMarker(current_space.GetMarker()); // Add the marker to the new space
-                board.at(current_space.GetSpaceId() - 1).SetMarker(nullptr); // Remove the marker
-                int move_eval = minimax(board, 0, false);
+                vector<Space> new_board(board);
+                new_board.at(move_space_id - 1).SetMarker(current_space.GetMarker()); // Add the marker to the new space
+                new_board.at(current_space.GetSpaceId() - 1).SetMarker(nullptr); // Remove the marker
+                int move_eval = minimax(new_board, 2, false);
                 if (move_eval > best_eval) {
-                        best_move_spaces_id.at(0) = current_space.GetSpaceId();
-                        best_move_spaces_id.at(1) = move_space_id;
+                        best_move_spaces_id.push_back(current_space.GetSpaceId());
+                        best_move_spaces_id.push_back(move_space_id);
                         best_eval = move_eval;
                 }
             }

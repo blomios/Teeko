@@ -1,3 +1,4 @@
+#include <iostream>
 #include "GameRenderer.h"
 
 GameRenderer::GameRenderer(Game *game) {
@@ -47,7 +48,8 @@ void GameRenderer::Render() {
             }
             vector<int> spaces_id;
             spaces_id = game_->GetAi()->FindBestMoveSpacesId(spaces);
-            game_->MoveMarker(game_->GetSpaces()->at(spaces_id.at(0)),game_->GetSpaces()->at(spaces_id.at(1)),0);
+            std::cout << "Moving marker on space #" << spaces_id.at(0) << " to #" << spaces_id.at(1) << endl;
+            game_->MoveMarker(game_->GetSpaces()->at(spaces_id.at(0)-1),game_->GetSpaces()->at(spaces_id.at(1)-1),0);
         }
 
 
