@@ -109,18 +109,18 @@ int AI::alignementMarker(vector<int> markers_id, vector<int> coef,int player){
     count_mark_square == 3 || count_mark_diago_d == 3 || count_mark_line == 3
     || count_mark_colu == 3 ||  count_mark_diago_u == 3 ? score += 3*coef.at(2) * player : score += 0;
 
-    count_mark_square == 2 ? score = 2*coef.at(1) * player : score += 0;
-    count_mark_diago_d == 2 ? score = 2*coef.at(1) * player : score += 0;
-    count_mark_line == 2 ? score = 2*coef.at(1) * player : score += 0;
-    count_mark_colu == 2 ? score = 2*coef.at(1) * player : score += 0;
-    count_mark_diago_u == 2 ? score = 2*coef.at(1) * player : score += 0;
+    count_mark_square == 2 ? score += 2*coef.at(1) * player : score += 0;
+    count_mark_diago_d == 2 ? score += 2*coef.at(1) * player : score += 0;
+    count_mark_line == 2 ? score += 2*coef.at(1) * player : score += 0;
+    count_mark_colu == 2 ? score += 2*coef.at(1) * player : score += 0;
+    count_mark_diago_u == 2 ? score += 2*coef.at(1) * player : score += 0;
 
 
-    count_mark_square == 1 ? score = coef.at(0) * player : score += 0;
-    count_mark_diago_d == 1 ? score = coef.at(0) * player : score += 0;
-    count_mark_line == 1 ? score = coef.at(0) * player : score += 0;
-    count_mark_colu == 1 ? score = coef.at(0) * player : score += 0;
-    count_mark_diago_u == 1 ? score = coef.at(0) * player : score += 0;
+    count_mark_square == 1 ? score += coef.at(0) * player : score += 0;
+    count_mark_diago_d == 1 ? score += coef.at(0) * player : score += 0;
+    count_mark_line == 1 ? score += coef.at(0) * player : score += 0;
+    count_mark_colu == 1 ? score += coef.at(0) * player : score += 0;
+    count_mark_diago_u == 1 ? score += coef.at(0) * player : score += 0;
 
     return score;
 }
