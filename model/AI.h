@@ -10,7 +10,7 @@ private:
     vector<Space>* board_spaces_; // Not sure it will be useful, TODO remove if unused
 public:
     AI(vector<Space>* board_spaces, int difficulty);
-    int minimax(vector<Space> board, int depth, bool is_maximizing, int node_index);
+    int minimax(vector<Space> board, int depth, bool is_maximizing);
     int evaluate(vector<Space> *board);
 };
 
