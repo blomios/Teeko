@@ -158,6 +158,11 @@ void MainMenu::ClickController(int mouse_x, int mouse_y) {
                     break;
                 }
                 case 1 : { // AI button
+                    main_window_.close();
+                    Game game(true);
+                    game.initGame();
+                    GameRenderer game_renderer(&game);
+                    game_renderer.Render();
                     break;
                 }
                 case 2 : { // Exit

@@ -171,3 +171,23 @@ int AI::evaluate(vector<Space> *board) {
 
     return redScore - blackScore;
 }
+
+int AI::FindBestMoveSpaceId(vector<Space> board) {
+    int best_eval = -INT32_MAX;
+    int best_move_space_id;
+    for (Space current_space : board) {
+        // Check whether there is a valid move and for each valid moves, make the move
+        for (int move_space_id : current_space.GetValidMoves(&board)) {
+            if (move_space_id != -1 && current_space.GetMarker() != nullptr &&
+                current_space.GetMarker()->GetColor() == "Red") {
+                board.at(move_space_id - 1).SetMarker(current_space.GetMarker()); // Add the marker to the new space
+                board.at(current_space.GetSpaceId() - 1).SetMarker(nullptr); // Remove the marker
+                int move_eval = minimax(board, 4, false);
+                if (move_eval > best_eval) {
+                        best_move_space_id = move_space_id;
+                        best_eval = move_eval;
+                }
+            }
+        }
+    }
+}
