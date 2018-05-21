@@ -6,22 +6,39 @@ AI::AI(vector<Space>* board_spaces, int difficulty) : Player("Red") {
 }
 
 // TODO Finish this method then add alpha/beta pruning
-int AI::minimax(vector<Space> board, int depth, bool is_maximizing, int node_index) {
+int AI::minimax(vector<Space> board, int depth, bool is_maximizing) {
     // If we are at the bottom of the tree, evaluate the board ; TODO Add condition : if there isn't any possible move
     if(depth == 0)
         return evaluate(&board);
 
     if(is_maximizing) {
+        // Best eval is -inf for now
         int best_eval = -INT32_MAX;
-        for(Space* space : spaces_) {
-            for(space->GetValidMoves(board_spaces_)) {
-                // TODO Update the board with the move using whatever function from Game class
-                best_eval = max(best_eval, minimax(/* TODO new board */, depth--, false, node_index++));
+        // For each space on the board
+        for(Space current_space : board) {
+            // Check whether there is a valid move and for each valid moves, make the move
+            for(int move_space_id : current_space.GetValidMoves(&board)) {
+                if(move_space_id!=-1 && current_space.GetMarker() != nullptr && current_space.GetMarker()->GetColor() == "Red") {
+                    board.at(move_space_id - 1).SetMarker(current_space.GetMarker()); // Add the marker to the new space
+                    board.at(current_space.GetSpaceId() - 1).SetMarker(nullptr); // Remove the marker
+                    best_eval = max(best_eval, minimax(board, depth--, false)); // Let's go deeper
+                }
             }
         }
     } else {
+        // Best eval is +inf for now
         int best_eval = INT32_MAX;
-        // TODO Follow the same steps as maximizer
+        // For each space on the board
+        for(Space current_space : board) {
+            // Check whether there is a valid move and for each valid moves, make the move
+            for(int move_space_id : current_space.GetValidMoves(&board)) {
+                if(move_space_id!=-1 && current_space.GetMarker() != nullptr && current_space.GetMarker()->GetColor() == "Black") {
+                    board.at(move_space_id - 1).SetMarker(current_space.GetMarker()); // Add the marker to the new space
+                    board.at(current_space.GetSpaceId() - 1).SetMarker(nullptr); // Remove the marker
+                    best_eval = min(best_eval, minimax(board, depth--, true)); // Let's go deeper
+                }
+            }
+        }
     }
 }
 
