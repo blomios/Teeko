@@ -1,14 +1,8 @@
 #include "Game.h"
 using namespace std;
 
-Game::Game(bool is_ai){
+Game::Game(bool is_ai) {
     ai_game_ = is_ai;
-}
-/**
- * Initiation Spaces and Markers
- */
-void Game::initGame() {
-
     for(int i = 0; i < 25; i++){
         this->spaces_.push_back(*(new Space(i+1,NULL)));
     }
@@ -22,7 +16,6 @@ void Game::initGame() {
         }
 
     }
-
     this->players_.push_back(*(new Player("Red")));
     this->players_.push_back(*(new Player("Black")));
     this->turn_number_ = 1;
@@ -38,13 +31,13 @@ void Game::initGame() {
  */
 void Game::PlaceMarker(Space space, int player) {
 
-    if(ai_game_ && players_.at(player).GetColor()=="Red")
+    /*if(ai_game_ && players_.at(player).GetColor()=="Red")
     {
 
     }
     else
-    {
-        if(space.IsEmpty() && players_.at(player).GetSpaces()->size()<4){
+    {*/
+        if(space.IsEmpty() && players_.at(player).GetSpaces()->size()<4) {
             players_.at(player).GetSpaces()->push_back(&spaces_.at(space.GetSpaceId()-1));
             spaces_.at(space.GetSpaceId() - 1).SetMarker(&markers_.at(turn_number_ - 1));
             turn_number_++;
@@ -53,7 +46,7 @@ void Game::PlaceMarker(Space space, int player) {
             if(players_.at(player).IsWinner())
                 winner_ = &players_.at(player);
         }
-    }
+    //}
 }
 
 /**
@@ -125,4 +118,8 @@ Player* Game::GetWinner() {
 
 bool Game::IsAIGame() {
     return ai_game_;
+}
+
+AI *Game::GetAi() {
+    return &ai_;
 }
