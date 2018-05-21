@@ -12,6 +12,7 @@ public:
     AI(vector<Space>* board_spaces, int difficulty);
     int minimax(vector<Space> board, int depth, bool is_maximizing);
     int evaluate(vector<Space> *board);
+    int alignementMarker(vector<int> markers_id, vector<int> coef,int player);
 };
 
 

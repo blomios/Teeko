@@ -50,13 +50,9 @@ int AI::minimax(vector<Space> board, int depth, bool is_maximizing) {
  * @return
  */
 int AI::evaluate(vector<Space> *board) {
-
-    int count_mark_square = 1, count_mark_diago_d = 1, count_mark_diago_u = 1, count_mark_colu = 1 , count_mark_line = 1;
-
     /* Constant */
     // 1 marker alone, 2 marker, 3 marker and 1 far away, 3 marker and 1 close
-    vector <int> coefRed { 1 , 4 , 10};
-    int redScore=0, blackScore=0;
+    vector <int> coef { 1 , 4 , 10};
 
     //Red player : AI      Black player User
     vector <int> red(4),black(4);
@@ -72,10 +68,18 @@ int AI::evaluate(vector<Space> *board) {
     sort(red.begin(),red.begin()+4);
     sort(black.begin(),black.begin()+4);
 
-    //Check first red markers
-    int space_id = red.at(0);
+    return alignementMarker(red,coef,1) + alignementMarker(black,coef,-1);
+}
+
+int AI::alignementMarker(vector<int> markers_id, vector<int> coef,int player){
+
+    int count_mark_square = 1, count_mark_diago_d = 1, count_mark_diago_u = 1, count_mark_colu = 1 , count_mark_line = 1;
+
+    int score = 0;
+
+    int space_id = markers_id.at(0);
     for(int i = 1; i < 4; i++){
-        if((space_id + 1) == red.at(i) && (red.at(0) + 5) == red.at(2)){
+        if((space_id + 1) == markers_id.at(i) && (markers_id.at(0) + 5) == markers_id.at(2)){
             /* Square */
             if(i == 2){
                 space_id++;
@@ -83,19 +87,19 @@ int AI::evaluate(vector<Space> *board) {
                 space_id+=4;
             }
             count_mark_square++;
-        } else if((space_id + 1) == red.at(i)){
+        } else if((space_id + 1) == markers_id.at(i)){
             /* Line */
             space_id++;
             count_mark_line++;
-        } else if((space_id + 5) == red.at(i)){
+        } else if((space_id + 5) == markers_id.at(i)){
             /* Column */
             space_id+=5;
             count_mark_colu++;
-        } else if((space_id + 6) == red.at(i)){
+        } else if((space_id + 6) == markers_id.at(i)){
             /* Diagonal */
             space_id+=6;
             count_mark_diago_d++;
-        } else if ((space_id + 4) == red.at(i)){
+        } else if ((space_id + 4) == markers_id.at(i)){
             /* Diagonal */
             space_id+=4;
             count_mark_diago_u++;
@@ -103,71 +107,20 @@ int AI::evaluate(vector<Space> *board) {
     }
 
     count_mark_square == 3 || count_mark_diago_d == 3 || count_mark_line == 3
-    || count_mark_colu == 3 ||  count_mark_diago_u == 3 ? redScore += 3*coefRed.at(2) : redScore += 0;
+    || count_mark_colu == 3 ||  count_mark_diago_u == 3 ? score += 3*coef.at(2) * player : score += 0;
 
-    count_mark_square == 2 ? redScore = 2*coefRed.at(1) : redScore += 0;
-    count_mark_diago_d == 2 ? redScore = 2*coefRed.at(1) : redScore += 0;
-    count_mark_line == 2 ? redScore = 2*coefRed.at(1) : redScore += 0;
-    count_mark_colu == 2 ? redScore = 2*coefRed.at(1) : redScore += 0;
-    count_mark_diago_u == 2 ? redScore = 2*coefRed.at(1) : redScore += 0;
-
-
-    count_mark_square == 1 ? redScore = coefRed.at(0) : redScore += 0;
-    count_mark_diago_d == 1 ? redScore = coefRed.at(0) : redScore += 0;
-    count_mark_line == 1 ? redScore = coefRed.at(0) : redScore += 0;
-    count_mark_colu == 1 ? redScore = coefRed.at(0) : redScore += 0;
-    count_mark_diago_u == 1 ? redScore = coefRed.at(0) : redScore += 0;
+    count_mark_square == 2 ? score = 2*coef.at(1) * player : score += 0;
+    count_mark_diago_d == 2 ? score = 2*coef.at(1) * player : score += 0;
+    count_mark_line == 2 ? score = 2*coef.at(1) * player : score += 0;
+    count_mark_colu == 2 ? score = 2*coef.at(1) * player : score += 0;
+    count_mark_diago_u == 2 ? score = 2*coef.at(1) * player : score += 0;
 
 
-    count_mark_square = 1, count_mark_diago_d = 1, count_mark_diago_u = 1, count_mark_colu = 1 , count_mark_line = 1;
+    count_mark_square == 1 ? score = coef.at(0) * player : score += 0;
+    count_mark_diago_d == 1 ? score = coef.at(0) * player : score += 0;
+    count_mark_line == 1 ? score = coef.at(0) * player : score += 0;
+    count_mark_colu == 1 ? score = coef.at(0) * player : score += 0;
+    count_mark_diago_u == 1 ? score = coef.at(0) * player : score += 0;
 
-
-    space_id = black.at(0);
-    for(int i = 1; i < 4; i++){
-        if((space_id + 1) == black.at(i) && (black.at(0) + 5) == black.at(2)){
-            /* Square */
-            if(i == 2){
-                space_id++;
-            } else {
-                space_id+=4;
-            }
-            count_mark_square++;
-        } else if((space_id + 1) == black.at(i)){
-            /* Line */
-            space_id++;
-            count_mark_line++;
-        } else if((space_id + 5) == black.at(i)){
-            /* Column */
-            space_id+=5;
-            count_mark_colu++;
-        } else if((space_id + 6) == black.at(i)){
-            /* Diagonal */
-            space_id+=6;
-            count_mark_diago_d++;
-        } else if ((space_id + 4) == black.at(i)){
-            /* Diagonal */
-            space_id+=4;
-            count_mark_diago_u++;
-        }
-    }
-
-    count_mark_square == 3 || count_mark_diago_d == 3 || count_mark_line == 3
-    || count_mark_colu == 3 ||  count_mark_diago_u == 3 ? blackScore += -3*coefRed.at(2) : blackScore += 0;
-
-    count_mark_square == 2 ? blackScore += -2*coefRed.at(1) : blackScore += 0;
-    count_mark_diago_d == 2 ? blackScore += -2*coefRed.at(1) : blackScore += 0;
-    count_mark_line == 2 ? blackScore += -2*coefRed.at(1) : blackScore += 0;
-    count_mark_colu == 2 ? blackScore += -2*coefRed.at(1) : blackScore += 0;
-    count_mark_diago_u == 2 ? blackScore += -2*coefRed.at(1) : blackScore += 0;
-
-
-    count_mark_square == 1 ?  blackScore += -coefRed.at(0) : blackScore += 0;
-    count_mark_diago_d == 1 ?  blackScore += -coefRed.at(0) : blackScore += 0;
-    count_mark_line == 1 ?  blackScore += -coefRed.at(0) : blackScore += 0;
-    count_mark_colu == 1 ?  blackScore += -coefRed.at(0) : blackScore += 0;
-    count_mark_diago_u == 1 ?  blackScore += -coefRed.at(0) : blackScore += 0;
-
-
-
-    return redScore - blackScore;
+    return score;
 }
