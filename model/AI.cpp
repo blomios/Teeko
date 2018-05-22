@@ -7,7 +7,7 @@ AI::AI(vector<Space>* board_spaces, int difficulty) : Player("Red") {
 }
 
 // TODO Finish this method then add alpha/beta pruning
-int AI::minimax(vector<Space> board, int depth, bool is_maximizing) {
+int AI::minimax(vector<Space> board, int depth, bool is_maximizing, int alpha, int beta) {
     // If we are at the bottom of the tree, evaluate the board ; TODO Add condition : if there isn't any possible move
     if(depth == 0)
         return evaluate(&board);
@@ -25,7 +25,12 @@ int AI::minimax(vector<Space> board, int depth, bool is_maximizing) {
                     vector<Space> new_board(board);
                     new_board.at(move_space_id - 1).SetMarker(current_space.GetMarker()); // Add the marker to the new space
                     new_board.at(current_space.GetSpaceId() - 1).SetMarker(nullptr); // Remove the marker
-                    best_eval = max(best_eval, minimax(new_board, depth-1, false)); // Let's go deeper
+                    best_eval = max(best_eval, minimax(new_board, depth-1, false, alpha, beta)); // Let's go deeper
+                    alpha = max(alpha, best_eval);
+                    if(beta <= alpha) {
+                        cout << "Pruning..." << endl;
+                        break;
+                    }
                 }
             }
         }
@@ -43,7 +48,12 @@ int AI::minimax(vector<Space> board, int depth, bool is_maximizing) {
                     vector<Space> new_board(board);
                     new_board.at(move_space_id - 1).SetMarker(current_space.GetMarker()); // Add the marker to the new space
                     new_board.at(current_space.GetSpaceId() - 1).SetMarker(nullptr); // Remove the marker
-                    best_eval = min(best_eval, minimax(new_board, depth-1, true)); // Let's go deeper
+                    best_eval = min(best_eval, minimax(new_board, depth-1, true, alpha, beta)); // Let's go deeper
+                    beta = min(beta, best_eval);
+                    if (beta <= alpha) {
+                        cout << "Pruning..." << endl;
+                        break;
+                    }
                 }
             }
         }
@@ -145,7 +155,7 @@ vector<int> AI::FindBestMoveSpacesId(vector<Space> board) {
                 vector<Space> new_board(board);
                 new_board.at(move_space_id - 1).SetMarker(current_space.GetMarker()); // Add the marker to the new space
                 new_board.at(current_space.GetSpaceId() - 1).SetMarker(nullptr); // Remove the marker
-                int move_eval = minimax(new_board, 2, false);
+                int move_eval = minimax(new_board, 3, false, -INT32_MAX, INT32_MAX);
                 if (move_eval > best_eval) {
                         best_move_spaces_id.push_back(current_space.GetSpaceId());
                         best_move_spaces_id.push_back(move_space_id);
