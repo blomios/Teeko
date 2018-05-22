@@ -106,6 +106,13 @@ int AI::alignementMarker(vector<int> markers_id, vector<int> coef,int player){
         }
     }
 
+    if(count_mark_line == 3){
+
+        // Check first were is the last marker
+
+
+    }
+
     count_mark_square == 3 || count_mark_diago_d == 3 || count_mark_line == 3
     || count_mark_colu == 3 ||  count_mark_diago_u == 3 ? score += 3*coef.at(2) * player : score += 0;
 
