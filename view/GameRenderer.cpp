@@ -1,6 +1,5 @@
+#include <iostream>
 #include "GameRenderer.h"
-
-
 
 GameRenderer::GameRenderer(Game *game) {
     this->game_ = game;
@@ -42,8 +41,15 @@ void GameRenderer::Render() {
         }
 
         // TODO Move this to another game loop ; TEST PURPOSES ONLY
-        if(game_->IsAIGame()) {
-            // Move or place marker
+        if(game_->IsAIGame() && game_->GetPlayerTurn()==0 && game_->GetPlayers()->at(0).GetSpaces()->size()==4) {
+            vector<Space> spaces;
+            for(int i = 0; i < game_->GetSpaces()->size(); i++) {
+                spaces.push_back(game_->GetSpaces()->at(i));
+            }
+            vector<int> spaces_id;
+            spaces_id = game_->GetAi()->FindBestMoveSpacesId(spaces);
+            std::cout << "Moving marker on space #" << spaces_id.at(0) << " to #" << spaces_id.at(1) << endl;
+            game_->MoveMarker(game_->GetSpaces()->at(spaces_id.at(0)-1),game_->GetSpaces()->at(spaces_id.at(1)-1),0);
         }
 
 
