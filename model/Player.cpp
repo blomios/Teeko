@@ -43,7 +43,7 @@ bool Player::IsWinner(){
                     space_id+=4;
                 }
                 count_mark_square++;
-            } else if((space_id + 1) == markers_ids[i] && (space_id % 5 == 0 && space_id + 1 % 5 != 1)){
+            } else if((space_id + 1) == markers_ids[i] && (space_id % 5 != 0 && space_id + 1 % 5 != 1)){
                 /* Line */
                 space_id++;
                 count_mark_line++;
