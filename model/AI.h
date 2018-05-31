@@ -12,7 +12,8 @@ public:
     int minimax(vector<Space> board, int depth, bool is_maximizing, int alpha, int beta);
     int evaluate(vector<Space> *board);
     vector<int> FindBestMoveSpacesId(vector<Space> board);
-    int alignementMarker(vector<int> markers_id, vector<int> coef,int player);
+    int alignementMarker(vector<int> markers_id, int coef,int player);
+    int distanceMarker(vector<int> space_id, int coef,int player);
 };
 
 

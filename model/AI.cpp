@@ -1,5 +1,6 @@
 #include <iostream>
 #include "AI.h"
+#include "Utils.h"
 
 AI::AI(vector<Space>* board_spaces, int difficulty) : Player("Red") {
     board_spaces_ = board_spaces;
@@ -21,7 +22,7 @@ int AI::minimax(vector<Space> board, int depth, bool is_maximizing, int alpha, i
             if(current_space.GetMarker()!= nullptr && current_space.GetMarker()->GetColor() == "Red")
             for(int move_space_id : current_space.GetValidMoves(&board)) {
                 if(move_space_id!=-1) {
-                    std::cout << "Checking move on space #" << current_space.GetSpaceId() << " to #" << move_space_id << " at depth " << depth << endl;
+                    //std::cout << "Checking move on space #" << current_space.GetSpaceId() << " to #" << move_space_id << " at depth " << depth << endl;
                     vector<Space> new_board(board);
                     new_board.at(move_space_id - 1).SetMarker(current_space.GetMarker()); // Add the marker to the new space
                     new_board.at(current_space.GetSpaceId() - 1).SetMarker(nullptr); // Remove the marker
@@ -44,7 +45,7 @@ int AI::minimax(vector<Space> board, int depth, bool is_maximizing, int alpha, i
             if(current_space.GetMarker()!= nullptr && current_space.GetMarker()->GetColor() == "Black")
             for(int move_space_id : current_space.GetValidMoves(&board)) {
                 if(move_space_id!=-1) {
-                    std::cout << "Checking move on space #" << current_space.GetSpaceId() << " to #" << move_space_id << "at depth " << depth << endl;
+                    //std::cout << "Checking move on space #" << current_space.GetSpaceId() << " to #" << move_space_id << "at depth " << depth << endl;
                     vector<Space> new_board(board);
                     new_board.at(move_space_id - 1).SetMarker(current_space.GetMarker()); // Add the marker to the new space
                     new_board.at(current_space.GetSpaceId() - 1).SetMarker(nullptr); // Remove the marker
@@ -72,25 +73,52 @@ int AI::evaluate(vector<Space> *board) {
     /* Constant */
     // 1 marker alone, 2 marker, 3 marker and 1 far away, 3 marker and 1 close
     vector <int> coef { 1 , 4 , 10};
+    int score=0;
 
     //Red player : AI      Black player User
-    vector <int> red(4),black(4);
+    vector <int> red,black;
 
     for(int i = 0; i < 25; i ++){
         if(board->at(i).GetMarker() != nullptr && board->at(i).GetMarker()->GetColor() == "Red"){
             red.push_back(board->at(i).GetSpaceId());
-        } else {
+        } else if(board->at(i).GetMarker() != nullptr && board->at(i).GetMarker()->GetColor() == "Black"){
             black.push_back(board->at(i).GetSpaceId());
         }
     }
 
-    sort(red.begin(),red.begin()+4);
-    sort(black.begin(),black.begin()+4);
+    sort(red.begin(),red.begin()+red.size());
+    sort(black.begin(),black.begin()+black.size());
 
-    return alignementMarker(red,coef,1) + alignementMarker(black,coef,-1);
+    score+=alignementMarker(red,20,1) + alignementMarker(black,20,-1);
+    score+=distanceMarker(red,1,1) + distanceMarker(black,1,-1);
+
+
+    return score;
 }
 
-int AI::alignementMarker(vector<int> markers_id, vector<int> coef,int player){
+int AI::distanceMarker(vector<int> space_id, int coef,int player){
+    int score=0;
+
+    for(int i=0; i<space_id.size(); i++){
+
+        int ptA=space_id.at(i);
+
+        for(int j=0; j<space_id.size(); j++){
+
+            if(j>i){
+                int ptB=space_id.at(j);
+                score += (3 - Utils::getDistance(ptA,ptB)) * player * coef;
+
+            }
+
+        }
+
+    }
+    return score;
+}
+
+int AI::alignementMarker(vector<int> markers_id, int coef,int player){
+
 
     int count_mark_square = 1, count_mark_diago_d = 1, count_mark_diago_u = 1, count_mark_colu = 1 , count_mark_line = 1;
 
@@ -133,20 +161,20 @@ int AI::alignementMarker(vector<int> markers_id, vector<int> coef,int player){
     }
 
     count_mark_square == 3 || count_mark_diago_d == 3 || count_mark_line == 3
-    || count_mark_colu == 3 ||  count_mark_diago_u == 3 ? score += 3*coef.at(2) * player : score += 0;
+    || count_mark_colu == 3 ||  count_mark_diago_u == 3 ? score += 3*coef * player : score += 0;
 
-    count_mark_square == 2 ? score += 2*coef.at(1) * player : score += 0;
-    count_mark_diago_d == 2 ? score += 2*coef.at(1) * player : score += 0;
-    count_mark_line == 2 ? score += 2*coef.at(1) * player : score += 0;
-    count_mark_colu == 2 ? score += 2*coef.at(1) * player : score += 0;
-    count_mark_diago_u == 2 ? score += 2*coef.at(1) * player : score += 0;
+    count_mark_square == 2 ? score += 2*coef * player : score += 0;
+    count_mark_diago_d == 2 ? score += 2*coef * player : score += 0;
+    count_mark_line == 2 ? score += 2*coef * player : score += 0;
+    count_mark_colu == 2 ? score += 2*coef * player : score += 0;
+    count_mark_diago_u == 2 ? score += 2*coef * player : score += 0;
 
 
-    count_mark_square == 1 ? score += coef.at(0) * player : score += 0;
-    count_mark_diago_d == 1 ? score += coef.at(0) * player : score += 0;
-    count_mark_line == 1 ? score += coef.at(0) * player : score += 0;
-    count_mark_colu == 1 ? score += coef.at(0) * player : score += 0;
-    count_mark_diago_u == 1 ? score += coef.at(0) * player : score += 0;
+    count_mark_square == 1 ? score += coef * player : score += 0;
+    count_mark_diago_d == 1 ? score += coef * player : score += 0;
+    count_mark_line == 1 ? score += coef * player : score += 0;
+    count_mark_colu == 1 ? score += coef * player : score += 0;
+    count_mark_diago_u == 1 ? score += coef * player : score += 0;
 
     return score;
 }
@@ -162,7 +190,7 @@ vector<int> AI::FindBestMoveSpacesId(vector<Space> board) {
                 vector<Space> new_board(board);
                 new_board.at(move_space_id - 1).SetMarker(current_space.GetMarker()); // Add the marker to the new space
                 new_board.at(current_space.GetSpaceId() - 1).SetMarker(nullptr); // Remove the marker
-                int move_eval = minimax(new_board, 3, false, -INT32_MAX, INT32_MAX);
+                int move_eval = minimax(new_board, 4, false, -INT32_MAX, INT32_MAX);
                 if (move_eval > best_eval) {
                         best_move_spaces_id.push_back(current_space.GetSpaceId());
                         best_move_spaces_id.push_back(move_space_id);
