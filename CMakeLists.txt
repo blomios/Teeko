@@ -3,7 +3,7 @@ project(teeko)
 
 set(CMAKE_CXX_STANDARD 17)
 
-set(SOURCE_FILES main.cpp model/Game.cpp model/Game.h model/Space.cpp model/Space.h model/Marker.cpp model/Marker.h model/Player.cpp model/Player.h view/GameRenderer.cpp view/GameRenderer.h view/MainMenu.cpp view/MainMenu.h model/AI.cpp model/AI.h model/Utils.h)
+set(SOURCE_FILES main.cpp model/Game.cpp model/Game.h model/Space.cpp model/Space.h model/Marker.cpp model/Marker.h model/Player.cpp model/Player.h view/GameRenderer.cpp view/GameRenderer.h view/MainMenu.cpp view/MainMenu.h model/AI.cpp model/AI.h model/Utils.h model/Utils.cpp)
 add_executable(teeko ${SOURCE_FILES})
 
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake_modules")
