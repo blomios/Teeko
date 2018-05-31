@@ -20,20 +20,20 @@ int AI::minimax(vector<Space> board, int depth, bool is_maximizing, int alpha, i
         for(Space current_space : board) {
             // Check whether there is a valid move and for each valid moves, make the move
             if(current_space.GetMarker()!= nullptr && current_space.GetMarker()->GetColor() == "Red")
-            for(int move_space_id : current_space.GetValidMoves(&board)) {
-                if(move_space_id!=-1) {
-                    //std::cout << "Checking move on space #" << current_space.GetSpaceId() << " to #" << move_space_id << " at depth " << depth << endl;
-                    vector<Space> new_board(board);
-                    new_board.at(move_space_id - 1).SetMarker(current_space.GetMarker()); // Add the marker to the new space
-                    new_board.at(current_space.GetSpaceId() - 1).SetMarker(nullptr); // Remove the marker
-                    best_eval = max(best_eval, minimax(new_board, depth-1, false, alpha, beta)); // Let's go deeper
-                    alpha = max(alpha, best_eval);
-                    if(beta <= alpha) {
-                        cout << "Pruning..." << endl;
-                        break;
+                for(int move_space_id : current_space.GetValidMoves(&board)) {
+                    if(move_space_id!=-1) {
+                        //std::cout << "Checking move on space #" << current_space.GetSpaceId() << " to #" << move_space_id << " at depth " << depth << endl;
+                        vector<Space> new_board(board);
+                        new_board.at(move_space_id - 1).SetMarker(current_space.GetMarker()); // Add the marker to the new space
+                        new_board.at(current_space.GetSpaceId() - 1).SetMarker(nullptr); // Remove the marker
+                        best_eval = max(best_eval, minimax(new_board, depth-1, false, alpha, beta)); // Let's go deeper
+                        alpha = max(alpha, best_eval);
+                        if(beta <= alpha) {
+                            cout << "Pruning..." << endl;
+                            break;
+                        }
                     }
                 }
-            }
         }
         return best_eval;
     } else {
@@ -43,20 +43,20 @@ int AI::minimax(vector<Space> board, int depth, bool is_maximizing, int alpha, i
         for(Space current_space : board) {
             // Check whether there is a valid move and for each valid moves, make the move
             if(current_space.GetMarker()!= nullptr && current_space.GetMarker()->GetColor() == "Black")
-            for(int move_space_id : current_space.GetValidMoves(&board)) {
-                if(move_space_id!=-1) {
-                    //std::cout << "Checking move on space #" << current_space.GetSpaceId() << " to #" << move_space_id << "at depth " << depth << endl;
-                    vector<Space> new_board(board);
-                    new_board.at(move_space_id - 1).SetMarker(current_space.GetMarker()); // Add the marker to the new space
-                    new_board.at(current_space.GetSpaceId() - 1).SetMarker(nullptr); // Remove the marker
-                    best_eval = min(best_eval, minimax(new_board, depth-1, true, alpha, beta)); // Let's go deeper
-                    beta = min(beta, best_eval);
-                    if (beta <= alpha) {
-                        cout << "Pruning..." << endl;
-                        break;
+                for(int move_space_id : current_space.GetValidMoves(&board)) {
+                    if(move_space_id!=-1) {
+                        //std::cout << "Checking move on space #" << current_space.GetSpaceId() << " to #" << move_space_id << "at depth " << depth << endl;
+                        vector<Space> new_board(board);
+                        new_board.at(move_space_id - 1).SetMarker(current_space.GetMarker()); // Add the marker to the new space
+                        new_board.at(current_space.GetSpaceId() - 1).SetMarker(nullptr); // Remove the marker
+                        best_eval = min(best_eval, minimax(new_board, depth-1, true, alpha, beta)); // Let's go deeper
+                        beta = min(beta, best_eval);
+                        if (beta <= alpha) {
+                            cout << "Pruning..." << endl;
+                            break;
+                        }
                     }
                 }
-            }
         }
         return best_eval;
     }
@@ -192,9 +192,10 @@ vector<int> AI::FindBestMoveSpacesId(vector<Space> board) {
                 new_board.at(current_space.GetSpaceId() - 1).SetMarker(nullptr); // Remove the marker
                 int move_eval = minimax(new_board, 4, false, -INT32_MAX, INT32_MAX);
                 if (move_eval > best_eval) {
-                        best_move_spaces_id.push_back(current_space.GetSpaceId());
-                        best_move_spaces_id.push_back(move_space_id);
-                        best_eval = move_eval;
+                    best_move_spaces_id.clear();
+                    best_move_spaces_id.push_back(current_space.GetSpaceId());
+                    best_move_spaces_id.push_back(move_space_id);
+                    best_eval = move_eval;
                 }
             }
         }
