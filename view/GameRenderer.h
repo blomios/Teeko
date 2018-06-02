@@ -1,21 +1,17 @@
 #ifndef TEEKO_GAMERENDERER_H
 #define TEEKO_GAMERENDERER_H
 
-
 #include <SFML/Graphics.hpp>
 #include "../model/Game.h"
-#include "MainMenu.h"
-
-class Game; // Forward declaration to implement circular dependency
 
 class GameRenderer{
 private:
     Game* game_;
-    sf::RenderWindow main_window_;
+    sf::RenderWindow* main_window_;
     const int kBorderX = 750;
     const int kBorderY = 750;
 public:
-    explicit GameRenderer(Game *game);
+    explicit GameRenderer(Game *game, sf::RenderWindow *window);
     void Render();
     void DrawBoard();
     void DrawSpaces();

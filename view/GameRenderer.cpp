@@ -1,57 +1,37 @@
-#include <iostream>
 #include "GameRenderer.h"
 
-GameRenderer::GameRenderer(Game *game) {
+GameRenderer::GameRenderer(Game *game, sf::RenderWindow *window) {
     this->game_ = game;
-    sf::ContextSettings settings;
-    settings.antialiasingLevel = 8;
-    main_window_.create(sf::VideoMode(1200, 800), "Teeko", sf::Style::Default, settings);
-    sf::Image icon;
-    icon.loadFromFile("..\\resources\\images\\icon.png");
-    main_window_.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
+    this->main_window_ = window;
 }
 
 void GameRenderer::Render() {
     sf::Event event;
-    while (main_window_.isOpen()) {
-        while (main_window_.pollEvent(event)) {
+    bool loop(true);
+    while (main_window_->isOpen() && loop) {
+        while (main_window_->pollEvent(event)) {
             switch (event.type) {
                 case sf::Event::Closed: {  // Close button
-                    main_window_.close();
+                    main_window_->close();
                     break;
                 }
                 case sf::Event::Resized: {  // Occur when window is resized
-                    main_window_.setView(sf::View(sf::FloatRect(0, 0, event.size.width, event.size.height)));
+                    main_window_->setView(sf::View(sf::FloatRect(0, 0, event.size.width, event.size.height)));
                     break;
                 }
                 case sf::Event::MouseButtonReleased: {
                     if (event.mouseButton.button == sf::Mouse::Left && game_->GetWinner() == nullptr) {
-                        ClickController(sf::Mouse::getPosition(main_window_).x, sf::Mouse::getPosition(main_window_).y);
+                        ClickController(sf::Mouse::getPosition(*main_window_).x, sf::Mouse::getPosition(*main_window_).y);
                     }
                     break;
                 }
                 case sf::Event::KeyPressed: {
                     if(event.key.code == sf::Keyboard::Escape) {
-                        main_window_.close();
-                        MainMenu main_menu;
-                        main_menu.Render();
+                        loop = false;
                     }
                 }
             }
         }
-
-        // TODO Move this to another game loop ; TEST PURPOSES ONLY
-        if(game_->IsAIGame() && game_->GetPlayerTurn()==0 && game_->GetPlayers()->at(0).GetSpaces()->size()==4) {
-            vector<Space> spaces;
-            for(int i = 0; i < game_->GetSpaces()->size(); i++) {
-                spaces.push_back(game_->GetSpaces()->at(i));
-            }
-            vector<int> spaces_id;
-            spaces_id = game_->GetAi()->FindBestMoveSpacesId(spaces);
-            std::cout << "Moving marker on space #" << spaces_id.at(0) << " to #" << spaces_id.at(1) << endl;
-            game_->MoveMarker(game_->GetSpaces()->at(spaces_id.at(0)-1),game_->GetSpaces()->at(spaces_id.at(1)-1),0);
-        }
-
 
         this->DrawBackground();
         this->DrawBoard();
@@ -62,19 +42,19 @@ void GameRenderer::Render() {
             this->DrawWinnerMessage();
 
         // Display window
-        main_window_.display();
+        main_window_->display();
     }
 }
 
 void GameRenderer::DrawBoard() {
     sf::RectangleShape border(sf::Vector2f(kBorderX, kBorderY));
-    int border_position_x = (main_window_.getSize().x - kBorderX) / 2;
-    int border_position_y = (main_window_.getSize().y - kBorderY) / 2;
+    int border_position_x = (main_window_->getSize().x - kBorderX) / 2;
+    int border_position_y = (main_window_->getSize().y - kBorderY) / 2;
     border.setPosition(border_position_x, border_position_y);
     border.setFillColor(sf::Color(210, 105, 30));
     border.setOutlineThickness(10);
     border.setOutlineColor(sf::Color(0, 0, 0));
-    main_window_.draw(border);
+    main_window_->draw(border);
 
 }
 
@@ -87,23 +67,23 @@ void GameRenderer::DrawSpaces() {
             spaces[i][j].setOutlineThickness(4);
             spaces[i][j].setOutlineColor(sf::Color::Black);
             // Define spaces position
-            int space_position_x = (main_window_.getSize().x - kBorderX) / 2 + i * 150 + 25;
-            int space_position_y = (main_window_.getSize().y - kBorderY) / 2 + j * 150 + 25;
+            int space_position_x = (main_window_->getSize().x - kBorderX) / 2 + i * 150 + 25;
+            int space_position_y = (main_window_->getSize().y - kBorderY) / 2 + j * 150 + 25;
             // Set spaces position
             spaces[i][j].setPosition(space_position_x, space_position_y);
-            main_window_.draw(spaces[i][j]);
+            main_window_->draw(spaces[i][j]);
             if (i < 4) { // Render the link between this space and the next one
                 sf::RectangleShape link(sf::Vector2f(50, 5));
                 link.setPosition(space_position_x + 100, space_position_y + 50);
                 link.setFillColor(sf::Color::Black);
-                main_window_.draw(link);
+                main_window_->draw(link);
             }
             if (j < 4) { // Render the link between this space and the one below it
                 sf::RectangleShape link(sf::Vector2f(50, 5));
                 link.setFillColor(sf::Color::Black);
                 link.setPosition(space_position_x + 50, space_position_y + 100);
                 link.rotate(90);
-                main_window_.draw(link);
+                main_window_->draw(link);
             }
             if (i < 4 && j < 4) { // Render the link between this space and the one on the right diagonal
                 int link_position_x = space_position_x + 50 + 35;
@@ -112,7 +92,7 @@ void GameRenderer::DrawSpaces() {
                 link.setFillColor(sf::Color::Black);
                 link.setPosition(link_position_x, link_position_y);
                 link.rotate(45);
-                main_window_.draw(link);
+                main_window_->draw(link);
             }
             if (i > 0 && j < 4) { // Render the link between this space and the one on the left diagonal
                 int link_position_x = space_position_x + 50 - 35;
@@ -121,7 +101,7 @@ void GameRenderer::DrawSpaces() {
                 link.setFillColor(sf::Color::Black);
                 link.setPosition(link_position_x, link_position_y);
                 link.rotate(135);
-                main_window_.draw(link);
+                main_window_->draw(link);
             }
         }
     }
@@ -142,7 +122,7 @@ void GameRenderer::DrawMarkers() {
                 marker.setFillColor(sf::Color::Black);
             marker.setPosition(GetCoordX(player_spaces->at(j)->GetSpaceId()) + (50 - marker.getRadius()),
                                GetCoordY(player_spaces->at(j)->GetSpaceId()) + (50 - marker.getRadius()));
-            main_window_.draw(marker);
+            main_window_->draw(marker);
         }
     }
 }
@@ -155,7 +135,7 @@ void GameRenderer::DrawTurnLabel() {
     sf::Text turn_text("Turn : " + std::to_string(game_->GetTurnNumber()), junegull);
     turn_text.setCharacterSize(40);
     turn_text.setPosition(20, 10);
-    main_window_.draw(turn_text);
+    main_window_->draw(turn_text);
 
     // Display player color
     string player_turn;
@@ -168,7 +148,7 @@ void GameRenderer::DrawTurnLabel() {
     else player_turn_text.setFillColor(sf::Color::Black);
     player_turn_text.setCharacterSize(40);
     player_turn_text.setPosition(20, 50);
-    main_window_.draw(player_turn_text);
+    main_window_->draw(player_turn_text);
 }
 
 void GameRenderer::DrawBackground() {
@@ -179,8 +159,8 @@ void GameRenderer::DrawBackground() {
         wood_texture.setRepeated(true);
         sf::Sprite background_sprite;
         background_sprite.setTexture(wood_texture);
-        background_sprite.setTextureRect(sf::IntRect(0, 0, main_window_.getSize().x, main_window_.getSize().y));
-        main_window_.draw(background_sprite);
+        background_sprite.setTextureRect(sf::IntRect(0, 0, main_window_->getSize().x, main_window_->getSize().y));
+        main_window_->draw(background_sprite);
     }
 }
 
@@ -190,7 +170,7 @@ int GameRenderer::GetCoordX(int space_id) {
         x = 4;
     } else
         x--;
-    return (main_window_.getSize().x - 750) / 2 + x * 150 + 25;
+    return (main_window_->getSize().x - 750) / 2 + x * 150 + 25;
 }
 
 int GameRenderer::GetCoordY(int space_id) {
@@ -198,7 +178,7 @@ int GameRenderer::GetCoordY(int space_id) {
     if (space_id % 5 == 0) {
         y = space_id / 5 - 1;
     }
-    return (main_window_.getSize().y - 750) / 2 + y * 150 + 25;
+    return (main_window_->getSize().y - 750) / 2 + y * 150 + 25;
 }
 
 // TODO(Piryus) Refactor this method
@@ -215,7 +195,7 @@ void GameRenderer::ClickController(int mouse_x, int mouse_y) {
     }
 
     if (selected_space == nullptr &&
-        clicked_space_id != -1) { // If the player clicks on a space and if no space is selected
+        clicked_space_id != -1 && (!game_->IsAIGame() || game_->GetPlayerTurn() == 1)) { // If the player clicks on a space and if no space is selected
         // If the player clicks on a marker
         if (spaces->at(clicked_space_id - 1).GetMarker() != nullptr &&
             (spaces->at(clicked_space_id - 1).GetMarker()->GetColor() ==
@@ -260,9 +240,9 @@ int GameRenderer::GetClickedSpaceID(int x, int y) {
 
 void GameRenderer::DrawWinnerMessage() {
     // Hide the game with black mask
-    sf::RectangleShape black_mask(sf::Vector2f(main_window_.getSize().x,main_window_.getSize().y));
+    sf::RectangleShape black_mask(sf::Vector2f(main_window_->getSize().x,main_window_->getSize().y));
     black_mask.setFillColor(sf::Color(0,0,0,150));
-    main_window_.draw(black_mask);
+    main_window_->draw(black_mask);
 
     // Load font
     sf::Font junegull;
@@ -272,7 +252,7 @@ void GameRenderer::DrawWinnerMessage() {
     sf::Text winner(game_->GetWinner()->GetColor() + " wins!", junegull);
     winner.setCharacterSize(70);
     winner.setOrigin(winner.getGlobalBounds().width / 2, winner.getGlobalBounds().height / 2);
-    winner.setPosition(main_window_.getSize().x / 2,
-                       main_window_.getSize().y / 2);
-    main_window_.draw(winner);
+    winner.setPosition(main_window_->getSize().x / 2,
+                       main_window_->getSize().y / 2);
+    main_window_->draw(winner);
 }
