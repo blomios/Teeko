@@ -1,9 +1,5 @@
-//
-// Created by blomi on 22/05/2018.
-//
-
 #include "Utils.h"
-#include <math.h>
+#include <cmath>
 
 
 bool Utils::isAdjacent(int spaceA, int spaceB){
