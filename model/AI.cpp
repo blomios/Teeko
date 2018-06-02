@@ -1,6 +1,4 @@
-#include <iostream>
 #include "AI.h"
-#include "Utils.h"
 
 AI::AI(vector<Space>* board_spaces, int difficulty) : Player("Red") {
     board_spaces_ = board_spaces;

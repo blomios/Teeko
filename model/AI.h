@@ -2,6 +2,7 @@
 #define TEEKO_AI_H
 
 #include "Player.h"
+#include "Utils.h"
 
 class AI : public Player {
 private:
