@@ -4,7 +4,7 @@
 #include "GameRenderer.h"
 
 /**
- * @brief Generic class for menus
+ * @brief Base class for menus
  */
 class Menu {
 public:
