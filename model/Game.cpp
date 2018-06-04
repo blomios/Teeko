@@ -1,3 +1,4 @@
+#include <SFML/System/Thread.hpp>
 #include "Game.h"
 using namespace std;
 
@@ -20,6 +21,11 @@ Game::Game(bool is_ai) {
     this->players_.push_back(*(new Player("Black")));
     this->turn_number_ = 1;
     this->turn_ = 1; // Player Black Start the game
+
+    if (ai_game_) {
+        std::thread ai(AiLoop, this);
+        ai.detach();
+    }
 }
 
 /**
@@ -122,4 +128,21 @@ bool Game::IsAIGame() {
 
 AI *Game::GetAi() {
     return &ai_;
+}
+
+void Game::AiLoop() {
+    while(winner_== nullptr) {
+        if (turn_ == 0 && players_.at(0).GetSpaces()->size() == 4) {
+            vector<int> spaces_id;
+            spaces_id = ai_.FindBestMoveSpacesId(spaces_);
+            //std::cout << "Moving marker on space #" << spaces_id.at(0) << " to #" << spaces_id.at(1) << endl;
+            MoveMarker(spaces_.at(spaces_id.at(0) - 1), spaces_.at(spaces_id.at(1) - 1), 0);
+        }
+        else if(turn_ == 0 && players_.at(0).GetSpaces()->size() != 4) {
+            int rand_space_id = rand()%25;
+            while(GetSpaces()->at(rand_space_id).GetMarker() != nullptr)
+                rand_space_id = rand()%25;
+            PlaceMarker(spaces_.at(rand_space_id), 0);
+        }
+    }
 }

@@ -1,4 +1,3 @@
-#include <SFML/Graphics.hpp>
 #include "view/MainMenu.h"
 
 int main()
