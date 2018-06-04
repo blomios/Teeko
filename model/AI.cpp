@@ -134,7 +134,7 @@ int AI::alignementMarker(vector<int> markers_id, int coef,int player){
                 space_id+=4;
             }
             count_mark_square++;
-        } else if((space_id + 1) == markers_id.at(i)){
+        } else if((space_id + 1) == markers_id.at(i) && (space_id % 5 != 0 && space_id + 1 % 5 != 1)){
             /* Line */
             space_id++;
             count_mark_line++;
@@ -146,35 +146,18 @@ int AI::alignementMarker(vector<int> markers_id, int coef,int player){
             /* Diagonal */
             space_id+=6;
             count_mark_diago_d++;
-        } else if ((space_id + 4) == markers_id.at(i)){
+        } else if ((space_id + 4) == markers_id.at(i) && (space_id % 5 != 1 && space_id +4 % 5 != 0 )){
             /* Diagonal */
             space_id+=4;
             count_mark_diago_u++;
         }
     }
 
-    if(count_mark_line == 3){
-
-        // Check first were is the last marker
-
-
-    }
+    count_mark_square == 4 || count_mark_diago_d == 4 || count_mark_line == 4
+    || count_mark_colu == 4 ||  count_mark_diago_u == 4 ? score += INT32_MAX : score += 0;
 
     count_mark_square == 3 || count_mark_diago_d == 3 || count_mark_line == 3
     || count_mark_colu == 3 ||  count_mark_diago_u == 3 ? score += 3*coef * player : score += 0;
-
-    count_mark_square == 2 ? score += 2*coef * player : score += 0;
-    count_mark_diago_d == 2 ? score += 2*coef * player : score += 0;
-    count_mark_line == 2 ? score += 2*coef * player : score += 0;
-    count_mark_colu == 2 ? score += 2*coef * player : score += 0;
-    count_mark_diago_u == 2 ? score += 2*coef * player : score += 0;
-
-
-    count_mark_square == 1 ? score += coef * player : score += 0;
-    count_mark_diago_d == 1 ? score += coef * player : score += 0;
-    count_mark_line == 1 ? score += coef * player : score += 0;
-    count_mark_colu == 1 ? score += coef * player : score += 0;
-    count_mark_diago_u == 1 ? score += coef * player : score += 0;
 
     return score;
 }

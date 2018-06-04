@@ -19,6 +19,7 @@ vector<Space *> *Player::GetSpaces() {
  */
 bool Player::IsWinner(){
     int count_mark_square = 1, count_mark_diago_d = 1, count_mark_diago_u = 1, count_mark_colu = 1 , count_mark_line = 1;
+
     //Check first if there 4 markers on board
     if(spaces_.size() == 4){
         int* markers_ids = new int[4];
@@ -29,6 +30,7 @@ bool Player::IsWinner(){
 
         //Sort tab
         sort(markers_ids,markers_ids + 4);
+
 
         int space_id = markers_ids[0];
 
@@ -55,7 +57,7 @@ bool Player::IsWinner(){
                 /* Diagonal */
                 space_id+=6;
                 count_mark_diago_d++;
-            } else if ((space_id + 4) == markers_ids[i]){
+            } else if ((space_id + 4) == markers_ids[i]  && (space_id % 5 != 1 && space_id +4 % 5 != 0 )){
                 /* Diagonal */
                 space_id+=4;
                 count_mark_diago_u++;
