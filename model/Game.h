@@ -1,11 +1,10 @@
 #ifndef TEEKO_GAME_H
 #define TEEKO_GAME_H
 
-
-#include <SFML/Graphics.hpp>
 #include "AI.h"
 #include <vector>
 #include <algorithm>
+#include <thread>
 
 class Game {
 public:
@@ -20,6 +19,7 @@ public:
     Player* GetWinner();
     bool IsAIGame();
     AI* GetAi();
+    void AiLoop();
 private:
     vector<Space> spaces_;
     vector<Marker> markers_;
