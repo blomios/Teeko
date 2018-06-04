@@ -15,6 +15,7 @@ public:
     bool static isAdjacent(int spaceA, int spaceB);
     static vector<int> getPosXY(int spaceId);
     static int getDistance(int spaceIdA, int spaceIdB);
+    //static bool isWinner();
 
 };
 

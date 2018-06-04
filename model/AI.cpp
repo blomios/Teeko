@@ -10,7 +10,21 @@ AI::AI(vector<Space>* board_spaces, int difficulty) : Player("Red") {
 // TODO Finish this method then add alpha/beta pruning
 int AI::minimax(vector<Space> board, int depth, bool is_maximizing, int alpha, int beta) {
     // If we are at the bottom of the tree, evaluate the board ; TODO Add condition : if there isn't any possible move
-    if(depth == 0)
+
+
+    //Red player : AI      Black player User
+    vector <int> red,black;
+
+    for(int i = 0; i < 25; i ++){
+        if(board.at(i).GetMarker() != nullptr && board.at(i).GetMarker()->GetColor() == "Red"){
+            red.push_back(board.at(i).GetSpaceId());
+        } else if(board.at(i).GetMarker() != nullptr && board.at(i).GetMarker()->GetColor() == "Black"){
+            black.push_back(board.at(i).GetSpaceId());
+        }
+    }
+
+
+    if(depth == 0 || alignementMarker(black, 1,-1)==-3 || alignementMarker(red, 1,1)==3 )
         return evaluate(&board);
 
     if(is_maximizing) {
@@ -29,7 +43,6 @@ int AI::minimax(vector<Space> board, int depth, bool is_maximizing, int alpha, i
                         best_eval = max(best_eval, minimax(new_board, depth-1, false, alpha, beta)); // Let's go deeper
                         alpha = max(alpha, best_eval);
                         if(beta <= alpha) {
-                            cout << "Pruning..." << endl;
                             break;
                         }
                     }
@@ -52,7 +65,6 @@ int AI::minimax(vector<Space> board, int depth, bool is_maximizing, int alpha, i
                         best_eval = min(best_eval, minimax(new_board, depth-1, true, alpha, beta)); // Let's go deeper
                         beta = min(beta, best_eval);
                         if (beta <= alpha) {
-                            cout << "Pruning..." << endl;
                             break;
                         }
                     }
@@ -89,8 +101,8 @@ int AI::evaluate(vector<Space> *board) {
     sort(red.begin(),red.begin()+red.size());
     sort(black.begin(),black.begin()+black.size());
 
-    score+=alignementMarker(red,20,1) + alignementMarker(black,20,-1);
-    score+=distanceMarker(red,1,1) + distanceMarker(black,1,-1);
+    score+=alignementMarker(red,20,1)+ alignementMarker(black,20,-1);
+    score+=distanceMarker(red,1,1)+ distanceMarker(black,1,-1);
 
 
     return score;
@@ -108,11 +120,8 @@ int AI::distanceMarker(vector<int> space_id, int coef,int player){
             if(j>i){
                 int ptB=space_id.at(j);
                 score += (3 - Utils::getDistance(ptA,ptB)) * player * coef;
-
             }
-
         }
-
     }
     return score;
 }
@@ -160,21 +169,21 @@ int AI::alignementMarker(vector<int> markers_id, int coef,int player){
 
     }
 
-    count_mark_square == 3 || count_mark_diago_d == 3 || count_mark_line == 3
-    || count_mark_colu == 3 ||  count_mark_diago_u == 3 ? score += 3*coef * player : score += 0;
+    count_mark_square == 4 || count_mark_diago_d == 4 || count_mark_line == 4
+    || count_mark_colu == 4 ||  count_mark_diago_u == 4 ? score += 3*coef * player : score += 0;
 
-    count_mark_square == 2 ? score += 2*coef * player : score += 0;
-    count_mark_diago_d == 2 ? score += 2*coef * player : score += 0;
-    count_mark_line == 2 ? score += 2*coef * player : score += 0;
-    count_mark_colu == 2 ? score += 2*coef * player : score += 0;
-    count_mark_diago_u == 2 ? score += 2*coef * player : score += 0;
-
-
-    count_mark_square == 1 ? score += coef * player : score += 0;
-    count_mark_diago_d == 1 ? score += coef * player : score += 0;
-    count_mark_line == 1 ? score += coef * player : score += 0;
-    count_mark_colu == 1 ? score += coef * player : score += 0;
-    count_mark_diago_u == 1 ? score += coef * player : score += 0;
+//    count_mark_square == 2 ? score += 2*coef * player : score += 0;
+//    count_mark_diago_d == 2 ? score += 2*coef * player : score += 0;
+//    count_mark_line == 2 ? score += 2*coef * player : score += 0;
+//    count_mark_colu == 2 ? score += 2*coef * player : score += 0;
+//    count_mark_diago_u == 2 ? score += 2*coef * player : score += 0;
+//
+//
+//    count_mark_square == 1 ? score += coef * player : score += 0;
+//    count_mark_diago_d == 1 ? score += coef * player : score += 0;
+//    count_mark_line == 1 ? score += coef * player : score += 0;
+//    count_mark_colu == 1 ? score += coef * player : score += 0;
+//    count_mark_diago_u == 1 ? score += coef * player : score += 0;
 
     return score;
 }
@@ -190,6 +199,7 @@ vector<int> AI::FindBestMoveSpacesId(vector<Space> board) {
                 vector<Space> new_board(board);
                 new_board.at(move_space_id - 1).SetMarker(current_space.GetMarker()); // Add the marker to the new space
                 new_board.at(current_space.GetSpaceId() - 1).SetMarker(nullptr); // Remove the marker
+
                 int move_eval = minimax(new_board, 4, false, -INT32_MAX, INT32_MAX);
                 if (move_eval > best_eval) {
                     best_move_spaces_id.clear();
