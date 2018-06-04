@@ -9,12 +9,9 @@ AI::AI(vector<Space>* board_spaces, int difficulty) : Player("Red") {
 
 // TODO Finish this method then add alpha/beta pruning
 int AI::minimax(vector<Space> board, int depth, bool is_maximizing, int alpha, int beta) {
-    // If we are at the bottom of the tree, evaluate the board ; TODO Add condition : if there isn't any possible move
-
-
-    //Red player : AI      Black player User
+    // Retrieves the spaces' ID of both Black and Red players
+    // They will be used to determine if a player has aligned 4 markers and has won
     vector <int> red,black;
-
     for(int i = 0; i < 25; i ++){
         if(board.at(i).GetMarker() != nullptr && board.at(i).GetMarker()->GetColor() == "Red"){
             red.push_back(board.at(i).GetSpaceId());
@@ -23,7 +20,7 @@ int AI::minimax(vector<Space> board, int depth, bool is_maximizing, int alpha, i
         }
     }
 
-
+    // If we are at a leaf of the tree (2 cases : win or depth reached)
     if(depth == 0 || alignementMarker(black, 1,-1)==-3 || alignementMarker(red, 1,1)==3 )
         return evaluate(&board);
 
@@ -71,19 +68,6 @@ int AI::minimax(vector<Space> board, int depth, bool is_maximizing, int alpha, i
                     }
                 }
             }
-                for(int move_space_id : current_space.GetValidMoves(&board)) {
-                    if(move_space_id!=-1) {
-                        //std::cout << "Checking move on space #" << current_space.GetSpaceId() << " to #" << move_space_id << "at depth " << depth << endl;
-                        vector<Space> new_board(board);
-                        new_board.at(move_space_id - 1).SetMarker(current_space.GetMarker()); // Add the marker to the new space
-                        new_board.at(current_space.GetSpaceId() - 1).SetMarker(nullptr); // Remove the marker
-                        best_eval = min(best_eval, minimax(new_board, depth-1, true, alpha, beta)); // Let's go deeper
-                        beta = min(beta, best_eval);
-                        if (beta <= alpha) {
-                            break;
-                        }
-                    }
-                }
         }
         return best_eval;
     }
