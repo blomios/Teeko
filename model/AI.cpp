@@ -1,13 +1,11 @@
-#include <iostream>
 #include "AI.h"
-#include "Utils.h"
+
 
 AI::AI(vector<Space>* board_spaces, int difficulty) : Player("Red") {
     board_spaces_ = board_spaces;
     difficulty_ = difficulty;
 }
 
-// TODO Finish this method then add alpha/beta pruning
 int AI::minimax(vector<Space> board, int depth, bool is_maximizing, int alpha, int beta) {
     // Retrieves the spaces' ID of both Black and Red players
     // They will be used to determine if a player has aligned 4 markers and has won
@@ -74,8 +72,7 @@ int AI::minimax(vector<Space> board, int depth, bool is_maximizing, int alpha, i
 }
 
 /**
- * TODO This function returns an evaluation of the passed board
- * https://en.wikipedia.org/wiki/Evaluation_function
+ * This function returns an evaluation of the passed board
  * Maximise Red player ( AI ), so minimize Black Player ( User )
  * @param board
  * @return
