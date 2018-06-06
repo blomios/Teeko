@@ -1,11 +1,20 @@
 #include "AIMenu.h"
 
+/**
+ * Constructor for the AI Menu
+ * Calls Render()
+ * @param window, the window in which the menu will be rendered
+ */
 AIMenu::AIMenu(sf::RenderWindow *window) : Menu(window) {
     this->Render();
 }
 
+/**
+ * Renders the elements of the menu : background, buttons, text, ...
+ * Also contains the main loop managing the events
+ */
 void AIMenu::Render() {
-    sf::Event event;
+    sf::Event event{};
     bool loop(true);
     while (main_window_->isOpen() && loop) {
         while (main_window_->pollEvent(event)) {
