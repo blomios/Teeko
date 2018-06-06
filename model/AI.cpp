@@ -142,7 +142,7 @@ int AI::alignementMarker(vector<int> markers_id, int coef,int player){
                 space_id+=4;
             }
             count_mark_square++;
-        } else if((space_id + 1) == markers_id.at(i)){
+        } else if((space_id + 1) == markers_id.at(i) && (space_id % 5 != 0 && space_id + 1 % 5 != 1)){
             /* Line */
             space_id++;
             count_mark_line++;
@@ -154,7 +154,7 @@ int AI::alignementMarker(vector<int> markers_id, int coef,int player){
             /* Diagonal */
             space_id+=6;
             count_mark_diago_d++;
-        } else if ((space_id + 4) == markers_id.at(i)){
+        } else if ((space_id + 4) == markers_id.at(i) && (space_id % 5 != 1 && space_id +4 % 5 != 0 )){
             /* Diagonal */
             space_id+=4;
             count_mark_diago_u++;
