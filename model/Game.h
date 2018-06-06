@@ -11,7 +11,7 @@ public:
     Game(bool is_ai);
     void PlaceMarker(Space space, int player);
     void MoveMarker(Space current_space, Space next_space, int player);
-    vector<Player>* GetPlayers();
+    vector<Player*>* GetPlayers();
     vector<Space>* GetSpaces();
     vector<Marker>* GetMarkers();
     int GetTurnNumber();
@@ -23,7 +23,7 @@ public:
 private:
     vector<Space> spaces_;
     vector<Marker> markers_;
-    vector<Player> players_;
+    vector<Player*> players_;
     AI ai_ = AI(&spaces_, 0);
     int turn_; // Player 1 or 2
     int turn_number_;

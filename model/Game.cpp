@@ -17,8 +17,8 @@ Game::Game(bool is_ai) {
         }
 
     }
-    this->players_.push_back(*(new Player("Red")));
-    this->players_.push_back(*(new Player("Black")));
+    players_.push_back(new Player("Red"));
+    players_.push_back(new Player("Black"));
     this->turn_number_ = 1;
     this->turn_ = 1; // Player Black Start the game
 
@@ -43,14 +43,14 @@ void Game::PlaceMarker(Space space, int player) {
     }
     else
     {*/
-        if(space.IsEmpty() && players_.at(player).GetSpaces()->size()<4) {
-            players_.at(player).GetSpaces()->push_back(&spaces_.at(space.GetSpaceId()-1));
+        if(space.IsEmpty() && players_.at(player)->GetSpaces()->size()<4) {
+            players_.at(player)->GetSpaces()->push_back(&spaces_.at(space.GetSpaceId()-1));
             spaces_.at(space.GetSpaceId() - 1).SetMarker(&markers_.at(turn_number_ - 1));
             turn_number_++;
             turn_ = turn_ == 0 ? 1 : 0;
 
-            if(players_.at(player).IsWinner())
-                winner_ = &players_.at(player);
+            if(players_.at(player)->IsWinner())
+                winner_ = players_.at(player);
         }
     //}
 }
@@ -65,7 +65,7 @@ void Game::PlaceMarker(Space space, int player) {
  */
 void Game::MoveMarker(Space current_space, Space next_space, int player) {
     int valid = 0;
-    if (players_.at(player).GetSpaces()->size() == 4) {
+    if (players_.at(player)->GetSpaces()->size() == 4) {
 
         vector<int> moves = current_space.GetValidMoves(&spaces_);
         for(int i = 0; i < 8;i++){
@@ -76,29 +76,29 @@ void Game::MoveMarker(Space current_space, Space next_space, int player) {
         }
 
         if(valid == 1) {
-            players_.at(player).GetSpaces()->push_back(&spaces_.at(next_space.GetSpaceId() - 1));
+            players_.at(player)->GetSpaces()->push_back(&spaces_.at(next_space.GetSpaceId() - 1));
             spaces_.at(next_space.GetSpaceId() - 1).SetMarker(
                     &markers_.at(current_space.GetMarker()->GetMarkerId() - 1));
 
             // method erase
             spaces_.at(current_space.GetSpaceId() - 1).SetMarker(nullptr);
-            vector<Space *> *spaces = players_.at(player).GetSpaces();
+            vector<Space *> *spaces = players_.at(player)->GetSpaces();
             for (int i = 0; i < 4; i++) {
                 if (current_space.GetSpaceId() == spaces->at(i)->GetSpaceId()) {
-                    players_.at(player).GetSpaces()->erase(spaces->begin() + i);
+                    players_.at(player)->GetSpaces()->erase(spaces->begin() + i);
                 }
             }
 
             turn_number_++;
             turn_ = turn_ == 0 ? 1 : 0;
 
-            if(players_.at(player).IsWinner())
-                winner_ = &players_.at(player);
+            if(players_.at(player)->IsWinner())
+                winner_ = players_.at(player);
         }
     }
 }
 
-vector<Player>* Game::GetPlayers() {
+vector<Player*>* Game::GetPlayers() {
     return &players_;
 }
 
@@ -132,13 +132,13 @@ AI *Game::GetAi() {
 
 void Game::AiLoop() {
     while(winner_== nullptr) {
-        if (turn_ == 0 && players_.at(0).GetSpaces()->size() == 4) {
+        if (turn_ == 0 && players_.at(0)->GetSpaces()->size() == 4) {
             vector<int> spaces_id;
             spaces_id = ai_.FindBestMoveSpacesId(spaces_);
             //std::cout << "Moving marker on space #" << spaces_id.at(0) << " to #" << spaces_id.at(1) << endl;
             MoveMarker(spaces_.at(spaces_id.at(0) - 1), spaces_.at(spaces_id.at(1) - 1), 0);
         }
-        else if(turn_ == 0 && players_.at(0).GetSpaces()->size() != 4) {
+        else if(turn_ == 0 && players_.at(0)->GetSpaces()->size() != 4) {
             int rand_space_id = rand()%25;
             while(GetSpaces()->at(rand_space_id).GetMarker() != nullptr)
                 rand_space_id = rand()%25;

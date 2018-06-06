@@ -141,16 +141,16 @@ void GameRenderer::DrawSpaces() {
 void GameRenderer::DrawMarkers() {
     // This loop scans each player's spaces vector
     for (auto &player : *game_->GetPlayers()) {
-        for (Space *space : *player.GetSpaces()) {
+        for (Space *space : *player->GetSpaces()) {
             sf::CircleShape marker(43);
             // If marker is selected, it adds a blue outline
             if (space->GetMarker()->IsSelected()) {
                 marker.setOutlineThickness(-10);
                 marker.setOutlineColor(sf::Color(0, 100, 255)); // Blueish
             }
-            if (player.GetColor() == "Red")
+            if (player->GetColor() == "Red")
                 marker.setFillColor(sf::Color(216, 0, 0)); // Red
-            else if (player.GetColor() == "Black")
+            else if (player->GetColor() == "Black")
                 marker.setFillColor(sf::Color::Black);
             // Center the marker in its space
             marker.setPosition(GetCoordX(space->GetSpaceId()) + (50 - marker.getRadius()),
@@ -282,7 +282,7 @@ void GameRenderer::ClickController(int mouse_x, int mouse_y) {
         // If the player clicked on a space with marker and if this marker's color is the same as the player's
         if (spaces->at(clicked_space_id - 1).GetMarker() != nullptr &&
             (spaces->at(clicked_space_id - 1).GetMarker()->GetColor() ==
-             game_->GetPlayers()->at(player_turn).GetColor())) {
+             game_->GetPlayers()->at(player_turn)->GetColor())) {
             // Selects the marker the player clicked on (or the marker of the space the player clicked on)
             spaces->at(clicked_space_id - 1).GetMarker()->Select();
         }
@@ -300,7 +300,7 @@ void GameRenderer::ClickController(int mouse_x, int mouse_y) {
         // If the player clicked on one of his marker
         if (spaces->at(clicked_space_id - 1).GetMarker() != nullptr &&
             (spaces->at(clicked_space_id - 1).GetMarker()->GetColor() ==
-             game_->GetPlayers()->at(game_->GetPlayerTurn()).GetColor())) {
+             game_->GetPlayers()->at(game_->GetPlayerTurn())->GetColor())) {
             // Unselects the selected marker
             selected_space->GetMarker()->Unselect();
             // Selects the other marker
