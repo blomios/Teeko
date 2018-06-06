@@ -166,20 +166,7 @@ int AI::alignementMarker(vector<int> markers_id, int coef,int player){
     }
 
     count_mark_square == 4 || count_mark_diago_d == 4 || count_mark_line == 4
-    || count_mark_colu == 4 ||  count_mark_diago_u == 4 ? score += 3*coef * player : score += 0;
-
-//    count_mark_square == 2 ? score += 2*coef * player : score += 0;
-//    count_mark_diago_d == 2 ? score += 2*coef * player : score += 0;
-//    count_mark_line == 2 ? score += 2*coef * player : score += 0;
-//    count_mark_colu == 2 ? score += 2*coef * player : score += 0;
-//    count_mark_diago_u == 2 ? score += 2*coef * player : score += 0;
-//
-//
-//    count_mark_square == 1 ? score += coef * player : score += 0;
-//    count_mark_diago_d == 1 ? score += coef * player : score += 0;
-//    count_mark_line == 1 ? score += coef * player : score += 0;
-//    count_mark_colu == 1 ? score += coef * player : score += 0;
-//    count_mark_diago_u == 1 ? score += coef * player : score += 0;
+    || count_mark_colu == 4 ||  count_mark_diago_u == 4 ? score +=  3*coef * player: score += 0;
 
     return score;
 }
