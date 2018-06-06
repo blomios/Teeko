@@ -53,7 +53,7 @@ bool Player::IsWinner(){
                 /* Column */
                 space_id+=5;
                 count_mark_colu++;
-            } else if((space_id + 6) == markers_ids[i]){
+            } else if((space_id + 6) == markers_ids[i] && (space_id % 5 != 0 && space_id +6 % 5 != 5 )){
                 /* Diagonal */
                 space_id+=6;
                 count_mark_diago_d++;
