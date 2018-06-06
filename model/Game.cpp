@@ -137,19 +137,22 @@ AI *Game::GetAi() {
     return &ai_;
 }
 
+/**
+ * This is the main loop for the AI
+ */
 void Game::AiLoop() {
     while(winner_== nullptr) {
+        // If the AI has already placed its 4 markers
         if (turn_ == 0 && players_.at(0)->GetSpaces()->size() == 4) {
+            // Vector of 2 space id, the first one is the space id of the marker to move and the second one is the arrival space's id
             vector<int> spaces_id;
             spaces_id = ai_.FindBestMoveSpacesId(spaces_);
-            //std::cout << "Moving marker on space #" << spaces_id.at(0) << " to #" << spaces_id.at(1) << endl;
             MoveMarker(spaces_.at(spaces_id.at(0) - 1), spaces_.at(spaces_id.at(1) - 1), 0);
         }
+        // If it hasn't place 4 markers yet
         else if(turn_ == 0 && players_.at(0)->GetSpaces()->size() != 4) {
-            int rand_space_id = rand()%25;
-            while(GetSpaces()->at(rand_space_id).GetMarker() != nullptr)
-                rand_space_id = rand()%25;
-            PlaceMarker(spaces_.at(rand_space_id), 0);
+            int space_id = ai_.FindBestPlacementSpaceId(spaces_);
+            PlaceMarker(spaces_.at(space_id-1), 0);
         }
     }
 }

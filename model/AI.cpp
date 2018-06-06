@@ -9,57 +9,103 @@ AI::AI(vector<Space>* board_spaces, int difficulty) : Player("Red") {
 int AI::minimax(vector<Space> board, int depth, bool is_maximizing, int alpha, int beta) {
     // Retrieves the spaces' ID of both Black and Red players
     // They will be used to determine if a player has aligned 4 markers and has won
-    vector <int> red,black;
-    for(int i = 0; i < 25; i ++){
-        if(board.at(i).GetMarker() != nullptr && board.at(i).GetMarker()->GetColor() == "Red"){
+    vector<int> red, black;
+    for (int i = 0; i < 25; i++) {
+        if (board.at(i).GetMarker() != nullptr && board.at(i).GetMarker()->GetColor() == "Red") {
             red.push_back(board.at(i).GetSpaceId());
-        } else if(board.at(i).GetMarker() != nullptr && board.at(i).GetMarker()->GetColor() == "Black"){
+        } else if (board.at(i).GetMarker() != nullptr && board.at(i).GetMarker()->GetColor() == "Black") {
             black.push_back(board.at(i).GetSpaceId());
         }
     }
 
     // If we are at a leaf of the tree (2 cases : win or depth reached)
-    if(depth == 0 || alignementMarker(black, 1,-1)==-3 || alignementMarker(red, 1,1)==3 )
+    if (depth == 0 || alignementMarker(black, 1, -1) == -3 || alignementMarker(red, 1, 1) == 3)
         return evaluate(&board);
 
-    if(is_maximizing) {
+    if (is_maximizing) {
         // Best eval is -inf for now
         int best_eval = -INT32_MAX;
-        // For each space on the board
-        for(Space current_space : board) {
-            // Check whether there is a valid move and for each valid moves, make the move
-            if(current_space.GetMarker()!= nullptr && current_space.GetMarker()->GetColor() == "Red")
-                for(int move_space_id : current_space.GetValidMoves(&board)) {
-                    if(move_space_id!=-1) {
-                        //std::cout << "Checking move on space #" << current_space.GetSpaceId() << " to #" << move_space_id << " at depth " << depth << endl;
-                        vector<Space> new_board(board);
-                        new_board.at(move_space_id - 1).SetMarker(current_space.GetMarker()); // Add the marker to the new space
-                        new_board.at(current_space.GetSpaceId() - 1).SetMarker(nullptr); // Remove the marker
-                        best_eval = max(best_eval, minimax(new_board, depth-1, false, alpha, beta)); // Let's go deeper
-                        alpha = max(alpha, best_eval);
-                        if(beta <= alpha) {
-                            //cout << "Pruning..." << endl;
-                            break;
+        // 4 markers already placed
+        if (spaces_.size() == 4) {
+            // For each space on the board
+            for (Space current_space : board) {
+                // Check whether there is a valid move and for each valid moves, make the move
+                if (current_space.GetMarker() != nullptr && current_space.GetMarker()->GetColor() == "Red")
+                    for (int move_space_id : current_space.GetValidMoves(&board)) {
+                        if (move_space_id != -1) {
+                            vector<Space> new_board(board);
+                            new_board.at(move_space_id - 1).SetMarker(
+                                    current_space.GetMarker()); // Add the marker to the new space
+                            new_board.at(current_space.GetSpaceId() - 1).SetMarker(
+                                    nullptr); // Remove the marker
+                            best_eval = max(best_eval, minimax(new_board, depth - 1, false, alpha,
+                                                               beta)); // Let's go deeper
+                            alpha = max(alpha, best_eval);
+                            if (beta <= alpha) {
+                                //cout << "Pruning..." << endl;
+                                break;
+                            }
                         }
                     }
+            }
+        }
+            // If not every player's markers are not all placed yet
+        else {
+            for (Space current_space : board) {
+                // If there isn't any marker on the space,
+                if (current_space.GetMarker() == nullptr) {
+                    // This is the new board to be evaluated
+                    vector<Space> new_board(board);
+                    new_board.at(current_space.GetSpaceId() - 1).SetMarker(new Marker("Red", 0));
+                    best_eval = max(best_eval, minimax(new_board, depth - 1, false, alpha,
+                                                       beta)); // Let's go deeper
+                    alpha = max(alpha, best_eval);
+                    if (beta <= alpha) {
+                        //cout << "Pruning..." << endl;
+                        break;
+                    }
                 }
+            }
         }
         return best_eval;
     } else {
         // Best eval is +inf for now
         int best_eval = INT32_MAX;
-        // For each space on the board
-        for(Space current_space : board) {
-            // Check whether there is a valid move and for each valid moves, make the move
-            if(current_space.GetMarker()!= nullptr && current_space.GetMarker()->GetColor() == "Black")
-            for(int move_space_id : current_space.GetValidMoves(&board)) {
-                if(move_space_id!=-1) {
-                    //std::cout << "Checking move on space #" << current_space.GetSpaceId() << " to #" << move_space_id << "at depth " << depth << endl;
+        // 4 markers already placed
+        if (spaces_.size() == 4) {
+            // For each space on the board
+            for (Space current_space : board) {
+                // Check whether there is a valid move and for each valid moves, make the move
+                if (current_space.GetMarker() != nullptr && current_space.GetMarker()->GetColor() == "Black")
+                    for (int move_space_id : current_space.GetValidMoves(&board)) {
+                        if (move_space_id != -1) {
+                            //std::cout << "Checking move on space #" << current_space.GetSpaceId() << " to #" << move_space_id << "at depth " << depth << endl;
+                            vector<Space> new_board(board);
+                            new_board.at(move_space_id - 1).SetMarker(
+                                    current_space.GetMarker()); // Add the marker to the new space
+                            new_board.at(current_space.GetSpaceId() - 1).SetMarker(nullptr); // Remove the marker
+                            best_eval = min(best_eval,
+                                            minimax(new_board, depth - 1, true, alpha, beta)); // Let's go deeper
+                            beta = min(beta, best_eval);
+                            if (beta <= alpha) {
+                                //cout << "Pruning..." << endl;
+                                break;
+                            }
+                        }
+                    }
+            }
+        }
+            // If not every player's markers are not all placed yet
+        else {
+            for (Space current_space : board) {
+                // If there isn't any marker on the space,
+                if (current_space.GetMarker() == nullptr) {
+                    // This is the new board to be evaluated
                     vector<Space> new_board(board);
-                    new_board.at(move_space_id - 1).SetMarker(current_space.GetMarker()); // Add the marker to the new space
-                    new_board.at(current_space.GetSpaceId() - 1).SetMarker(nullptr); // Remove the marker
-                    best_eval = min(best_eval, minimax(new_board, depth-1, true, alpha, beta)); // Let's go deeper
-                    beta = min(beta, best_eval);
+                    new_board.at(current_space.GetSpaceId() - 1).SetMarker(new Marker("Black", 0));
+                    best_eval = max(best_eval, minimax(new_board, depth - 1, false, alpha,
+                                                       beta)); // Let's go deeper
+                    alpha = max(alpha, best_eval);
                     if (beta <= alpha) {
                         //cout << "Pruning..." << endl;
                         break;
@@ -130,7 +176,7 @@ int AI::alignementMarker(vector<int> markers_id, int coef,int player){
     int score = 0;
 
     int space_id = markers_id.at(0);
-    for(int i = 1; i < 4; i++){
+    for(int i = 1; i < markers_id.size()-1; i++){
         if((space_id + 1) == markers_id.at(i) && (markers_id.at(0) + 5) == markers_id.at(2)){
             /* Square */
             if(i == 2){
@@ -207,4 +253,24 @@ vector<int> AI::FindBestMoveSpacesId(vector<Space> board) {
         }
     }
     return best_move_spaces_id;
+}
+
+int AI::FindBestPlacementSpaceId(vector<Space> board) {
+    int best_eval = -INT32_MAX;
+    int move_eval;
+    int best_placement_space_id;
+    // Check whether there is a valid move and for each valid moves, make the move
+    for (Space space : board) {
+        if (space.GetMarker() == nullptr) {
+            vector<Space> new_board(board);
+            new_board.at(space.GetSpaceId() - 1).SetMarker(
+                   new Marker("Red", 0)); // Add the marker to the new space
+            move_eval = minimax(new_board, 6, false, -INT32_MAX, INT32_MAX);
+            if (move_eval > best_eval) {
+                best_placement_space_id = space.GetSpaceId();
+                best_eval = move_eval;
+            }
+        }
+    }
+    return best_placement_space_id;
 }
