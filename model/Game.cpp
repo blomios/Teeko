@@ -135,10 +135,6 @@ bool Game::IsAIGame() {
     return ai_game_;
 }
 
-AI *Game::GetAi() {
-    return &ai_;
-}
-
 /**
  * This is the main loop for the AI
  */

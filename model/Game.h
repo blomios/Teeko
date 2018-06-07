@@ -19,7 +19,6 @@ public:
     int GetPlayerTurn();
     Player* GetWinner();
     bool IsAIGame();
-    AI* GetAi();
     void AiLoop();
     SoundManager *GetSoundManager();
 private:
