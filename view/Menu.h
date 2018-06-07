@@ -23,7 +23,7 @@ public:
     // Displays the menu buttons
     virtual void DrawButtons()= 0;
     // Changes button's color on mouseover
-    virtual void HighlightButtonsController(int mouse_x, int mouse_y)= 0;
+    virtual void ButtonsColorController(int mouse_x, int mouse_y)= 0;
     // Manages every click on the window and calls the appropriate functions
     virtual void ClickController(int mouse_x, int mouse_y)= 0;
 protected:
@@ -35,6 +35,8 @@ protected:
     int kButtonHeight = 50;
     // The font used for the buttons
     sf::Font theboldfont;
+    // A sound manager, useful to play the little "clicks" when hovering a button
+    SoundManager sound_manager_;
 };
 
 

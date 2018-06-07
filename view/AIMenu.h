@@ -15,7 +15,7 @@ public:
     // Draw the difficulty buttons
     void DrawButtons() override;
     // Changes the color of the button on mouseover
-    void HighlightButtonsController(int mouse_x, int mouse_y) override;
+    void ButtonsColorController(int mouse_x, int mouse_y) override;
     // Manages every events triggered by a mouse click
     void ClickController(int mouse_x, int mouse_y) override;
     // Renders the little text inviting the user to choose a difficulty

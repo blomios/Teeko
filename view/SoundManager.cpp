@@ -6,6 +6,8 @@ SoundManager::SoundManager() {
     victory_music_buffer_.loadFromFile(R"(..\resources\sounds\victory.wav)");
     victory_music_.setBuffer(victory_music_buffer_);
     victory_sound_played_ = false;
+    button_click_sound_buffer_.loadFromFile(R"(..\resources\sounds\menu_click.wav)");
+    button_click_sound_.setBuffer(button_click_sound_buffer_);
 }
 
 void SoundManager::PlayMarkerSound() {
@@ -18,3 +20,8 @@ void SoundManager::PlayVictoryMusic() {
         victory_sound_played_ = true;
     }
 }
+
+void SoundManager::PlayButtonClickSound() {
+    button_click_sound_.play();
+}
+
