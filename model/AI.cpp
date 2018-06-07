@@ -172,13 +172,11 @@ int AI::evaluate(vector<Space> *board) {
  * @param board
  * @return
  */
-int AI::evaluate_Easy(vector<Space> *board,vector<int>red,vector<int>black)
-{
+int AI::evaluate_Easy(vector<Space> *board,vector<int>red,vector<int>black) {
     int score = 0;
 
-
-    score+=alignementMarker(red,20,1)+ alignementMarker(black,20,-1);
-
+    score+=alignementMarker(red,30,1)+ alignementMarker(black,30,-1);
+    score+=distanceMarker(red,1,1)+ distanceMarker(black,1,-1);
     return score;
 }
 
@@ -188,11 +186,7 @@ int AI::evaluate_Easy(vector<Space> *board,vector<int>red,vector<int>black)
  * @param board
  * @return
  */
-int AI::evaluate_Medium(vector<Space> *board,vector<int>red,vector<int>black)
-{
-    /* Constant */
-    // 1 marker alone, 2 markers, 3 markers and 1 far away, 3 markers and 1 close
-    vector <int> coef { 1 , 4 , 10};
+int AI::evaluate_Medium(vector<Space> *board,vector<int>red,vector<int>black) {
     int score=0;
     score+=alignementMarker(red,20,1)+ alignementMarker(black,20,-1);
     score+=evaluatePotential(red,1)+evaluatePotential(black,-1);
@@ -207,8 +201,7 @@ int AI::evaluate_Medium(vector<Space> *board,vector<int>red,vector<int>black)
  * @param board
  * @return
  */
-int AI::evaluate_Hard(vector<Space> *board,vector<int>red,vector<int>black)
-{
+int AI::evaluate_Hard(vector<Space> *board,vector<int>red,vector<int>black) {
     /* Constant */
     // 1 marker alone, 2 markers, 3 markers and 1 far away, 3 markers and 1 close
     vector <int> coef { 1 , 4 , 10};
@@ -224,14 +217,18 @@ int AI::evaluate_Hard(vector<Space> *board,vector<int>red,vector<int>black)
 
 }
 
-
+/**
+ * This function returns an evaluation of the position of each
+ * @param board
+ * @return
+ */
 int AI::evaluatePotential(vector<int> markers,int player){
     int score = 0;
-    vector<int>coin = {1,5,21,25}; // les coins de l'échiquier
-    vector<int>bCoin = {3,11,15,23};
-    vector<int>bMilieu = {2,4,6,10,16,20,22,24};
-    vector<int>milieuC = {7,9,17,19};
-    vector<int>milieuB = {8,12,14,18};
+    vector<int>coin = {1,5,21,25}; // les coins du board | 4 coups gagnants possibles
+    vector<int>bCoin = {3,11,15,23}; // les bords du board qui sont vers les coins | 5 coups gagnants possibles
+    vector<int>bMilieu = {2,4,6,10,16,20,22,24}; // les milieux des bords du board | 6 coups gagnant possibles
+    vector<int>milieuC = {7,9,17,19}; // les coins du carré intérieur | 10 coups gagnant possibles
+    vector<int>milieuB = {8,12,14,18}; // les bords du carré intérieur | 10 coups gagnants possibles
 
 
 
@@ -239,17 +236,17 @@ int AI::evaluatePotential(vector<int> markers,int player){
     for (int i = 0; i < markers.size(); ++i) {
         int ourMarker = markers[i];
         if(find(coin.begin(),coin.end(),ourMarker)!=coin.end()){
-            score+=2;
+            score+=1;
         }else if(find(bCoin.begin(),bCoin.end(),ourMarker)!=bCoin.end()){
-            score+=4;
+            score+=3;
         }else if(find(bMilieu.begin(),bMilieu.end(),ourMarker)!=bMilieu.end()) {
-            score += 3;
+            score += 2;
         }else if(find(milieuC.begin(),milieuC.end(),ourMarker)!=milieuC.end()) {
-            score += 5;
+            score += 4;
         }else if(find(milieuB.begin(),milieuB.end(),ourMarker)!=milieuB.end()) {
-            score += 5;
+            score += 4;
         }else{
-            score+=6;
+            score+=5;
         }
 
     }
@@ -304,7 +301,7 @@ int AI::alignementMarker(vector<int> markers_id, int coef,int player){
             /* Column */
             space_id+=5;
             count_mark_colu++;
-        } else if((space_id + 6) == markers_id.at(i)){
+        } else if((space_id + 6) == markers_id.at(i) && (space_id % 5 != 0 && space_id +6 % 5 != 5 )){
             /* Diagonal */
             space_id+=6;
             count_mark_diago_d++;
@@ -315,9 +312,6 @@ int AI::alignementMarker(vector<int> markers_id, int coef,int player){
         }
     }
 
-    if(count_mark_line == 3){
-        // Check first were is the last marker
-    }
 
     count_mark_square == 4 || count_mark_diago_d == 4 || count_mark_line == 4
     || count_mark_colu == 4 ||  count_mark_diago_u == 4 ? score +=  3*coef * player: score += 0;
@@ -327,6 +321,24 @@ int AI::alignementMarker(vector<int> markers_id, int coef,int player){
 
 vector<int> AI::FindBestMoveSpacesId(vector<Space> board) {
     int best_eval = -INT32_MAX;
+
+    int depth=0;
+
+    switch (difficulty_){
+        case 0:
+            depth = 2;
+            break;
+        case 1:
+            depth = 3;
+            break;
+        case 2:
+            depth = 4;
+            break;
+        default:
+            depth = 4;
+            break;
+    }
+
     vector<int> best_move_spaces_id;
     for (Space current_space : board) {
         // Check whether there is a valid move and for each valid moves, make the move
@@ -337,7 +349,7 @@ vector<int> AI::FindBestMoveSpacesId(vector<Space> board) {
                 new_board.at(move_space_id - 1).SetMarker(current_space.GetMarker()); // Add the marker to the new space
                 new_board.at(current_space.GetSpaceId() - 1).SetMarker(nullptr); // Remove the marker
 
-                int move_eval = minimax(new_board, 4, false, -INT32_MAX, INT32_MAX);
+                int move_eval = minimax(new_board, depth, false, -INT32_MAX, INT32_MAX);
                 if (move_eval > best_eval) {
                     best_move_spaces_id.clear();
                     best_move_spaces_id.push_back(current_space.GetSpaceId());
