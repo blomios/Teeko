@@ -158,3 +158,7 @@ void Game::AiLoop() {
         }
     }
 }
+
+SoundManager *Game::GetSoundManager() {
+    return &sound_manager_;
+}

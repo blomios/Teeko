@@ -7,9 +7,13 @@ class SoundManager {
 public:
     SoundManager();
     void PlayMarkerSound();
+    void PlayVictoryMusic();
 private:
     sf::SoundBuffer marker_sound_buffer_;
     sf::Sound marker_sound_;
+    sf::Sound victory_music_;
+    sf::SoundBuffer victory_music_buffer_;
+    bool victory_sound_played_;
 };
 
 

@@ -338,6 +338,9 @@ int GameRenderer::GetClickedSpaceID(int x, int y) {
  * Renders the winner message
  */
 void GameRenderer::DrawWinnerMessage() {
+    // Plays victory music
+    game_->GetSoundManager()->PlayVictoryMusic();
+
     // Hides the game with black mask
     sf::RectangleShape black_mask(sf::Vector2f(main_window_->getSize().x, main_window_->getSize().y));
     black_mask.setFillColor(sf::Color(0, 0, 0, 150)); // Transparent black

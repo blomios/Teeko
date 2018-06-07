@@ -21,6 +21,7 @@ public:
     bool IsAIGame();
     AI* GetAi();
     void AiLoop();
+    SoundManager *GetSoundManager();
 private:
     vector<Space> spaces_;
     vector<Marker> markers_;
@@ -31,6 +32,7 @@ private:
     Player* winner_ = nullptr;
     bool ai_game_;
     SoundManager sound_manager_;
+
 };
 
 #endif //TEEKO_GAME_H
