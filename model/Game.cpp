@@ -58,6 +58,7 @@ void Game::PlaceMarker(Space space, int player) {
 
             if(players_.at(player)->IsWinner())
                 winner_ = players_.at(player);
+            sound_manager_.PlayMarkerSound();
         }
     //}
 }
@@ -101,6 +102,7 @@ void Game::MoveMarker(Space current_space, Space next_space, int player) {
 
             if(players_.at(player)->IsWinner())
                 winner_ = players_.at(player);
+            sound_manager_.PlayMarkerSound();
         }
     }
 }
@@ -133,10 +135,6 @@ bool Game::IsAIGame() {
     return ai_game_;
 }
 
-AI *Game::GetAi() {
-    return &ai_;
-}
-
 /**
  * This is the main loop for the AI
  */
@@ -155,4 +153,8 @@ void Game::AiLoop() {
             PlaceMarker(spaces_.at(space_id-1), 0);
         }
     }
+}
+
+SoundManager *Game::GetSoundManager() {
+    return &sound_manager_;
 }

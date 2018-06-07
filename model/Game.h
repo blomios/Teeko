@@ -2,6 +2,7 @@
 #define TEEKO_GAME_H
 
 #include "AI.h"
+#include "../view/SoundManager.h"
 #include <vector>
 #include <algorithm>
 #include <thread>
@@ -18,8 +19,8 @@ public:
     int GetPlayerTurn();
     Player* GetWinner();
     bool IsAIGame();
-    AI* GetAi();
     void AiLoop();
+    SoundManager *GetSoundManager();
 private:
     vector<Space> spaces_;
     vector<Marker> markers_;
@@ -29,6 +30,8 @@ private:
     int turn_number_;
     Player* winner_ = nullptr;
     bool ai_game_;
+    SoundManager sound_manager_;
+
 };
 
 #endif //TEEKO_GAME_H

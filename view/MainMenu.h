@@ -22,7 +22,7 @@ public:
     // Draws the 3 buttons of the main menu
     void DrawButtons() override;
     // On mouseover, changes the color of a button
-    void HighlightButtonsController(int mouse_x, int mouse_y) override;
+    void ButtonsColorController(int mouse_x, int mouse_y) override;
     // Manages every events triggered by a mouse click
     void ClickController(int mouse_x, int mouse_y) override;
     // Draws the big "Teeko" logo

@@ -1,3 +1,4 @@
+#include <iostream>
 #include "MainMenu.h"
 
 /**
@@ -15,6 +16,22 @@ MainMenu::MainMenu() {
     sf::Image icon;
     icon.loadFromFile(R"(..\resources\images\icon.png)");
     main_window_->setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
+
+    // Creates the different buttons of the menu
+    // Buttons position, first button is at the center of the window
+    int button_x = (main_window_->getSize().x - kButtonWidth) / 2;
+    int button_y = (main_window_->getSize().y - kButtonHeight) / 2;
+
+    // Creates play button
+    play_two_button_ = CreateButton(button_x, button_y, sf::Color(230, 126, 34), sf::Color(211, 84, 0));
+
+    // Creates "Play against AI" button, 50px under the previous one
+    button_y += kButtonHeight + 50;
+    play_ai_button_ = CreateButton(button_x, button_y, sf::Color(230, 126, 34), sf::Color(211, 84, 0));
+
+    // Create "Exit" button, 50px under the previous one
+    button_y += kButtonHeight + 50;
+    exit_button_ = CreateButton(button_x, button_y, sf::Color(230, 126, 34), sf::Color(211, 84, 0));
 }
 
 /**
@@ -71,27 +88,14 @@ void MainMenu::DrawTitle() {
  * Creates and displays the menu buttons and their texts
  */
 void MainMenu::DrawButtons() {
-    // Buttons position, first button is at the center of the window
-    int button_x = (main_window_->getSize().x - kButtonWidth) / 2;
-    int button_y = (main_window_->getSize().y - kButtonHeight) / 2;
-
-    // Create play button
-    play_two_button_ = CreateButton(button_x, button_y, sf::Color(230, 126, 34), sf::Color(211, 84, 0));
-    main_window_->draw(play_two_button_);
-
-    // Create "Play against AI" button, 50px under the previous one
-    button_y += kButtonHeight + 50;
-    play_ai_button_ = CreateButton(button_x, button_y, sf::Color(230, 126, 34), sf::Color(211, 84, 0));
-    main_window_->draw(play_ai_button_);
-
-    // Create "Exit" button, 50px under the previous one
-    button_y += kButtonHeight + 50;
-    exit_button_ = CreateButton(button_x, button_y, sf::Color(230, 126, 34), sf::Color(211, 84, 0));
-    main_window_->draw(exit_button_);
-
     // If mouse is on a button, change its color
-    HighlightButtonsController(sf::Mouse::getPosition(*main_window_).x,
-                               sf::Mouse::getPosition(*main_window_).y);
+    ButtonsColorController(sf::Mouse::getPosition(*main_window_).x,
+                           sf::Mouse::getPosition(*main_window_).y);
+
+    // Draw the buttons
+    main_window_->draw(play_two_button_);
+    main_window_->draw(play_ai_button_);
+    main_window_->draw(exit_button_);
 
     // Draw button texts
     main_window_->draw(CreateButtonText(&play_two_button_, "Play (2 players)"));
@@ -101,23 +105,26 @@ void MainMenu::DrawButtons() {
 
 /**
  * Checks whether the mouse pointer is on a button
- * If it is, the function changes the button color
+ * If it is, sets the fill color of the button to green and plays a click sound
+ * If not, sets the color to orange
  * @param mouse_x, the mouse position on X axis
  * @param mouse_y, the mouse position on Y axis
  */
-void MainMenu::HighlightButtonsController(int mouse_x, int mouse_y) {
+void MainMenu::ButtonsColorController(int mouse_x, int mouse_y) {
     // Creates a vector with the menu's buttons
-    std::vector<sf::RectangleShape> buttons_vec{play_two_button_, play_ai_button_, exit_button_};
-    for (sf::RectangleShape button : buttons_vec) {
+    std::vector<sf::RectangleShape*> buttons_vec{&play_two_button_, &play_ai_button_, &exit_button_};
+    for (sf::RectangleShape *button : buttons_vec) {
         // Checks if mouse pointer is on the button
-        if (mouse_x >= button.getPosition().x &&
-            mouse_x <= (button.getPosition().x + button.getSize().x) &&
-            mouse_y >= button.getPosition().y &&
-            mouse_y <= (button.getPosition().y + button.getSize().y)) {
-            // Changes its color
-            button.setFillColor(sf::Color(39, 174, 96));
-            main_window_->draw(button);
-        }
+        if (mouse_x >= button->getPosition().x &&
+            mouse_x <= (button->getPosition().x + button->getSize().x) &&
+            mouse_y >= button->getPosition().y &&
+            mouse_y <= (button->getPosition().y + button->getSize().y)) {
+            // Changes its color to green and plays a click sound
+            if(button->getFillColor() != sf::Color(39, 174, 96)) {
+                button->setFillColor(sf::Color(39, 174, 96));
+                sound_manager_.PlayButtonClickSound();
+            }
+        } else button->setFillColor(sf::Color(230, 126, 34)); // If the cursor isn't on the button, sets its color to normal
     }
 }
 
