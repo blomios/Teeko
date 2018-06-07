@@ -174,7 +174,6 @@ int AI::evaluate(vector<Space> *board) {
  */
 int AI::evaluate_Easy(vector<Space> *board,vector<int>red,vector<int>black) {
     int score = 0;
-
     score+=alignementMarker(red,30,1)+ alignementMarker(black,30,-1);
     score+=distanceMarker(red,1,1)+ distanceMarker(black,1,-1);
     return score;
@@ -236,17 +235,17 @@ int AI::evaluatePotential(vector<int> markers,int player){
     for (int i = 0; i < markers.size(); ++i) {
         int ourMarker = markers[i];
         if(find(coin.begin(),coin.end(),ourMarker)!=coin.end()){
-            score+=1;
+            score+=2;
         }else if(find(bCoin.begin(),bCoin.end(),ourMarker)!=bCoin.end()){
-            score+=3;
+            score+=4;
         }else if(find(bMilieu.begin(),bMilieu.end(),ourMarker)!=bMilieu.end()) {
-            score += 2;
+            score += 3;
         }else if(find(milieuC.begin(),milieuC.end(),ourMarker)!=milieuC.end()) {
-            score += 4;
+            score += 5;
         }else if(find(milieuB.begin(),milieuB.end(),ourMarker)!=milieuB.end()) {
-            score += 4;
+            score += 5;
         }else{
-            score+=5;
+            score+=6;
         }
 
     }
