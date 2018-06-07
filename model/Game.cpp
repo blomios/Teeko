@@ -58,6 +58,7 @@ void Game::PlaceMarker(Space space, int player) {
 
             if(players_.at(player)->IsWinner())
                 winner_ = players_.at(player);
+            sound_manager_.PlayMarkerSound();
         }
     //}
 }
@@ -101,6 +102,7 @@ void Game::MoveMarker(Space current_space, Space next_space, int player) {
 
             if(players_.at(player)->IsWinner())
                 winner_ = players_.at(player);
+            sound_manager_.PlayMarkerSound();
         }
     }
 }
