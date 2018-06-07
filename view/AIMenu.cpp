@@ -42,6 +42,15 @@ void AIMenu::Render() {
                 }
                 case sf::Event::Resized: {  // Occurs when window is resized
                     main_window_->setView(sf::View(sf::FloatRect(0, 0, event.size.width, event.size.height)));
+                    // Buttons need to be moved
+                    // Buttons position, first button is at the center of the window
+                    int button_x = (main_window_->getSize().x - kButtonWidth) / 2;
+                    int button_y = (main_window_->getSize().y - kButtonHeight) / 2;
+                    easy_button_.setPosition(button_x, button_y);
+                    button_y = (main_window_->getSize().y - kButtonHeight) / 2 + kButtonHeight + 50;
+                    normal_button_.setPosition(button_x, button_y);
+                    button_y = (main_window_->getSize().y - kButtonHeight) / 2 + kButtonHeight * 2 + 50 * 2;
+                    hard_button_.setPosition(button_x, button_y);
                     break;
                 }
                 case sf::Event::MouseButtonReleased: { // On player's click
