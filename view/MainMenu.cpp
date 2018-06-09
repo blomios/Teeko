@@ -155,7 +155,7 @@ void MainMenu::ClickController(int mouse_x, int mouse_y) {
             mouse_y <= (buttons_vec.at(i).getPosition().y + buttons_vec.at(i).getSize().y)) {
             switch (i) {
                 case 0 : { // Two players button
-                    Game game(false, -1);
+                    Game game(false, -1, false);
                     GameRenderer game_renderer(&game, main_window_);
                     game_renderer.Render();
                     break;

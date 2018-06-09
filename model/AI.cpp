@@ -1,7 +1,7 @@
 #include "AI.h"
 
 
-AI::AI(vector<Space>* board_spaces, int difficulty) : Player("Red") {
+AI::AI(vector<Space> *board_spaces, int difficulty, std::string color) : Player(color) {
     board_spaces_ = board_spaces;
     difficulty_ = difficulty;
 }
@@ -24,7 +24,7 @@ int AI::minimax(vector<Space> board, int depth, bool is_maximizing, int alpha, i
     }
 
     // If we are at a leaf of the tree (2 cases : win or depth reached)
-    if (depth == 0 || alignementMarker(black, 1, -1) == -3 || alignementMarker(red, 1, 1) == 3)
+    if (depth == 0 || (black.size()>0 && alignementMarker(black, 1, -1)) == -3 || (red.size()>0 && alignementMarker(red, 1, 1) == 3))
         return evaluate(&board);
 
     if (is_maximizing) {
