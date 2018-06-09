@@ -322,6 +322,9 @@ int AI::alignementMarker(vector<int> markers_id, int coef,int player){
 vector<int> AI::FindBestMoveSpacesId(vector<Space> board) {
     int best_eval = -INT32_MAX;
 
+    // Red player is the minimizer, black is the maximizer
+    bool maximizing = (color_ == "Black");
+
     int depth=0;
 
     switch (difficulty_){
@@ -344,12 +347,12 @@ vector<int> AI::FindBestMoveSpacesId(vector<Space> board) {
         // Check whether there is a valid move and for each valid moves, make the move
         for (int move_space_id : current_space.GetValidMoves(&board)) {
             if (move_space_id != -1 && current_space.GetMarker() != nullptr &&
-                current_space.GetMarker()->GetColor() == "Red") {
+                current_space.GetMarker()->GetColor() == color_) {
                 vector<Space> new_board(board);
                 new_board.at(move_space_id - 1).SetMarker(current_space.GetMarker()); // Add the marker to the new space
                 new_board.at(current_space.GetSpaceId() - 1).SetMarker(nullptr); // Remove the marker
 
-                int move_eval = minimax(new_board, depth, false, -INT32_MAX, INT32_MAX);
+                int move_eval = minimax(new_board, depth, maximizing, -INT32_MAX, INT32_MAX);
                 if (move_eval > best_eval) {
                     best_move_spaces_id.clear();
                     best_move_spaces_id.push_back(current_space.GetSpaceId());
@@ -366,13 +369,17 @@ int AI::FindBestPlacementSpaceId(vector<Space> board) {
     int best_eval = -INT32_MAX;
     int move_eval;
     int best_placement_space_id;
+
+    // Red player is the minimizer, black is the maximizer
+    bool maximizing = (color_ == "Black");
+
     // Check whether there is a valid move and for each valid moves, make the move
     for (Space space : board) {
         if (space.GetMarker() == nullptr) {
             vector<Space> new_board(board);
             new_board.at(space.GetSpaceId() - 1).SetMarker(
-                   new Marker("Red", 0)); // Add the marker to the new space
-            move_eval = minimax(new_board, 4, false, -INT32_MAX, INT32_MAX);
+                   new Marker(color_, 0)); // Add the marker to the new space
+            move_eval = minimax(new_board, 4, maximizing, -INT32_MAX, INT32_MAX);
             if (move_eval > best_eval) {
                 best_placement_space_id = space.GetSpaceId();
                 best_eval = move_eval;
