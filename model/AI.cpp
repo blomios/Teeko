@@ -320,10 +320,18 @@ int AI::alignementMarker(vector<int> markers_id, int coef,int player){
 }
 
 vector<int> AI::FindBestMoveSpacesId(vector<Space> board) {
-    int best_eval = -INT32_MAX;
+    int best_eval;
+    bool maximizing;
 
-    // Red player is the minimizer, black is the maximizer
-    bool maximizing = (color_ == "Black");
+    // Red player is the minimizer, black player is the maximizer
+    if(color_ == "Black") {
+        best_eval = +INT32_MAX;
+        maximizing = true;
+    }
+    else {
+        best_eval = -INT32_MAX;
+        maximizing = false;
+    }
 
     int depth=0;
 
@@ -352,8 +360,14 @@ vector<int> AI::FindBestMoveSpacesId(vector<Space> board) {
                 new_board.at(move_space_id - 1).SetMarker(current_space.GetMarker()); // Add the marker to the new space
                 new_board.at(current_space.GetSpaceId() - 1).SetMarker(nullptr); // Remove the marker
 
-                int move_eval = minimax(new_board, depth, maximizing, -INT32_MAX, INT32_MAX);
-                if (move_eval > best_eval) {
+                int move_eval = minimax(new_board, depth, maximizing, -INT32_MAX, +INT32_MAX);
+                if (move_eval > best_eval && !maximizing) {
+                    best_move_spaces_id.clear();
+                    best_move_spaces_id.push_back(current_space.GetSpaceId());
+                    best_move_spaces_id.push_back(move_space_id);
+                    best_eval = move_eval;
+                }
+                else if (move_eval < best_eval && maximizing) {
                     best_move_spaces_id.clear();
                     best_move_spaces_id.push_back(current_space.GetSpaceId());
                     best_move_spaces_id.push_back(move_space_id);
@@ -366,12 +380,24 @@ vector<int> AI::FindBestMoveSpacesId(vector<Space> board) {
 }
 
 int AI::FindBestPlacementSpaceId(vector<Space> board) {
-    int best_eval = -INT32_MAX;
+    // Best evaluation so far
+    int best_eval;
+    // Evaluation of the tested move
     int move_eval;
+    // The best placement space's ID
     int best_placement_space_id;
+    //
+    bool maximizing;
 
-    // Red player is the minimizer, black is the maximizer
-    bool maximizing = (color_ == "Black");
+    // Red player is the minimizer, black player is the maximizer
+    if(color_ == "Black") {
+        best_eval = +INT32_MAX;
+        maximizing = true;
+    }
+    else {
+        best_eval = -INT32_MAX;
+        maximizing = false;
+    }
 
     // Check whether there is a valid move and for each valid moves, make the move
     for (Space space : board) {
@@ -379,8 +405,12 @@ int AI::FindBestPlacementSpaceId(vector<Space> board) {
             vector<Space> new_board(board);
             new_board.at(space.GetSpaceId() - 1).SetMarker(
                    new Marker(color_, 0)); // Add the marker to the new space
-            move_eval = minimax(new_board, 4, maximizing, -INT32_MAX, INT32_MAX);
-            if (move_eval > best_eval) {
+            move_eval = minimax(new_board, 4, maximizing, -INT32_MAX, +INT32_MAX);
+            if (move_eval > best_eval && !maximizing) {
+                best_placement_space_id = space.GetSpaceId();
+                best_eval = move_eval;
+            }
+            else if (move_eval < best_eval && maximizing) {
                 best_placement_space_id = space.GetSpaceId();
                 best_eval = move_eval;
             }
