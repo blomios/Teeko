@@ -94,7 +94,7 @@ void MainMenu::DrawTitle() {
 }
 
 /**
- * Creates and displays the menu buttons and their texts
+ * Displays the menu buttons and their texts
  */
 void MainMenu::DrawButtons() {
     // If mouse is on a button, change its color
