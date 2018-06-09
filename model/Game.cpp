@@ -2,7 +2,7 @@
 #include "Game.h"
 using namespace std;
 
-Game::Game(bool is_ai, int difficulty) : ai_(&spaces_, difficulty) {
+Game::Game(bool is_ai, int difficulty) : ai_(difficulty) {
     ai_game_ = is_ai;
     for(int i = 0; i < 25; i++){
         this->spaces_.push_back(*(new Space(i+1,NULL)));
