@@ -49,6 +49,15 @@ void MainMenu::Render() {
                 }
                 case sf::Event::Resized: {  // Occurs when window is resized
                     main_window_->setView(sf::View(sf::FloatRect(0, 0, event.size.width, event.size.height)));
+                    // Buttons need to be moved
+                    // Buttons position, first button is at the center of the window
+                    int button_x = (main_window_->getSize().x - kButtonWidth) / 2;
+                    int button_y = (main_window_->getSize().y - kButtonHeight) / 2;
+                    play_two_button_.setPosition(button_x, button_y);
+                    button_y += kButtonHeight + 50;
+                    play_ai_button_.setPosition(button_x, button_y);
+                    button_y += kButtonHeight + 50;
+                    exit_button_.setPosition(button_x, button_y);
                     break;
                 }
                 case sf::Event::MouseButtonReleased: { // On player's click
@@ -85,7 +94,7 @@ void MainMenu::DrawTitle() {
 }
 
 /**
- * Creates and displays the menu buttons and their texts
+ * Displays the menu buttons and their texts
  */
 void MainMenu::DrawButtons() {
     // If mouse is on a button, change its color
