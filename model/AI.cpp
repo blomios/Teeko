@@ -230,15 +230,15 @@ int AI::evaluate_Hard(vector<Space> *board,vector<int>red,vector<int>black) {
 }
 
 /**
- * This function returns an evaluation of the position of each
+ * This function returns an evaluation of the position of each marker on the board (for a color)
  * @param board
  * @return
  */
 int AI::evaluatePotential(vector<int> markers,int player){
     int score = 0;
     vector<int>coin = {1,5,21,25}; // les coins du board | 4 coups gagnants possibles
-    vector<int>bCoin = {3,11,15,23}; // les bords du board qui sont vers les coins | 5 coups gagnants possibles
-    vector<int>bMilieu = {2,4,6,10,16,20,22,24}; // les milieux des bords du board | 6 coups gagnant possibles
+    vector<int>bMilieu = {3,11,15,23}; // les bords du board qui sont au milieu| 5 coups gagnants possibles
+    vector<int>bCoin = {2,4,6,10,16,20,22,24}; // les milieux des bords du board | 6 coups gagnant possibles
     vector<int>milieuC = {7,9,17,19}; // les coins du carré intérieur | 10 coups gagnant possibles
     vector<int>milieuB = {8,12,14,18}; // les bords du carré intérieur | 10 coups gagnants possibles
 
