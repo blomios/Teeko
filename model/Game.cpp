@@ -53,12 +53,13 @@ void Game::PlaceMarker(Space space, int player) {
         if(space.IsEmpty() && players_.at(player)->GetSpaces()->size()<4) {
             players_.at(player)->GetSpaces()->push_back(&spaces_.at(space.GetSpaceId()-1));
             spaces_.at(space.GetSpaceId() - 1).SetMarker(&markers_.at(turn_number_ - 1));
-            turn_number_++;
-            turn_ = turn_ == 0 ? 1 : 0;
-
+            sound_manager_.PlayMarkerSound();
             if(players_.at(player)->IsWinner())
                 winner_ = players_.at(player);
-            sound_manager_.PlayMarkerSound();
+            else {
+                turn_number_++;
+                turn_ = turn_ == 0 ? 1 : 0;
+            }
         }
     //}
 }
@@ -96,13 +97,13 @@ void Game::MoveMarker(Space current_space, Space next_space, int player) {
                     players_.at(player)->GetSpaces()->erase(spaces->begin() + i);
                 }
             }
-
-            turn_number_++;
-            turn_ = turn_ == 0 ? 1 : 0;
-
+            sound_manager_.PlayMarkerSound();
             if(players_.at(player)->IsWinner())
                 winner_ = players_.at(player);
-            sound_manager_.PlayMarkerSound();
+            else {
+                turn_number_++;
+                turn_ = turn_ == 0 ? 1 : 0;
+            }
         }
     }
 }
@@ -139,7 +140,7 @@ bool Game::IsAIGame() {
  * This is the main loop for the AI
  */
 void Game::AiLoop() {
-    while(winner_== nullptr) {
+    while(winner_ == nullptr) {
         // If the AI has already placed its 4 markers
         if (turn_ == 0 && players_.at(0)->GetSpaces()->size() == 4) {
             // Vector of 2 space id, the first one is the space id of the marker to move and the second one is the arrival space's id
