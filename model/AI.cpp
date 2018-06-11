@@ -188,7 +188,7 @@ int AI::evaluate(vector<Space> *board) {
 int AI::evaluate_Easy(vector<Space> *board,vector<int>red,vector<int>black) {
     int score = 0;
     score+=alignementMarker(red,30,1)+ alignementMarker(black,30,-1);
-    score+=distanceMarker(red,1,1)+ distanceMarker(black,1,-1);
+    score+=evaluatePotential(red,1)+evaluatePotential(black,-1);
     return score;
 }
 
@@ -201,7 +201,7 @@ int AI::evaluate_Easy(vector<Space> *board,vector<int>red,vector<int>black) {
 int AI::evaluate_Medium(vector<Space> *board,vector<int>red,vector<int>black) {
     int score=0;
     score+=alignementMarker(red,20,1)+ alignementMarker(black,20,-1);
-    score+=evaluatePotential(red,1)+evaluatePotential(black,-1);
+    score+=distanceMarker(red,1,1)+ distanceMarker(black,1,-1);
 
     return score;
 }
