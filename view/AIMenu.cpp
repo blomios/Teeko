@@ -22,8 +22,6 @@ AIMenu::AIMenu(sf::RenderWindow *window) : Menu(window) {
     // Creates "Hard" button
     button_y = (main_window_->getSize().y - kButtonHeight) / 2 + kButtonHeight * 2 + 50 * 2;
     hard_button_ = CreateButton(button_x, button_y, sf::Color(230, 126, 34), sf::Color(211, 84, 0));
-
-    this->Render();
 }
 
 /**

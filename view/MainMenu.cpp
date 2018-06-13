@@ -170,10 +170,12 @@ void MainMenu::ClickController(int mouse_x, int mouse_y) {
                 }
                 case 1 : { // AI button
                     AIMenu ai_menu(main_window_);
+                    ai_menu.Render();
                     break;
                 }
-                case 2 : { // AI button
+                case 2 : { // Spectator mode button
                     SpectatorMenu spectator_menu(main_window_);
+                    spectator_menu.Render();
                     break;
                 }
                 case 3 : { // Exit

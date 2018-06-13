@@ -18,30 +18,25 @@ Game::Game(bool is_ai, int difficulty, bool spectator_mode) {
 
     }
 
-    spectator_mode_ = true;
-
-    // If it's an AI game then add an AI to the vector of players, else add a player
-    if(!ai_game_)
-        players_.push_back(new Player("Red"));
-    else {
-        players_.push_back(new AI(&spaces_, difficulty, "Red"));
-    }
-
-    // Spectator mode : both players are AI
-    if(ai_game_ && spectator_mode_) {
-        players_.push_back(new AI(&spaces_, difficulty, "Black"));
-    } else players_.push_back(new Player("Black"));
-
     this->turn_number_ = 1;
     this->turn_ = 1; // Player Black Start the game
+    spectator_mode_ = spectator_mode;
 
-    if (ai_game_ && !spectator_mode_) {
-        std::thread ai(AiLoop, this);
-        ai.detach();
-    }
-    else if(spectator_mode_) {
-        std::thread ai(SpectatorLoop, this);
-        ai.detach();
+    // If it's an AI game then add an AI to the vector of players, else add a player
+    if(!ai_game_) {
+        players_.push_back(new Player("Red"));
+        players_.push_back(new Player("Black"));
+    } else {
+        players_.push_back(new AI(&spaces_, difficulty, "Red"));
+        if(spectator_mode_) {
+            players_.push_back(new AI(&spaces_, difficulty, "Black"));
+            std::thread ai(SpectatorLoop, this);
+            ai.detach();
+        } else {
+            players_.push_back(new Player("Black"));
+            std::thread ai(AiLoop, this);
+            ai.detach();
+        }
     }
 }
 
