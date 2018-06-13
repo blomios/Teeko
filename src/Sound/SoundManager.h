@@ -10,12 +10,16 @@ class SoundManager {
 public:
     // Default constructor
     SoundManager();
+
     // Plays the sound of a marker being placed
     void PlayMarkerSound();
+
     // Plays the victory music when game is over
     void PlayVictoryMusic();
+
     // Plays the sound on button mouseover
     void PlayButtonClickSound();
+
 private:
     // Buffers and sounds
     sf::SoundBuffer marker_sound_buffer_;

@@ -25,7 +25,7 @@ void SoundManager::PlayMarkerSound() {
  * Plays a victory tone
  */
 void SoundManager::PlayVictoryMusic() {
-    if(!victory_sound_played_) {
+    if (!victory_sound_played_) {
         victory_music_.play();
         victory_sound_played_ = true;
     }
