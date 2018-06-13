@@ -35,7 +35,7 @@ Game::Game(bool is_ai, int difficulty, bool spectator_mode) {
     this->turn_number_ = 1;
     this->turn_ = 1; // Player Black Start the game
 
-    if (ai_game_) {
+    if (ai_game_ && !spectator_mode_) {
         std::thread ai(AiLoop, this);
         ai.detach();
     }
@@ -196,4 +196,8 @@ void Game::SpectatorLoop() {
                 PlaceMarker(spaces_.at(space_id-1), 1);
             }
         }
+}
+
+bool Game::IsSpectatorGame() {
+    return spectator_mode_;
 }

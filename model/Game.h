@@ -22,6 +22,7 @@ public:
     void AiLoop();
     void SpectatorLoop();
     SoundManager *GetSoundManager();
+    bool IsSpectatorGame();
 private:
     vector<Space> spaces_;
     vector<Marker> markers_;
