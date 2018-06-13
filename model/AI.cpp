@@ -289,6 +289,14 @@ int AI::distanceMarker(vector<int> space_id, int coef,int player){
     return score;
 }
 
+
+/**
+ * This function returns a score if an alignement is found else, it returns 0
+ * @param markers_id
+ * @param coef
+ * @param player
+ * @return
+ */
 int AI::alignementMarker(vector<int> markers_id, int coef,int player){
 
     int count_mark_square = 1, count_mark_diago_d = 1, count_mark_diago_u = 1, count_mark_colu = 1 , count_mark_line = 1;
