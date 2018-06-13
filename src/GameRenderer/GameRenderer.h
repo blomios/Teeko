@@ -2,7 +2,7 @@
 #define TEEKO_GAMERENDERER_H
 
 #include <SFML/Graphics.hpp>
-#include "../model/Game.h"
+#include "../Core/Game.h"
 
 /**
  * @brief Renders the game itself and manages clicks

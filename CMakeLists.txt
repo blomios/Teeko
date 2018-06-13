@@ -3,7 +3,7 @@ project(teeko)
 
 set(CMAKE_CXX_STANDARD 17)
 
-set(SOURCE_FILES main.cpp model/Game.cpp model/Game.h model/Space.cpp model/Space.h model/Marker.cpp model/Marker.h model/Player.cpp model/Player.h view/GameRenderer.cpp view/GameRenderer.h view/MainMenu.cpp view/MainMenu.h model/AI.cpp model/AI.h model/Utils.h model/Utils.cpp view/AIMenu.cpp view/AIMenu.h view/Menu.cpp view/Menu.h view/SoundManager.cpp view/SoundManager.h view/SpectatorMenu.cpp view/SpectatorMenu.h)
+set(SOURCE_FILES src/main.cpp src/Core/Game.cpp src/Core/Game.h src/Core/Space.cpp src/Core/Space.h src/Core/Marker.cpp src/Core/Marker.h src/Core/Player.cpp src/Core/Player.h src/GameRenderer/GameRenderer.cpp src/GameRenderer/GameRenderer.h src/Menus/MainMenu.cpp src/Menus/MainMenu.h src/AI/AI.cpp src/AI/AI.h src/Utils/Utils.h src/Utils/Utils.cpp src/Menus/AIMenu.cpp src/Menus/AIMenu.h src/Menus/Menu.cpp src/Menus/Menu.h src/Sound/SoundManager.cpp src/Sound/SoundManager.h src/Menus/SpectatorMenu.cpp src/Menus/SpectatorMenu.h)
 add_executable(teeko ${SOURCE_FILES})
 
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake_modules")
