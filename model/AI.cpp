@@ -152,13 +152,13 @@ int AI::evaluate(vector<Space> *board) {
 
     switch (this->difficulty_){
         case 0:
-            score =evaluate_Easy(board,red,black);
+            score =evaluate_Easy(red,black);
             break;
         case 1:
-            score =evaluate_Medium(board,red,black);
+            score =evaluate_Medium(red,black);
             break;
         case 2:
-            score = evaluate_Hard(board,red,black);
+            score = evaluate_Hard(red,black);
             break;
     }
 
@@ -172,10 +172,10 @@ int AI::evaluate(vector<Space> *board) {
  * @param board
  * @return
  */
-int AI::evaluate_Easy(vector<Space> *board,vector<int>red,vector<int>black) {
+int AI::evaluate_Easy(vector<int>red,vector<int>black) {
     int score = 0;
 
-    score+=alignementMarker(red,30,1)+ alignementMarker(black,30,-1);
+    score+=alignementMarker(red,25,1)+ alignementMarker(black,25,-1);
     score+=distanceMarker(red,1,1)+ distanceMarker(black,1,-1);
     return score;
 }
@@ -186,7 +186,7 @@ int AI::evaluate_Easy(vector<Space> *board,vector<int>red,vector<int>black) {
  * @param board
  * @return
  */
-int AI::evaluate_Medium(vector<Space> *board,vector<int>red,vector<int>black) {
+int AI::evaluate_Medium(vector<int>red,vector<int>black) {
     int score=0;
     score+=alignementMarker(red,20,1)+ alignementMarker(black,20,-1);
     score+=evaluatePotential(red,1)+evaluatePotential(black,-1);
@@ -201,16 +201,14 @@ int AI::evaluate_Medium(vector<Space> *board,vector<int>red,vector<int>black) {
  * @param board
  * @return
  */
-int AI::evaluate_Hard(vector<Space> *board,vector<int>red,vector<int>black) {
-    /* Constant */
-    // 1 marker alone, 2 markers, 3 markers and 1 far away, 3 markers and 1 close
-    vector <int> coef { 1 , 4 , 10};
+int AI::evaluate_Hard(vector<int>red,vector<int>black) {
+
     int score=0;
 
     sort(red.begin(),red.begin()+red.size());
     sort(black.begin(),black.begin()+black.size());
 
-    score+=alignementMarker(red,20,1)+ alignementMarker(black,20,-1);
+    score+=alignementMarker(red,15,1)+ alignementMarker(black,15,-1);
     score+=distanceMarker(red,1,1)+ distanceMarker(black,1,-1);
     score+=evaluatePotential(red,1)+evaluatePotential(black,-1);
     return score;
