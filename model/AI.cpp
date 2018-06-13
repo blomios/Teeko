@@ -187,6 +187,9 @@ int AI::evaluate(vector<Space> *board) {
 int AI::evaluate_Easy(vector<int>red,vector<int>black) {
     int score = 0;
 
+    sort(red.begin(),red.begin()+red.size());
+    sort(black.begin(),black.begin()+black.size());
+
     score+=alignementMarker(red,25,1)+ alignementMarker(black,25,-1);
     score+=distanceMarker(red,1,1)+ distanceMarker(black,1,-1);
     return score;
@@ -200,8 +203,12 @@ int AI::evaluate_Easy(vector<int>red,vector<int>black) {
  */
 int AI::evaluate_Medium(vector<int>red,vector<int>black) {
     int score=0;
+
+    sort(red.begin(),red.begin()+red.size());
+    sort(black.begin(),black.begin()+black.size());
+
     score+=alignementMarker(red,20,1)+ alignementMarker(black,20,-1);
-    score+=evaluatePotential(red,1)+evaluatePotential(black,-1);
+    score+=(0.5)*evaluatePotential(red,1)+(0.5)*evaluatePotential(black,-1);
 
     return score;
 }
@@ -222,7 +229,7 @@ int AI::evaluate_Hard(vector<int>red,vector<int>black) {
 
     score+=alignementMarker(red,15,1)+ alignementMarker(black,15,-1);
     score+=distanceMarker(red,1,1)+ distanceMarker(black,1,-1);
-    score+=evaluatePotential(red,1)+evaluatePotential(black,-1);
+    score+=(0.25)*evaluatePotential(red,1)+(0.25)*evaluatePotential(black,-1);
     return score;
 
 }
@@ -246,17 +253,17 @@ int AI::evaluatePotential(vector<int> markers,int player){
     for (int i = 0; i < markers.size(); ++i) {
         int ourMarker = markers[i];
         if(find(coin.begin(),coin.end(),ourMarker)!=coin.end()){
-            score+=2;
+            score+=0;
         }else if(find(bCoin.begin(),bCoin.end(),ourMarker)!=bCoin.end()){
-            score+=4;
+            score+=2;
         }else if(find(bMilieu.begin(),bMilieu.end(),ourMarker)!=bMilieu.end()) {
-            score += 3;
+            score += 1;
         }else if(find(milieuC.begin(),milieuC.end(),ourMarker)!=milieuC.end()) {
-            score += 5;
+            score += 3;
         }else if(find(milieuB.begin(),milieuB.end(),ourMarker)!=milieuB.end()) {
-            score += 5;
+            score += 3;
         }else{
-            score+=6;
+            score+=4;
         }
 
     }
