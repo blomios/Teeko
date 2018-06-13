@@ -1,8 +1,14 @@
 #include "Marker.h"
+#include <utility>
 
-Marker::Marker(string color,int id){
+/**
+ * Marker constructor
+ * @param color of the marker
+ * @param marker's ID
+ */
+Marker::Marker(string color, int id) {
     is_selected_ = false;
-    color_ = color;
+    color_ = std::move(color);
     marker_id_ = id;
 }
 
@@ -10,7 +16,7 @@ int Marker::GetMarkerId() const {
     return marker_id_;
 }
 
-string Marker::GetColor(){
+string Marker::GetColor() {
     return color_;
 }
 
