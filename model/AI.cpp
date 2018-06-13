@@ -24,7 +24,7 @@ int AI::minimax(vector<Space> board, int depth, bool is_maximizing, int alpha, i
     }
 
     // If we are at a leaf of the tree (2 cases : win or depth reached)
-    if (depth == 0 || (!black.empty() && alignementMarker(black, 200, -1) == -3) || (!red.empty() && alignementMarker(red, 200, 1) == 3))
+    if (depth == 0 || (!black.empty() && alignementMarker(black, 1, -1) == -3) || (!red.empty() && alignementMarker(red, 1, 1) == 3))
         return evaluate(&board);
 
     if (is_maximizing) {
