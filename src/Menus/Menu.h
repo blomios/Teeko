@@ -1,7 +1,7 @@
 #ifndef TEEKO_MENU_H
 #define TEEKO_MENU_H
 
-#include "GameRenderer.h"
+#include "../GameRenderer/GameRenderer.h"
 
 /**
  * @brief Base class for menus

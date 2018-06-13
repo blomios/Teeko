@@ -1,8 +1,8 @@
 #ifndef TEEKO_AI_H
 #define TEEKO_AI_H
 
-#include "Player.h"
-#include "Utils.h"
+#include "../Core/Player.h"
+#include "../Utils/Utils.h"
 
 class AI : public Player {
 private:

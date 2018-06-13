@@ -1,8 +1,8 @@
 #ifndef TEEKO_GAME_H
 #define TEEKO_GAME_H
 
-#include "AI.h"
-#include "../view/SoundManager.h"
+#include "../AI/AI.h"
+#include "../Sound/SoundManager.h"
 #include <SFML/System/Thread.hpp>
 #include <vector>
 #include <algorithm>

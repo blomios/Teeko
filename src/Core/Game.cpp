@@ -47,25 +47,17 @@ Game::Game(bool is_ai, int difficulty, bool spectator_mode) {
  *
  */
 void Game::PlaceMarker(Space space, int player) {
-
-    /*if(ai_game_ && players_.at(player).GetColor()=="Red")
-    {
-
-    }
-    else
-    {*/
-        if(space.IsEmpty() && players_.at(player)->GetSpaces()->size()<4) {
-            players_.at(player)->GetSpaces()->push_back(&spaces_.at(space.GetSpaceId()-1));
-            spaces_.at(space.GetSpaceId() - 1).SetMarker(&markers_.at(turn_number_ - 1));
-            sound_manager_.PlayMarkerSound();
-            if(players_.at(player)->IsWinner())
-                winner_ = players_.at(player);
-            else {
-                turn_number_++;
-                turn_ = turn_ == 0 ? 1 : 0;
-            }
+    if (space.IsEmpty() && players_.at(player)->GetSpaces()->size() < 4) {
+        players_.at(player)->GetSpaces()->push_back(&spaces_.at(space.GetSpaceId() - 1));
+        spaces_.at(space.GetSpaceId() - 1).SetMarker(&markers_.at(turn_number_ - 1));
+        sound_manager_.PlayMarkerSound();
+        if (players_.at(player)->IsWinner())
+            winner_ = players_.at(player);
+        else {
+            turn_number_++;
+            turn_ = turn_ == 0 ? 1 : 0;
         }
-    //}
+    }
 }
 
 /**
