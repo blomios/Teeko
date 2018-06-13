@@ -112,10 +112,6 @@ vector<Space> *Game::GetSpaces() {
     return &spaces_;
 }
 
-vector<Marker> *Game::GetMarkers() {
-    return &markers_;
-}
-
 int Game::GetTurnNumber() {
     return turn_number_;
 }
