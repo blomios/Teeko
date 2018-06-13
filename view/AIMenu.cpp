@@ -22,8 +22,6 @@ AIMenu::AIMenu(sf::RenderWindow *window) : Menu(window) {
     // Creates "Hard" button
     button_y = (main_window_->getSize().y - kButtonHeight) / 2 + kButtonHeight * 2 + 50 * 2;
     hard_button_ = CreateButton(button_x, button_y, sf::Color(230, 126, 34), sf::Color(211, 84, 0));
-
-    this->Render();
 }
 
 /**
@@ -134,19 +132,19 @@ void AIMenu::ClickController(int mouse_x, int mouse_y) {
             mouse_y <= (buttons_vec.at(i).getPosition().y + buttons_vec.at(i).getSize().y)) {
             switch (i) {
                 case 0 : { // Easy mode
-                    Game game(true, 0);
+                    Game game(true, 0, false);
                     GameRenderer game_renderer(&game, main_window_);
                     game_renderer.Render();
                     break;
                 }
                 case 1 : { // Normal mode
-                    Game game(true, 1);
+                    Game game(true, 1, false);
                     GameRenderer game_renderer(&game, main_window_);
                     game_renderer.Render();
                     break;
                 }
                 case 2 : { // Hard mode
-                    Game game(true, 2);
+                    Game game(true, 2, false);
                     GameRenderer game_renderer(&game, main_window_);
                     game_renderer.Render();
                     break;

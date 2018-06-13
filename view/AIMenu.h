@@ -20,7 +20,7 @@ public:
     void ClickController(int mouse_x, int mouse_y) override;
     // Renders the little text inviting the user to choose a difficulty
     void DrawText();
-private:
+protected:
     // The "Easy" difficulty button
     sf::RectangleShape easy_button_;
     // The "Normal" difficulty button

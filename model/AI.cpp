@@ -1,10 +1,9 @@
 #include "AI.h"
 
 /**
- * AI's constructor
- * @param difficulty of the AI
- */
-AI::AI(int difficulty) : Player("Red") {
+*AI's constructor
+ * @param difficulty of theAI*/
+AI::AI(int difficulty, std::string color) : Player(color) {
     difficulty_ = difficulty;
 }
 
@@ -36,7 +35,7 @@ int AI::minimax(vector<Space> board, int depth, bool is_maximizing, int alpha, i
     }
 
     // If we are at a leaf of the tree (2 cases : win or depth reached)
-    if (depth == 0 || alignementMarker(black, 1, -1) == -3 || alignementMarker(red, 1, 1) == 3)
+    if (depth == 0 || (!black.empty() && alignementMarker(black, 1, -1) == -3) || (!red.empty() && alignementMarker(red, 1, 1) == 3))
         return evaluate(&board);
 
     // Maximizer
@@ -165,13 +164,13 @@ int AI::evaluate(vector<Space> *board) {
 
     switch (this->difficulty_){
         case 0:
-            score =evaluate_Easy(board,red,black);
+            score =evaluate_Easy(red,black);
             break;
         case 1:
-            score =evaluate_Medium(board,red,black);
+            score =evaluate_Medium(red,black);
             break;
         case 2:
-            score = evaluate_Hard(board,red,black);
+            score = evaluate_Hard(red,black);
             break;
     }
 
@@ -185,10 +184,11 @@ int AI::evaluate(vector<Space> *board) {
  * @param board
  * @return
  */
-int AI::evaluate_Easy(vector<Space> *board,vector<int>red,vector<int>black) {
+int AI::evaluate_Easy(vector<int>red,vector<int>black) {
     int score = 0;
-    score+=alignementMarker(red,30,1)+ alignementMarker(black,30,-1);
-    score+=evaluatePotential(red,1)+evaluatePotential(black,-1);
+
+    score+=alignementMarker(red,25,1)+ alignementMarker(black,25,-1);
+    score+=distanceMarker(red,1,1)+ distanceMarker(black,1,-1);
     return score;
 }
 
@@ -198,10 +198,10 @@ int AI::evaluate_Easy(vector<Space> *board,vector<int>red,vector<int>black) {
  * @param board
  * @return
  */
-int AI::evaluate_Medium(vector<Space> *board,vector<int>red,vector<int>black) {
+int AI::evaluate_Medium(vector<int>red,vector<int>black) {
     int score=0;
     score+=alignementMarker(red,20,1)+ alignementMarker(black,20,-1);
-    score+=distanceMarker(red,1,1)+ distanceMarker(black,1,-1);
+    score+=evaluatePotential(red,1)+evaluatePotential(black,-1);
 
     return score;
 }
@@ -213,16 +213,14 @@ int AI::evaluate_Medium(vector<Space> *board,vector<int>red,vector<int>black) {
  * @param board
  * @return
  */
-int AI::evaluate_Hard(vector<Space> *board,vector<int>red,vector<int>black) {
-    /* Constant */
-    // 1 marker alone, 2 markers, 3 markers and 1 far away, 3 markers and 1 close
-    vector <int> coef { 1 , 4 , 10};
+int AI::evaluate_Hard(vector<int>red,vector<int>black) {
+
     int score=0;
 
     sort(red.begin(),red.begin()+red.size());
     sort(black.begin(),black.begin()+black.size());
 
-    score+=alignementMarker(red,20,1)+ alignementMarker(black,20,-1);
+    score+=alignementMarker(red,15,1)+ alignementMarker(black,15,-1);
     score+=distanceMarker(red,1,1)+ distanceMarker(black,1,-1);
     score+=evaluatePotential(red,1)+evaluatePotential(black,-1);
     return score;
@@ -333,8 +331,9 @@ int AI::alignementMarker(vector<int> markers_id, int coef,int player){
     }
 
 
-    count_mark_square == 4 || count_mark_diago_d == 4 || count_mark_line == 4
-    || count_mark_colu == 4 ||  count_mark_diago_u == 4 ? score +=  3*coef * player: score += 0;
+    if (count_mark_square == 4 || count_mark_diago_d == 4 || count_mark_line == 4
+        || count_mark_colu == 4 || count_mark_diago_u == 4)
+        score += 3 * coef * player;
 
     return score;
 }
@@ -346,12 +345,22 @@ int AI::alignementMarker(vector<int> markers_id, int coef,int player){
  * and the second being the space's ID where the marker will be moved
  */
 vector<int> AI::FindBestMoveSpacesId(vector<Space> board) {
-    // AI is the maximizer, so the current best eval is -inf
-    int best_eval = -INT32_MAX;
+    int best_eval;
     int move_eval;
-    // Depth depends on the AI's difficulty
-    int depth;
-    switch (difficulty_) {
+    bool maximizing;
+    // Red player is the maximizer, black player is the minimizer
+    if(color_ == "Black") {
+        best_eval = +INT32_MAX;
+        maximizing = true;
+    }
+    else {
+        best_eval = -INT32_MAX;
+        maximizing = false;
+    }
+
+    int depth=0;
+
+    switch (difficulty_){
         case 0:
             depth = 2;
             break;
@@ -372,15 +381,21 @@ vector<int> AI::FindBestMoveSpacesId(vector<Space> board) {
         // Check whether there is a valid move and for each valid moves, make the move
         for (int move_space_id : current_space.GetValidMoves(&board)) {
             if (move_space_id != -1 && current_space.GetMarker() != nullptr &&
-                current_space.GetMarker()->GetColor() == "Red") {
+                current_space.GetMarker()->GetColor() == color_) {
                 vector<Space> new_board(board);
                 new_board.at(move_space_id - 1).SetMarker(current_space.GetMarker()); // Add the marker to the new space
                 new_board.at(current_space.GetSpaceId() - 1).SetMarker(nullptr); // Remove the marker
 
                 // Gets the move evaluation
-                move_eval = minimax(new_board, depth, false, -INT32_MAX, INT32_MAX);
+                move_eval = minimax(new_board, depth, maximizing, -INT32_MAX, +INT32_MAX);
                 // If the move is better than the best move found so far, it becomes the best move
-                if (move_eval > best_eval) {
+                if (move_eval > best_eval && color_ == "Red") {
+                    best_move_spaces_id.clear();
+                    best_move_spaces_id.push_back(current_space.GetSpaceId());
+                    best_move_spaces_id.push_back(move_space_id);
+                    best_eval = move_eval;
+                }
+                else if (move_eval < best_eval && color_ == "Black") {
                     best_move_spaces_id.clear();
                     best_move_spaces_id.push_back(current_space.GetSpaceId());
                     best_move_spaces_id.push_back(move_space_id);
@@ -399,21 +414,40 @@ vector<int> AI::FindBestMoveSpacesId(vector<Space> board) {
  * and the second being the space's ID where the marker will be moved
  */
 int AI::FindBestPlacementSpaceId(vector<Space> board) {
-    // AI is the maximizer, so the current best eval is -inf
-    int best_eval = -INT32_MAX;
+    // Best evaluation so far
+    int best_eval;
+    // Evaluation of the tested move
     int move_eval;
     // The best placement space's ID
     int best_placement_space_id;
+    //
+    bool maximizing;
+
+    // Red player is the maximizer, black player is the minimizer
+    if(color_ == "Black") {
+        best_eval = +INT32_MAX;
+        maximizing = true;
+    }
+    else {
+        best_eval = -INT32_MAX;
+        maximizing = false;
+    }
+
     // Check whether there is a valid move and for each valid moves, make the move
     for (Space space : board) {
         if (space.GetMarker() == nullptr) {
             vector<Space> new_board(board);
             // Adds the marker to the new space
-            new_board.at(space.GetSpaceId() - 1).SetMarker(new Marker("Red", 0));
+            new_board.at(space.GetSpaceId() - 1).SetMarker(
+                   new Marker(color_, 0));
             // Gets the evaluation of the placement
-            move_eval = minimax(new_board, 4, false, -INT32_MAX, INT32_MAX);
+            move_eval = minimax(new_board, 4, maximizing, -INT32_MAX, +INT32_MAX);
             // If it's better than the best placement so far, replaces it
-            if (move_eval > best_eval) {
+            if (move_eval > best_eval && color_ == "Red") {
+                best_placement_space_id = space.GetSpaceId();
+                best_eval = move_eval;
+            }
+            else if (move_eval < best_eval && color_ == "Black") {
                 best_placement_space_id = space.GetSpaceId();
                 best_eval = move_eval;
             }

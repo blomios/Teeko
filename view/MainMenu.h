@@ -1,7 +1,7 @@
 #ifndef TEEKO_MAINMENU_H
 #define TEEKO_MAINMENU_H
 
-#include "AIMenu.h"
+#include "SpectatorMenu.h"
 
 /**
  * @brief Class for creating and rendering a main menu
@@ -12,6 +12,8 @@ private:
     sf::RectangleShape play_two_button_;
     // The "Play against A.I." button
     sf::RectangleShape play_ai_button_;
+    // The "Spectator mode" button
+    sf::RectangleShape spectator_button_;
     // The "Exit Game" button
     sf::RectangleShape exit_button_;
 public:

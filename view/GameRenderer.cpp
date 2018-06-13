@@ -32,7 +32,7 @@ void GameRenderer::Render() {
                 case sf::Event::MouseButtonReleased: { // On clicks
                     // Checks if it it a left click
                     // If there is a winner, blocks every clicks, we don't want players to be playing when a game is already won !
-                    if (event.mouseButton.button == sf::Mouse::Left && game_->GetWinner() == nullptr) {
+                    if (event.mouseButton.button == sf::Mouse::Left && game_->GetWinner() == nullptr && !game_->IsSpectatorGame()) {
                         // Passes the mouse position (relative to window) to the click controller
                         ClickController(sf::Mouse::getPosition(*main_window_).x,
                                         sf::Mouse::getPosition(*main_window_).y);

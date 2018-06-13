@@ -9,7 +9,7 @@
 
 class Game {
 public:
-    Game(bool is_ai, int difficulty);
+    Game(bool is_ai, int difficulty, bool spectator_mode);
     void PlaceMarker(Space space, int player);
     void MoveMarker(Space current_space, Space next_space, int player);
     vector<Player*>* GetPlayers();
@@ -20,18 +20,19 @@ public:
     Player* GetWinner();
     bool IsAIGame();
     void AiLoop();
+    void SpectatorLoop();
     SoundManager *GetSoundManager();
+    bool IsSpectatorGame();
 private:
     vector<Space> spaces_;
     vector<Marker> markers_;
     vector<Player*> players_;
-    AI ai_;
     int turn_; // Player 1 or 2
     int turn_number_;
     Player* winner_ = nullptr;
     bool ai_game_;
     SoundManager sound_manager_;
-
+    bool spectator_mode_;
 };
 
 #endif //TEEKO_GAME_H
