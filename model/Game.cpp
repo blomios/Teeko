@@ -1,4 +1,3 @@
-#include <SFML/System/Thread.hpp>
 #include "Game.h"
 using namespace std;
 

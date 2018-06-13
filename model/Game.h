@@ -3,6 +3,7 @@
 
 #include "AI.h"
 #include "../view/SoundManager.h"
+#include <SFML/System/Thread.hpp>
 #include <vector>
 #include <algorithm>
 #include <thread>
