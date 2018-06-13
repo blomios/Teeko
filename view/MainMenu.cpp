@@ -29,6 +29,10 @@ MainMenu::MainMenu() {
     button_y += kButtonHeight + 50;
     play_ai_button_ = CreateButton(button_x, button_y, sf::Color(230, 126, 34), sf::Color(211, 84, 0));
 
+    // Creates "Play against AI" button, 50px under the previous one
+    button_y += kButtonHeight + 50;
+    spectator_button_ = CreateButton(button_x, button_y, sf::Color(230, 126, 34), sf::Color(211, 84, 0));
+
     // Create "Exit" button, 50px under the previous one
     button_y += kButtonHeight + 50;
     exit_button_ = CreateButton(button_x, button_y, sf::Color(230, 126, 34), sf::Color(211, 84, 0));
@@ -56,6 +60,8 @@ void MainMenu::Render() {
                     play_two_button_.setPosition(button_x, button_y);
                     button_y += kButtonHeight + 50;
                     play_ai_button_.setPosition(button_x, button_y);
+                    button_y += kButtonHeight + 50;
+                    spectator_button_.setPosition(button_x, button_y);
                     button_y += kButtonHeight + 50;
                     exit_button_.setPosition(button_x, button_y);
                     break;
@@ -104,11 +110,13 @@ void MainMenu::DrawButtons() {
     // Draw the buttons
     main_window_->draw(play_two_button_);
     main_window_->draw(play_ai_button_);
+    main_window_->draw(spectator_button_);
     main_window_->draw(exit_button_);
 
     // Draw button texts
     main_window_->draw(CreateButtonText(&play_two_button_, "Play (2 players)"));
     main_window_->draw(CreateButtonText(&play_ai_button_, "Play against A.I."));
+    main_window_->draw(CreateButtonText(&spectator_button_, "Spectator mode"));
     main_window_->draw(CreateButtonText(&exit_button_, "Exit game"));
 }
 
@@ -121,7 +129,7 @@ void MainMenu::DrawButtons() {
  */
 void MainMenu::ButtonsColorController(int mouse_x, int mouse_y) {
     // Creates a vector with the menu's buttons
-    std::vector<sf::RectangleShape*> buttons_vec{&play_two_button_, &play_ai_button_, &exit_button_};
+    std::vector<sf::RectangleShape*> buttons_vec{&play_two_button_, &play_ai_button_, &spectator_button_, &exit_button_};
     for (sf::RectangleShape *button : buttons_vec) {
         // Checks if mouse pointer is on the button
         if (mouse_x >= button->getPosition().x &&
@@ -146,7 +154,7 @@ void MainMenu::ButtonsColorController(int mouse_x, int mouse_y) {
  */
 void MainMenu::ClickController(int mouse_x, int mouse_y) {
     // Creates a vector with the menu's buttons
-    std::vector<sf::RectangleShape> buttons_vec{play_two_button_, play_ai_button_, exit_button_};
+    std::vector<sf::RectangleShape> buttons_vec{play_two_button_, play_ai_button_, spectator_button_,  exit_button_};
     // Here we use the int i to iterate through the vector because buttons don't have IDs and we need to identify which button was clicked
     for (int i = 0; i < buttons_vec.size(); i++) {
         if (mouse_x >= buttons_vec.at(i).getPosition().x &&
@@ -164,7 +172,11 @@ void MainMenu::ClickController(int mouse_x, int mouse_y) {
                     AIMenu ai_menu(main_window_);
                     break;
                 }
-                case 2 : { // Exit
+                case 2 : { // AI button
+                    SpectatorMenu spectator_menu(main_window_);
+                    break;
+                }
+                case 3 : { // Exit
                     main_window_->close();
                     break;
                 }

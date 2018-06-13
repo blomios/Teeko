@@ -313,8 +313,9 @@ int AI::alignementMarker(vector<int> markers_id, int coef,int player){
     }
 
 
-    count_mark_square == 4 || count_mark_diago_d == 4 || count_mark_line == 4
-    || count_mark_colu == 4 ||  count_mark_diago_u == 4 ? score +=  3*coef * player: score += 0;
+    if (count_mark_square == 4 || count_mark_diago_d == 4 || count_mark_line == 4
+        || count_mark_colu == 4 || count_mark_diago_u == 4)
+        score += 3 * coef * player;
 
     return score;
 }
