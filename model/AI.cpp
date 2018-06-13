@@ -24,7 +24,7 @@ int AI::minimax(vector<Space> board, int depth, bool is_maximizing, int alpha, i
     }
 
     // If we are at a leaf of the tree (2 cases : win or depth reached)
-    if (depth == 0 || (black.size()>0 && alignementMarker(black, 1, -1)) == -3 || (red.size()>0 && alignementMarker(red, 1, 1) == 3))
+    if (depth == 0 || (!black.empty() && alignementMarker(black, 1, -1) == -3) || (!red.empty() && alignementMarker(red, 1, 1) == 3))
         return evaluate(&board);
 
     if (is_maximizing) {
@@ -225,8 +225,8 @@ int AI::evaluate_Hard(vector<Space> *board,vector<int>red,vector<int>black) {
 int AI::evaluatePotential(vector<int> markers,int player){
     int score = 0;
     vector<int>coin = {1,5,21,25}; // les coins du board | 4 coups gagnants possibles
-    vector<int>bCoin = {3,11,15,23}; // les bords du board qui sont vers les coins | 5 coups gagnants possibles
-    vector<int>bMilieu = {2,4,6,10,16,20,22,24}; // les milieux des bords du board | 6 coups gagnant possibles
+    vector<int>bMilieu = {3,11,15,23}; // les bords du board qui sont au milieu| 5 coups gagnants possibles
+    vector<int>bCoin = {2,4,6,10,16,20,22,24}; // les milieux des bords du board | 6 coups gagnant possibles
     vector<int>milieuC = {7,9,17,19}; // les coins du carré intérieur | 10 coups gagnant possibles
     vector<int>milieuB = {8,12,14,18}; // les bords du carré intérieur | 10 coups gagnants possibles
 
@@ -236,17 +236,17 @@ int AI::evaluatePotential(vector<int> markers,int player){
     for (int i = 0; i < markers.size(); ++i) {
         int ourMarker = markers[i];
         if(find(coin.begin(),coin.end(),ourMarker)!=coin.end()){
-            score+=1;
+            score+=2;
         }else if(find(bCoin.begin(),bCoin.end(),ourMarker)!=bCoin.end()){
-            score+=3;
+            score+=4;
         }else if(find(bMilieu.begin(),bMilieu.end(),ourMarker)!=bMilieu.end()) {
-            score += 2;
+            score += 3;
         }else if(find(milieuC.begin(),milieuC.end(),ourMarker)!=milieuC.end()) {
-            score += 4;
+            score += 5;
         }else if(find(milieuB.begin(),milieuB.end(),ourMarker)!=milieuB.end()) {
-            score += 4;
+            score += 5;
         }else{
-            score+=5;
+            score+=6;
         }
 
     }
@@ -323,7 +323,7 @@ vector<int> AI::FindBestMoveSpacesId(vector<Space> board) {
     int best_eval;
     bool maximizing;
 
-    // Red player is the minimizer, black player is the maximizer
+    // Red player is the maximizer, black player is the minimizer
     if(color_ == "Black") {
         best_eval = +INT32_MAX;
         maximizing = true;
@@ -361,13 +361,13 @@ vector<int> AI::FindBestMoveSpacesId(vector<Space> board) {
                 new_board.at(current_space.GetSpaceId() - 1).SetMarker(nullptr); // Remove the marker
 
                 int move_eval = minimax(new_board, depth, maximizing, -INT32_MAX, +INT32_MAX);
-                if (move_eval > best_eval && !maximizing) {
+                if (move_eval > best_eval && color_ == "Red") {
                     best_move_spaces_id.clear();
                     best_move_spaces_id.push_back(current_space.GetSpaceId());
                     best_move_spaces_id.push_back(move_space_id);
                     best_eval = move_eval;
                 }
-                else if (move_eval < best_eval && maximizing) {
+                else if (move_eval < best_eval && color_ == "Black") {
                     best_move_spaces_id.clear();
                     best_move_spaces_id.push_back(current_space.GetSpaceId());
                     best_move_spaces_id.push_back(move_space_id);
@@ -389,7 +389,7 @@ int AI::FindBestPlacementSpaceId(vector<Space> board) {
     //
     bool maximizing;
 
-    // Red player is the minimizer, black player is the maximizer
+    // Red player is the maximizer, black player is the minimizer
     if(color_ == "Black") {
         best_eval = +INT32_MAX;
         maximizing = true;
@@ -406,11 +406,11 @@ int AI::FindBestPlacementSpaceId(vector<Space> board) {
             new_board.at(space.GetSpaceId() - 1).SetMarker(
                    new Marker(color_, 0)); // Add the marker to the new space
             move_eval = minimax(new_board, 4, maximizing, -INT32_MAX, +INT32_MAX);
-            if (move_eval > best_eval && !maximizing) {
+            if (move_eval > best_eval && color_ == "Red") {
                 best_placement_space_id = space.GetSpaceId();
                 best_eval = move_eval;
             }
-            else if (move_eval < best_eval && maximizing) {
+            else if (move_eval < best_eval && color_ == "Black") {
                 best_placement_space_id = space.GetSpaceId();
                 best_eval = move_eval;
             }
