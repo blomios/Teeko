@@ -32,7 +32,8 @@ void GameRenderer::Render() {
                 case sf::Event::MouseButtonReleased: { // On clicks
                     // Checks if it it a left click
                     // If there is a winner, blocks every clicks, we don't want players to be playing when a game is already won !
-                    if (event.mouseButton.button == sf::Mouse::Left && game_->GetWinner() == nullptr && !game_->IsSpectatorGame()) {
+                    if (event.mouseButton.button == sf::Mouse::Left && game_->GetWinner() == nullptr &&
+                        !game_->IsSpectatorGame()) {
                         // Passes the mouse position (relative to window) to the click controller
                         ClickController(sf::Mouse::getPosition(*main_window_).x,
                                         sf::Mouse::getPosition(*main_window_).y);
@@ -224,7 +225,7 @@ void GameRenderer::DrawBackground() {
  * @return Space position on X axis (int)
  */
 int GameRenderer::GetCoordX(int space_id) {
-    int x = (space_id-1) % 5;
+    int x = (space_id - 1) % 5;
     return (main_window_->getSize().x - kBoardX) / 2 + 25 + x * 150;
 }
 
@@ -286,7 +287,7 @@ void GameRenderer::ClickController(int mouse_x, int mouse_y) {
             // Selects the marker the player clicked on (or the marker of the space the player clicked on)
             spaces->at(clicked_space_id - 1).GetMarker()->Select();
         }
-        // If he clicked on an empty space, then try to place a marker on this space. PlaceMarker will whether the player is
+            // If he clicked on an empty space, then try to place a marker on this space. PlaceMarker will whether the player is
             // authorized to place a marker or not (e.g. if he already has 4 markers placed on the board)
         else game_->PlaceMarker(spaces->at(clicked_space_id - 1), player_turn);
 
@@ -295,8 +296,9 @@ void GameRenderer::ClickController(int mouse_x, int mouse_y) {
         // Unselects the space
         selected_space->GetMarker()->Unselect();
 
-    } else if (selected_space != nullptr &&
-               clicked_space_id != -1) { // If the player clicked on a valid space and if there is already a selected marker
+    }
+    // If the player clicked on a valid space and if there is already a selected marker
+    else if (selected_space != nullptr && clicked_space_id != -1) {
         // If the player clicked on one of his marker
         if (spaces->at(clicked_space_id - 1).GetMarker() != nullptr &&
             (spaces->at(clicked_space_id - 1).GetMarker()->GetColor() ==
