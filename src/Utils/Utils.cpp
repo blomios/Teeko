@@ -1,18 +1,6 @@
 #include "Utils.h"
-#include <cmath>
 
-
-bool Utils::isAdjacent(int spaceA, int spaceB){
-
-    int temp= abs(spaceA-spaceB);
-
-    if(getDistance(spaceA,spaceB)==1){
-        return true;
-    }
-    else return false;
-}
-
-vector<int> Utils::getPosXY(int spaceId){
+vector<int> Utils::GetPosXY(int spaceId){
     vector<int> pos(2);
 
     pos[1]=ceil((spaceId)/5);
@@ -21,10 +9,10 @@ vector<int> Utils::getPosXY(int spaceId){
     return pos;
 }
 
-int Utils::getDistance(int spaceIdA, int spaceIdB){
+int Utils::GetDistance(int spaceIdA, int spaceIdB){
 
-    vector<int> posA=getPosXY(spaceIdA);
-    vector<int> posB=getPosXY(spaceIdB);
+    vector<int> posA= GetPosXY(spaceIdA);
+    vector<int> posB= GetPosXY(spaceIdB);
 
     int dist;
 

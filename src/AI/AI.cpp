@@ -288,7 +288,7 @@ int AI::MarkerDistance(vector<int> space_id, int coef, int player){
                 int ptB=space_id.at(j);
                 // Increments the score through our first point's distance to the other point we're looking at
                         // time the player (1/-1) and the coefficient
-                score += (3 - Utils::getDistance(ptA,ptB)) * player * coef;
+                score += (3 - Utils::GetDistance(ptA, ptB)) * player * coef;
             }
         }
     }

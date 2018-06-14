@@ -2,13 +2,14 @@
 #define TEEKO_UTILS_H
 
 #include <vector>
+#include <cmath>
+
 using namespace std;
 
 class Utils {
 public:
-    static bool isAdjacent(int spaceA, int spaceB);
-    static vector<int> getPosXY(int spaceId);
-    static int getDistance(int spaceIdA, int spaceIdB);
+    static vector<int> GetPosXY(int spaceId);
+    static int GetDistance(int spaceIdA, int spaceIdB);
 };
 
 
