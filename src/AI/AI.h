@@ -12,19 +12,19 @@ public:
     // AI's constructor
     AI(int difficulty, std::string color);
     // The main algorithm determining a board's evaluation to a certain depth
-    int minimax(vector<Space> board, int depth, bool is_maximizing, int alpha, int beta);
+    int Minimax(vector<Space> board, int depth, bool is_maximizing, int alpha, int beta);
     // Evaluates the board and returns a score
-    int evaluate(vector<Space> *board);
-    int evaluate_Easy(vector<int>red,vector<int>black);
-    int evaluate_Medium(vector<int>red,vector<int>black);
-    int evaluate_Hard(vector<int>red,vector<int>black);
-    int evaluatePotential(vector<int> markers,int player);
+    int Evaluate(vector<Space> *board);
+    int EvaluateEasy(vector<int> red, vector<int> black);
+    int EvaluateNormal(vector<int> red, vector<int> black);
+    int EvaluateHard(vector<int> red, vector<int> black);
+    int EvaluatePotential(vector<int> markers, int player);
     // Finds the best best move possible
     vector<int> FindBestMoveSpacesId(vector<Space> board);
     // Finds the best space to place a marker
     int FindBestPlacementSpaceId(vector<Space> board);
-    int alignementMarker(vector<int> markers_id, int coef,int player);
-    int distanceMarker(vector<int> space_id, int coef,int player);
+    int MarkerAlignment(vector<int> markers_id, int coef, int player);
+    int MarkerDistance(vector<int> space_id, int coef, int player);
 };
 
 
