@@ -8,14 +8,26 @@
 
 using namespace std;
 
+/**
+ * @brief Class containing the player's data
+ */
 class Player {
 protected:
+    // Player's color ("Red" or "Black")
     string color_;
-    vector<Space*> spaces_;
+    // Spaces where the player has a marker on
+    vector<Space *> spaces_;
 public:
+    // Constructor
+    explicit Player(string color);
+
+    // Returns player's color ("Red" or "Black")
     string GetColor();
-    Player(string color);
+
+    // Returns the spaces where the player has a marker on
     vector<Space *> *GetSpaces();
+
+    // Checks whether the player has won or not
     bool IsWinner();
 };
 
