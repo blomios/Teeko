@@ -10,8 +10,8 @@ MainMenu::MainMenu() {
     sf::ContextSettings settings;
     // Sets the antialiasing level to 8 to smooth nicely the shapes, buttons, ...
     settings.antialiasingLevel = 8;
-    // Creates a new window 1200*800 with the previously defined settings
-    main_window_->create(sf::VideoMode(1200, 800), "Teeko", sf::Style::Default, settings);
+    // Creates a new window in full screen mode with the previously defined settings
+    main_window_->create(sf::VideoMode::getFullscreenModes()[0], "Teeko", sf::Style::Fullscreen, settings);
     // Sets the window's icon
     sf::Image icon;
     icon.loadFromFile(R"(..\resources\images\icon.png)");
