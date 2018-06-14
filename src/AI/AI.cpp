@@ -297,11 +297,12 @@ int AI::MarkerDistance(vector<int> space_id, int coef, int player){
 
 
 /**
- * This function returns a score if an alignement is found else, it returns 0
- * @param markers_id
- * @param coef
- * @param player
- * @return
+ * This function returns a score if an alignment is found else, it returns 0
+ * @param markers_id Vector contains spaces where are markers of the player
+ * @param coef, the number we want to multiply to the score
+ * @param player If equal to 1 is the red player ( maximizer)
+ *               Else -1 is the black player ( minimiser)
+ * @return score the score of the solution
  */
 int AI::MarkerAlignment(vector<int> markers_id, int coef, int player){
 
@@ -312,27 +313,31 @@ int AI::MarkerAlignment(vector<int> markers_id, int coef, int player){
     int space_id = markers_id.at(0);
     for(int i = 1; i < markers_id.size(); i++){
         if(markers_id.size() == 4 &&(space_id + 1) == markers_id.at(i) && (markers_id.at(0) + 5) == markers_id.at(2)){
-            /* Square */
-            if(i == 2){
+            // Scare condition
+            if(i == 2){ // If we are on the third space, we need to add one because the fourth is next to the third
                 space_id++;
-            } else {
+            } else { // Other solution, second space, for the next step we need to add four
                 space_id+=4;
             }
             count_mark_square++;
+
         } else if((space_id + 1) == markers_id.at(i) && (space_id % 5 != 0 && space_id + 1 % 5 != 1)){
-            /* Line */
+            // Line condition and check if there isn't one marker on the first column and the last
             space_id++;
             count_mark_line++;
+
         } else if((space_id + 5) == markers_id.at(i)){
-            /* Column */
+            // Column condition
             space_id+=5;
             count_mark_colu++;
+
         } else if((space_id + 6) == markers_id.at(i) && (space_id % 5 != 0 && space_id +6 % 5 != 5 )){
-            /* Diagonal */
+            // Diagonal condition down and check if the diagonal is in single piece
             space_id+=6;
             count_mark_diago_d++;
+
         } else if ((space_id + 4) == markers_id.at(i) && (space_id % 5 != 1 && space_id +4 % 5 != 0 )){
-            /* Diagonal */
+            // Diagonal condition up and check if the diagonal is in single piece
             space_id+=4;
             count_mark_diago_u++;
         }
@@ -345,6 +350,7 @@ int AI::MarkerAlignment(vector<int> markers_id, int coef, int player){
 
     return score;
 }
+
 
 /**
  * Find the best move to make
