@@ -28,6 +28,7 @@ Game::Game(bool is_ai, int difficulty, bool spectator_mode) {
     ai_game_ = is_ai;
     turn_number_ = 1;
     turn_ = 1; // Player Black starts the game
+    game_over_ = false;
 
 
     // If it's an AI game then adds an AI to the vector of players, else adds a player
@@ -39,12 +40,8 @@ Game::Game(bool is_ai, int difficulty, bool spectator_mode) {
         players_.push_back(new AI(difficulty, "Red"));
         if (spectator_mode_) {
             players_.push_back(new AI(difficulty, "Black"));
-            std::thread ai(SpectatorLoop, this);
-            ai.detach();
         } else {
             players_.push_back(new Player("Black"));
-            std::thread ai(AiLoop, this);
-            ai.detach();
         }
     }
 }
@@ -131,7 +128,7 @@ void Game::MoveMarker(Space current_space, Space next_space, int player) {
  * This is the main loop for the AI
  */
 void Game::AiLoop() {
-    while (winner_ == nullptr) {
+    while (winner_ == nullptr && !game_over_) {
         // If the AI has already placed its 4 markers
         if (turn_ == 0 && players_.at(0)->GetSpaces()->size() == 4) {
             // Vector of 2 space id, the first one is the space id of the marker to move and the second one is the arrival space's id
@@ -151,7 +148,7 @@ void Game::AiLoop() {
  * Main loop for the spectator mode
  */
 void Game::SpectatorLoop() {
-    while (winner_ == nullptr) {
+    while (winner_ == nullptr && !game_over_) {
         // If the AI has already placed its 4 markers
         if (turn_ == 0 && players_.at(0)->GetSpaces()->size() == 4) {
             // Vector of 2 space id, the first one is the space id of the marker to move and the second one is the arrival space's id
@@ -207,4 +204,8 @@ Player *Game::GetWinner() {
 
 bool Game::IsAIGame() {
     return ai_game_;
+}
+
+void Game::Finish() {
+    game_over_ = true;
 }

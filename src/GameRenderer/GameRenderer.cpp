@@ -42,6 +42,7 @@ void GameRenderer::Render() {
                 }
                 case sf::Event::KeyPressed: { // On "Esc" pressed
                     if (event.key.code == sf::Keyboard::Escape) {
+                        game_->Finish();
                         exit_game = true;
                     }
                 }

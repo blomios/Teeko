@@ -31,6 +31,8 @@ private:
     SoundManager sound_manager_;
     // True if spectator mode is enabled
     bool spectator_mode_;
+    // True if game's over
+    bool game_over_;
 public:
     // Constructor
     Game(bool is_ai, int difficulty, bool spectator_mode);
@@ -70,6 +72,9 @@ public:
 
     // Returns true if the game is opposing two AIs
     bool IsSpectatorGame();
+
+    // Stops the game
+    void Finish();
 };
 
 #endif //TEEKO_GAME_H

@@ -133,20 +133,26 @@ void AIMenu::ClickController(int mouse_x, int mouse_y) {
             switch (i) {
                 case 0 : { // Easy mode
                     Game game(true, 0, false);
+                    std::thread ai(&Game::AiLoop, &game);
                     GameRenderer game_renderer(&game, main_window_);
                     game_renderer.Render();
+                    ai.join();
                     break;
                 }
                 case 1 : { // Normal mode
                     Game game(true, 1, false);
+                    std::thread ai(&Game::AiLoop, &game);
                     GameRenderer game_renderer(&game, main_window_);
                     game_renderer.Render();
+                    ai.join();
                     break;
                 }
                 case 2 : { // Hard mode
                     Game game(true, 2, false);
+                    std::thread ai(&Game::AiLoop, &game);
                     GameRenderer game_renderer(&game, main_window_);
                     game_renderer.Render();
+                    ai.join();
                     break;
                 }
             }
