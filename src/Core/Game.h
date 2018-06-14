@@ -12,6 +12,25 @@
  * @brief The main class for the game
  */
 class Game {
+private:
+    // The spaces of the board
+    vector<Space> spaces_;
+    // The markers of the game
+    vector<Marker> markers_;
+    // The two players
+    vector<Player *> players_;
+    // 0 if it's Red's turn, 1 if it's Black's turn
+    int turn_;
+    // Starts at 1, +1 at each player's turn
+    int turn_number_;
+    // The winner of the game
+    Player *winner_ = nullptr;
+    // True if it's an AI game
+    bool ai_game_;
+    // The sound manager to plays the markers' sounds and victory tone
+    SoundManager sound_manager_;
+    // True if spectator mode is enabled
+    bool spectator_mode_;
 public:
     // Constructor
     Game(bool is_ai, int difficulty, bool spectator_mode);
@@ -51,26 +70,6 @@ public:
 
     // Returns true if the game is opposing two AIs
     bool IsSpectatorGame();
-
-private:
-    // The spaces of the board
-    vector<Space> spaces_;
-    // The markers of the game
-    vector<Marker> markers_;
-    // The two players
-    vector<Player *> players_;
-    // 0 if it's Red's turn, 1 if it's Black's turn
-    int turn_;
-    // Starts at 1, +1 at each player's turn
-    int turn_number_;
-    // The winner of the game
-    Player *winner_ = nullptr;
-    // True if it's an AI game
-    bool ai_game_;
-    // The sound manager to plays the markers' sounds and victory tone
-    SoundManager sound_manager_;
-    // True if spectator mode is enabled
-    bool spectator_mode_;
 };
 
 #endif //TEEKO_GAME_H
